@@ -34,16 +34,16 @@ banish) and the app remembers banished tracks per mix.
 - [x] **P1 — Music provider + Spotify.** Provider-agnostic interface; Spotify impl
       with PKCE login, token storage + refresh, Web API search/resolve, Web Playback
       SDK wrapper, and a mock provider for offline use.
-- [ ] **P2 — AWS auth + data.** Cognito OIDC (Google), HTTP API client, React Query
+- [x] **P2 — AWS auth + data.** Cognito OIDC (Google), HTTP API client, React Query
       hooks for mixes/prefs with optimistic updates, localStorage fallback + seed.
-- [ ] **P3 — Player engine + stores.** Faithful port of prototype logic (effective
+- [x] **P3 — Player engine + stores.** Faithful port of prototype logic (effective
       tracks, shuffle, banish, hold-to-banish) plus the music-player feature set.
-- [ ] **P4 — Component library.** Pixel-accurate atoms→templates.
-- [ ] **P5 — Pages & shell.** Live + Library routes, persistent now-playing bar,
+- [x] **P4 — Component library.** Pixel-accurate atoms→templates.
+- [x] **P5 — Pages & shell.** Live + Library routes, persistent now-playing bar,
       settings, login gate, Spotify/Cognito callbacks, command palette.
-- [ ] **P6 — Extended TTRPG features** (see below).
-- [ ] **P7 — Infra & CI/CD.** Terraform + Lambda + GitHub Actions (org AWS creds).
-- [ ] **P8 — Tests, docs, verification.**
+- [x] **P6 — Extended TTRPG features** (see below).
+- [x] **P7 — Infra & CI/CD.** Terraform + Lambda + GitHub Actions (org AWS creds).
+- [x] **P8 — Tests, docs, verification.**
 
 ## Music-player feature set (P3/P6)
 
