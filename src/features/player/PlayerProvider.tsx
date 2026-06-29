@@ -55,17 +55,28 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     [qc, provider],
   );
 
-  const play = useCallback(async (track: MusicTrack, mixLabel: string) => {
+  const play = useCallback(async (track: MusicTrack, mixLabel: string, fadeOut: boolean) => {
     const player = playerRef.current;
     if (!player) return;
-    await transitionTo(player, track, targetVolume(), useSettingsStore.getState().crossfadeMs);
-    const store = usePlayerStore.getState();
-    store.setCurrent(track);
-    store.pushHistory({ track, mixName: mixLabel, at: Date.now() });
+    await transitionTo(
+      player,
+      track,
+      targetVolume(),
+      useSettingsStore.getState().crossfadeMs,
+      fadeOut,
+      () => {
+        // Flip the now-playing UI at the swap point (start of the fade-in).
+        const store = usePlayerStore.getState();
+        store.setCurrent(track);
+        store.pushHistory({ track, mixName: mixLabel, at: Date.now() });
+      },
+    );
   }, []);
 
   const selectMix = useCallback(
     async (mix: Mix) => {
+      // Crossfade out the previous mix only if something is already playing.
+      const wasPlaying = Boolean(usePlayerStore.getState().current);
       const effective = await resolveEffective(mix);
       effectiveRef.current = effective;
       const queue = buildQueue(effective, mix.banishedTrackUris);
@@ -80,7 +91,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         queue: rest,
       });
       useUiStore.getState().showToast(`Crossfading into ${label}`);
-      if (first) await play(first, label);
+      if (first) await play(first, label, wasPlaying);
     },
     [resolveEffective, play],
   );
@@ -106,7 +117,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         useUiStore.getState().showToast('No tracks left in this mix');
         return;
       }
-      await play(next, store.mixName);
+      // Advancing within a mix (skip / banish / track-ended) always crossfades.
+      await play(next, store.mixName, true);
       if (opts?.toast) useUiStore.getState().showToast(opts.toast);
     },
     [play],

@@ -113,6 +113,10 @@ Lives entirely under `src/spotify/`:
 - **Web API** — `search` and playlist/track resolution, Zod-validated.
 - **Web Playback SDK** — registers the browser as a Connect device (requires
   Premium). A mock player mirrors the prototype's ticker for offline use.
+- **Crossfade** — the SDK can't overlap two tracks (single stream / one active
+  device) and `play({uris})` hard-cuts, so we roll our own single-stream
+  crossfade: fade the outgoing track out → swap → fade the incoming in, on every
+  skip / banish / mix switch (configurable duration; 0 = hard cut).
 
 App: **atmos** · client id `a35ad70cf30442f0a53ba22a95e85c8e` · redirect
 `http://localhost:3000/auth/spotify/`.

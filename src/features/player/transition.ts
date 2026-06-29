@@ -20,24 +20,48 @@ async function rampVolume(
 }
 
 /**
- * Start a track with a fade-in to `target` volume over `fadeMs`. This is the
- * single-stream approximation of a crossfade (the Web Playback SDK can't overlap
- * two tracks); it keeps switches smooth without delaying audio.
+ * Crossfade into `track`.
+ *
+ * The Spotify Web Playback SDK can't overlap two tracks (one stream, one active
+ * Connect device per account) and `play({uris})` hard-cuts, so a true
+ * overlapping crossfade is impossible. We instead roll our own **single-stream
+ * crossfade**: fade the outgoing track down, swap, then fade the incoming up —
+ * a smooth, click-free transition (used for skip / banish / mix switch).
+ *
+ * @param fadeOut when true (something is already playing) the outgoing track is
+ *   faded out first; when false (first track of a session) we skip straight to a
+ *   fade-in so there's no dead air.
+ * @param onSwap fired the instant the new track starts (start of the fade-in),
+ *   so the now-playing UI flips exactly when the audio does.
  */
 export async function transitionTo(
   player: MusicPlayer,
   track: MusicTrack,
   target: number,
-  fadeMs: number,
+  crossfadeMs: number,
+  fadeOut = false,
+  onSwap?: () => void,
 ): Promise<void> {
-  if (fadeMs <= 0) {
+  if (crossfadeMs <= 0) {
     await player.playTrack(track);
+    onSwap?.();
     await player.setVolume(target);
     return;
   }
+
+  if (fadeOut) {
+    const half = crossfadeMs / 2;
+    await rampVolume(player, target, 0, half); // outgoing fades out
+    await player.playTrack(track); // swap at silence (no audible cut)
+    onSwap?.();
+    await rampVolume(player, 0, target, half); // incoming fades in
+    return;
+  }
+
   await player.setVolume(0);
   await player.playTrack(track);
-  await rampVolume(player, 0, target, fadeMs);
+  onSwap?.();
+  await rampVolume(player, 0, target, crossfadeMs);
 }
 
 /** Gently fade out, pause, then restore volume so the next resume isn't silent. */
