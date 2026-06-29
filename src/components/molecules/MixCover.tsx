@@ -13,7 +13,14 @@ interface MixCoverProps {
 }
 
 /** Card cover: atmosphere gradient with a pin tack and (when active) eq bars. */
-export function MixCover({ gradient, artworkUrl, pinned, isActive, onTogglePin, height = 74 }: MixCoverProps) {
+export function MixCover({
+  gradient,
+  artworkUrl,
+  pinned,
+  isActive,
+  onTogglePin,
+  height = 74,
+}: MixCoverProps) {
   const togglePin = (e: MouseEvent) => {
     e.stopPropagation();
     onTogglePin();

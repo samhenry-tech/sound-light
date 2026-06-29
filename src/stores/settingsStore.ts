@@ -41,7 +41,8 @@ export const useSettingsStore = create<SettingsState>()(
       sleepTimerMinutes: 45,
       panicMixId: null,
 
-      setCrossfadeMs: (crossfadeMs) => set({ crossfadeMs: Math.min(8000, Math.max(0, crossfadeMs)) }),
+      setCrossfadeMs: (crossfadeMs) =>
+        set({ crossfadeMs: Math.min(8000, Math.max(0, crossfadeMs)) }),
       setAmbientVolume: (ambientVolume) =>
         set({ ambientVolume: Math.min(1, Math.max(0, ambientVolume)) }),
       setAmbientKind: (ambientKind) => set({ ambientKind }),

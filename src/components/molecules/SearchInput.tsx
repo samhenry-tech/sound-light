@@ -39,10 +39,12 @@ export function SearchInput({
         value={value}
         placeholder={placeholder}
         aria-label={ariaLabel ?? placeholder}
-        // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autoFocus}
         onChange={(e) => onChange(e.target.value)}
-        style={{ paddingLeft: leadingIcon ? 42 : undefined, paddingRight: showClear ? 40 : undefined }}
+        style={{
+          paddingLeft: leadingIcon ? 42 : undefined,
+          paddingRight: showClear ? 40 : undefined,
+        }}
       />
       {showClear && (
         <button

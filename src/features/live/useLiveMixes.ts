@@ -59,7 +59,9 @@ export function useLiveMixes() {
       .map((mix) => toCard(mix, combined, playingMixId));
 
     if (q) {
-      list = list.filter((c) => `${c.name} ${c.location} ${c.atmosphere}`.toLowerCase().includes(q));
+      list = list.filter((c) =>
+        `${c.name} ${c.location} ${c.atmosphere}`.toLowerCase().includes(q),
+      );
     }
     if (liveFilter !== 'all') {
       list = list.filter((c) => c.atmosphere === liveFilter);

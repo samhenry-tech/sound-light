@@ -17,3 +17,4 @@ export { createActiveMusicProvider, type MusicProviderId } from './registry';
 export { useMusicAuth } from './useMusicAuth';
 export { useMusicSearch } from './hooks/useMusicSearch';
 export { useResolvedSources, useResolvedTracks } from './hooks/useResolvedTracks';
+export { musicKeys } from './hooks/queryKeys';

@@ -4,7 +4,13 @@
  * In mock mode the account is always considered linked and these calls are
  * no-ops, so the app is fully usable without a Spotify Premium account.
  */
-import { IS_SPOTIFY_MOCK, SPOTIFY_CLIENT_ID, SPOTIFY_ENDPOINTS, SPOTIFY_REDIRECT_URI, SPOTIFY_SCOPES } from '../config';
+import {
+  IS_SPOTIFY_MOCK,
+  SPOTIFY_CLIENT_ID,
+  SPOTIFY_ENDPOINTS,
+  SPOTIFY_REDIRECT_URI,
+  SPOTIFY_SCOPES,
+} from '../config';
 import { tokenResponseSchema } from '../schemas';
 import { generateCodeChallenge, generateCodeVerifier, randomString } from './pkce';
 import {
@@ -43,7 +49,10 @@ export async function beginSpotifyLogin(): Promise<void> {
   window.location.assign(`${SPOTIFY_ENDPOINTS.authorize}?${params.toString()}`);
 }
 
-function persist(parsed: ReturnType<typeof tokenResponseSchema.parse>, fallbackRefresh?: string): SpotifyTokens {
+function persist(
+  parsed: ReturnType<typeof tokenResponseSchema.parse>,
+  fallbackRefresh?: string,
+): SpotifyTokens {
   const tokens: SpotifyTokens = {
     accessToken: parsed.access_token,
     refreshToken: parsed.refresh_token ?? fallbackRefresh,

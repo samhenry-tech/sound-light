@@ -26,7 +26,10 @@ interface SpotifyPlayerInstance {
   setVolume(volume: number): Promise<void>;
   getCurrentState(): Promise<SpotifyWebPlaybackState | null>;
   addListener(event: 'ready' | 'not_ready', cb: (data: { device_id: string }) => void): boolean;
-  addListener(event: 'player_state_changed', cb: (state: SpotifyWebPlaybackState | null) => void): boolean;
+  addListener(
+    event: 'player_state_changed',
+    cb: (state: SpotifyWebPlaybackState | null) => void,
+  ): boolean;
   addListener(
     event: 'initialization_error' | 'authentication_error' | 'account_error' | 'playback_error',
     cb: (data: { message: string }) => void,

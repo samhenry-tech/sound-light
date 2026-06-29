@@ -11,9 +11,7 @@ import { ATMOSPHERES, DEFAULT_ACCENT, type Atmosphere } from '@/theme/atmosphere
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
-export const atmosphereSchema = z.enum(
-  ATMOSPHERES as unknown as [Atmosphere, ...Atmosphere[]],
-);
+export const atmosphereSchema = z.enum(ATMOSPHERES as unknown as [Atmosphere, ...Atmosphere[]]);
 
 export const cardLabelSchema = z.enum(['split', 'combined']);
 

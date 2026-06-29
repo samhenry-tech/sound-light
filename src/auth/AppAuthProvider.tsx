@@ -50,7 +50,9 @@ function OidcSessionBridge({ children }: { children: ReactNode }) {
  */
 export function AppAuthProvider({ children }: { children: ReactNode }) {
   if (!IS_AUTH_ENABLED) {
-    return <AuthSessionContext.Provider value={DEV_SESSION}>{children}</AuthSessionContext.Provider>;
+    return (
+      <AuthSessionContext.Provider value={DEV_SESSION}>{children}</AuthSessionContext.Provider>
+    );
   }
   return (
     <OidcAuthProvider {...oidcConfig}>

@@ -64,7 +64,16 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   muted: false,
 
   startMix: ({ playingMixId, current, mixName, atmosphere, coverBg, queue }) =>
-    set({ playingMixId, current, mixName, atmosphere, coverBg, queue, positionMs: 0, isPlaying: true }),
+    set({
+      playingMixId,
+      current,
+      mixName,
+      atmosphere,
+      coverBg,
+      queue,
+      positionMs: 0,
+      isPlaying: true,
+    }),
 
   applyPlayback: (state) =>
     set((prev) => ({
@@ -85,8 +94,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   setHolding: (holding) => set({ holding }),
   setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)), muted: false }),
   toggleMute: () => set((s) => ({ muted: !s.muted })),
-  pushHistory: (entry) =>
-    set((s) => ({ history: [entry, ...s.history].slice(0, HISTORY_LIMIT) })),
+  pushHistory: (entry) => set((s) => ({ history: [entry, ...s.history].slice(0, HISTORY_LIMIT) })),
   reset: () =>
     set({
       playingMixId: null,

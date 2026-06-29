@@ -7,7 +7,9 @@ import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'infra/**/dist', 'infra/**/node_modules', '**/.terraform/**'],
+    // infra/ (Terraform + the Lambda) is a separate project with its own
+    // TypeScript toolchain; it is linted/typechecked independently.
+    ignores: ['dist', 'coverage', 'infra/**', '**/.terraform/**'],
   },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
@@ -27,9 +29,15 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
-      '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: { attributes: false } }],
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        { checksVoidReturn: { attributes: false } },
+      ],
     },
   },
   // Vitest test files

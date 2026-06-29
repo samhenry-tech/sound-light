@@ -6,7 +6,12 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function rampVolume(player: MusicPlayer, from: number, to: number, ms: number): Promise<void> {
+async function rampVolume(
+  player: MusicPlayer,
+  from: number,
+  to: number,
+  ms: number,
+): Promise<void> {
   const steps = Math.max(1, Math.round(ms / STEP_MS));
   for (let i = 1; i <= steps; i++) {
     await player.setVolume(from + (to - from) * (i / steps));

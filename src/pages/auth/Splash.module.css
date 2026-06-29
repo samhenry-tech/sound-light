@@ -1,0 +1,23 @@
+.splash {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: var(--bg-app);
+}
+
+.title {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.error {
+  color: var(--danger-text-2);
+  font-size: 14px;
+  max-width: 360px;
+  text-align: center;
+  padding: 0 24px;
+}

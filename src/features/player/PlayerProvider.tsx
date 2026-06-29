@@ -130,7 +130,11 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   }, [advance, updateMix]);
 
   const skip = useCallback(
-    () => void advance({ avoidUri: usePlayerStore.getState().current?.uri, toast: 'Faded out — next track' }),
+    () =>
+      void advance({
+        avoidUri: usePlayerStore.getState().current?.uri,
+        toast: 'Faded out — next track',
+      }),
     [advance],
   );
   const next = useCallback(
@@ -234,7 +238,20 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       toggleMute,
       panic,
     }),
-    [selectMix, togglePlay, skip, next, like, startHold, endHold, cancelHold, seek, setVolume, toggleMute, panic],
+    [
+      selectMix,
+      togglePlay,
+      skip,
+      next,
+      like,
+      startHold,
+      endHold,
+      cancelHold,
+      seek,
+      setVolume,
+      toggleMute,
+      panic,
+    ],
   );
 
   return <PlayerContext.Provider value={actions}>{children}</PlayerContext.Provider>;

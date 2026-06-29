@@ -69,7 +69,12 @@ export function createWebPlaybackPlayer(): AtmosPlayer {
         artworkUrl: t.album.images[0]?.url,
       };
       stateListeners.forEach((l) =>
-        l({ track: current, isPlaying: !state.paused, positionMs: state.position, durationMs: state.duration }),
+        l({
+          track: current,
+          isPlaying: !state.paused,
+          positionMs: state.position,
+          durationMs: state.duration,
+        }),
       );
 
       // Heuristic "track ended": we feed one track at a time, so when the SDK
@@ -89,9 +94,14 @@ export function createWebPlaybackPlayer(): AtmosPlayer {
     if (!token) throw new Error('Spotify account is not linked.');
     const res = await fetch(`${SPOTIFY_ENDPOINTS.api}${path}`, {
       ...init,
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...init?.headers },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...init?.headers,
+      },
     });
-    if (!res.ok && res.status !== 204) throw new Error(`Spotify playback command failed (${res.status}).`);
+    if (!res.ok && res.status !== 204)
+      throw new Error(`Spotify playback command failed (${res.status}).`);
   }
 
   return {

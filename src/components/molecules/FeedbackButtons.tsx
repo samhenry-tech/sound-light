@@ -27,7 +27,12 @@ interface ThumbDownButtonProps {
  * 👎 — tap to fade & skip, press-and-hold to banish. While held, a red ring
  * charges bottom-up and a hint floats above (matching the prototype exactly).
  */
-export function ThumbDownButton({ holding, onHoldStart, onHoldEnd, onHoldCancel }: ThumbDownButtonProps) {
+export function ThumbDownButton({
+  holding,
+  onHoldStart,
+  onHoldEnd,
+  onHoldCancel,
+}: ThumbDownButtonProps) {
   return (
     <div className={styles.thumbDownWrap}>
       {holding && <span className={styles.hint}>release: fade · keep holding: banish</span>}

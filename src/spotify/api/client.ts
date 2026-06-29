@@ -34,5 +34,8 @@ export async function spotifyFetch<S extends z.ZodTypeAny>(
   if (!res.ok) {
     throw new Error(`Spotify API error ${res.status} on ${path}`);
   }
-  return schema.parse(await res.json());
+  // `schema` is ZodTypeAny (its parse() is typed `any`); narrow back to the
+  // schema's inferred output. ZodTypeAny is required because several Spotify
+  // schemas use `.default`, so their input and output types differ.
+  return schema.parse(await res.json()) as z.infer<S>;
 }

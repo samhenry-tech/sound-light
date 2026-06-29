@@ -19,6 +19,7 @@ export function MusicProviderProvider({
   return <MusicProviderContext.Provider value={value}>{children}</MusicProviderContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useMusicProvider(): MusicProvider {
   const ctx = useContext(MusicProviderContext);
   if (!ctx) throw new Error('useMusicProvider must be used within <MusicProviderProvider>');

@@ -47,11 +47,17 @@ export function NowPlayingBar() {
       <div className={styles.text}>
         <div className={styles.name}>{state.mixName || 'atmos'}</div>
         <div className={styles.sub}>
-          {state.current ? `${state.current.title} · ${state.current.artist}` : 'Tap a vibe to begin'}
+          {state.current
+            ? `${state.current.title} · ${state.current.artist}`
+            : 'Tap a vibe to begin'}
         </div>
       </div>
 
-      <ProgressBar positionMs={state.positionMs} durationMs={state.durationMs} onSeek={actions.seek} />
+      <ProgressBar
+        positionMs={state.positionMs}
+        durationMs={state.durationMs}
+        onSeek={actions.seek}
+      />
 
       <VolumeControl
         volume={state.volume}
@@ -63,7 +69,12 @@ export function NowPlayingBar() {
       <div className={styles.divider} />
 
       <div className={styles.controls}>
-        <button type="button" className={styles.panic} onClick={actions.panic} title="Panic → jump to combat">
+        <button
+          type="button"
+          className={styles.panic}
+          onClick={actions.panic}
+          title="Panic → jump to combat"
+        >
           PANIC
         </button>
         <PlayButton isPlaying={state.isPlaying} onClick={actions.togglePlay} disabled={!hasTrack} />

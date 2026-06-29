@@ -20,7 +20,14 @@ interface LibraryMasterProps {
 }
 
 /** Library master column: title, New, a filter, and the list of mixes. */
-export function LibraryMaster({ rows, selectedId, query, onQuery, onNew, onSelect }: LibraryMasterProps) {
+export function LibraryMaster({
+  rows,
+  selectedId,
+  query,
+  onQuery,
+  onNew,
+  onSelect,
+}: LibraryMasterProps) {
   return (
     <div className={styles.master}>
       <div className={styles.head}>
@@ -30,7 +37,12 @@ export function LibraryMaster({ rows, selectedId, query, onQuery, onNew, onSelec
             New
           </AccentButton>
         </div>
-        <SearchInput value={query} onChange={onQuery} placeholder="Find a mix…" ariaLabel="Filter mixes" />
+        <SearchInput
+          value={query}
+          onChange={onQuery}
+          placeholder="Find a mix…"
+          ariaLabel="Filter mixes"
+        />
       </div>
       <div className={styles.list}>
         {rows.map((row) => (

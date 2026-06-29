@@ -50,12 +50,9 @@ export function useMixEditor(mix: Mix | undefined): MixEditorModel {
   const tracksQuery = useResolvedTracks(mix?.trackUris ?? []);
   const search = useMusicSearch(editorQuery);
 
-  const resolvedSources = sourcesQuery.data ?? [];
-  const resolvedTracks = tracksQuery.data ?? [];
-
   const effective = useMemo(
-    () => effectiveTracks(resolvedSources, resolvedTracks),
-    [resolvedSources, resolvedTracks],
+    () => effectiveTracks(sourcesQuery.data ?? [], tracksQuery.data ?? []),
+    [sourcesQuery.data, tracksQuery.data],
   );
   const { active, banished } = useMemo(
     () => splitByBanished(effective, mix?.banishedTrackUris ?? []),
@@ -103,30 +100,28 @@ export function useMixEditor(mix: Mix | undefined): MixEditorModel {
   const effectiveUris = new Set(effective.map((t) => t.uri));
   const sourceUris = new Set(mix?.sourceUris ?? []);
 
-  const results: EditorSearchResult[] = useMemo(() => {
-    const sources = search.results.sources.map<EditorSearchResult>((s) => ({
+  // Small list (≤14); computed each render so "added" flags stay in sync.
+  const results: EditorSearchResult[] = [
+    ...search.results.sources.map<EditorSearchResult>((s) => ({
       uri: s.uri,
       kind: 'playlist',
       title: s.name,
       sub: `${s.owner} · ${s.trackCount} tracks`,
       added: sourceUris.has(s.uri),
       onAdd: () => actions.addSource(s),
-    }));
-    const tracks = search.results.tracks.map<EditorSearchResult>((t) => ({
+    })),
+    ...search.results.tracks.map<EditorSearchResult>((t) => ({
       uri: t.uri,
       kind: 'track',
       title: t.title,
       sub: t.artist,
       added: effectiveUris.has(t.uri),
       onAdd: () => actions.addTrack(t),
-    }));
-    return [...sources, ...tracks];
-    // actions/sets are derived from mix each render; mix in deps is sufficient.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search.results, mix]);
+    })),
+  ];
 
   return {
-    sources: resolvedSources,
+    sources: sourcesQuery.data ?? [],
     active,
     banished,
     results,

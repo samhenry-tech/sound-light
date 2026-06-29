@@ -14,7 +14,15 @@ interface TrackRowProps {
 }
 
 /** A track line in the editor: atmosphere dot, title, "artist · origin". */
-export function TrackRow({ title, artist, origin, dotColor, removable, locked, onRemove }: TrackRowProps) {
+export function TrackRow({
+  title,
+  artist,
+  origin,
+  dotColor,
+  removable,
+  locked,
+  onRemove,
+}: TrackRowProps) {
   return (
     <div className={styles.row}>
       <span className={styles.dot} style={{ background: dotColor }} />

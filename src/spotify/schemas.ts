@@ -7,7 +7,11 @@
 import { z } from 'zod';
 import type { ResolvedSource, SpotifySearchResults, SpotifySource, SpotifyTrack } from './types';
 
-const imageSchema = z.object({ url: z.string(), height: z.number().nullish(), width: z.number().nullish() });
+const imageSchema = z.object({
+  url: z.string(),
+  height: z.number().nullish(),
+  width: z.number().nullish(),
+});
 const artistSchema = z.object({ name: z.string() });
 
 export const spotifyTrackSchema = z
@@ -40,9 +44,7 @@ export const spotifySearchResponseSchema = z.object({
 });
 
 export const playlistTracksResponseSchema = z.object({
-  items: z
-    .array(z.object({ track: spotifyTrackSchema.nullable() }).passthrough())
-    .default([]),
+  items: z.array(z.object({ track: spotifyTrackSchema.nullable() }).passthrough()).default([]),
   next: z.string().nullish(),
 });
 
@@ -96,7 +98,9 @@ export function mapPlaylistToSource(raw: z.infer<typeof spotifyPlaylistSchema>):
 
 export function mapSearchResults(payload: unknown): SpotifySearchResults {
   const parsed = spotifySearchResponseSchema.parse(payload);
-  const tracks = (parsed.tracks?.items ?? []).filter((t): t is RawSpotifyTrack => Boolean(t)).map(mapTrack);
+  const tracks = (parsed.tracks?.items ?? [])
+    .filter((t): t is RawSpotifyTrack => Boolean(t))
+    .map(mapTrack);
   const sources = (parsed.playlists?.items ?? [])
     .filter((p): p is z.infer<typeof spotifyPlaylistSchema> => Boolean(p))
     .map(mapPlaylistToSource);

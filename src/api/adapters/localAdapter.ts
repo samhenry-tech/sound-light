@@ -43,7 +43,11 @@ function defaultPrefs(owner: string): UserPrefs {
 
 export const localAdapter: DataAdapter = {
   listMixes({ owner }: DataContext) {
-    return Promise.resolve(read(owner).mixes.slice().sort((a, b) => a.sortIndex - b.sortIndex));
+    return Promise.resolve(
+      read(owner)
+        .mixes.slice()
+        .sort((a, b) => a.sortIndex - b.sortIndex),
+    );
   },
 
   createMix({ owner }: DataContext, input) {

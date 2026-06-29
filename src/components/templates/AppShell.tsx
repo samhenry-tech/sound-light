@@ -18,7 +18,13 @@ interface AppShellProps {
  * The iPad-canvas app frame: left rail + routed content + the persistent
  * now-playing bar (rendered outside the route so music never stops on nav).
  */
-export function AppShell({ active, onNavigate, onOpenPalette, onOpenSettings, children }: AppShellProps) {
+export function AppShell({
+  active,
+  onNavigate,
+  onOpenPalette,
+  onOpenSettings,
+  children,
+}: AppShellProps) {
   const tableMode = useUiStore((s) => s.tableMode);
   const toggleTableMode = useUiStore((s) => s.toggleTableMode);
   const toast = useUiStore((s) => s.toast);
@@ -26,7 +32,10 @@ export function AppShell({ active, onNavigate, onOpenPalette, onOpenSettings, ch
 
   return (
     <div className={styles.stage}>
-      <div className={cn(styles.frame, tableMode && styles.tableFrame)} style={{ transform: `scale(${scale})` }}>
+      <div
+        className={cn(styles.frame, tableMode && styles.tableFrame)}
+        style={{ transform: `scale(${scale})` }}
+      >
         <div className={styles.bodyRow}>
           <NavRail
             active={active}

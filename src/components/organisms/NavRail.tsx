@@ -32,7 +32,12 @@ export function NavRail({
         <span className={styles.brandName}>atmos</span>
       </div>
 
-      <NavItem icon="graphic_eq" label="Live" active={active === 'live'} onClick={() => onNavigate('live')} />
+      <NavItem
+        icon="graphic_eq"
+        label="Live"
+        active={active === 'live'}
+        onClick={() => onNavigate('live')}
+      />
       <NavItem
         icon="library_music"
         label="Library"
@@ -43,7 +48,13 @@ export function NavRail({
       <div className={styles.spacer} />
 
       <div className={styles.tools}>
-        <button type="button" className={styles.tool} title="Command palette (⌘K)" aria-label="Open command palette" onClick={onOpenPalette}>
+        <button
+          type="button"
+          className={styles.tool}
+          title="Command palette (⌘K)"
+          aria-label="Open command palette"
+          onClick={onOpenPalette}
+        >
           <Icon name="search" size={22} />
         </button>
         <button
@@ -56,7 +67,13 @@ export function NavRail({
         >
           <Icon name="crop_free" size={22} />
         </button>
-        <button type="button" className={styles.tool} title="Settings" aria-label="Open settings" onClick={onOpenSettings}>
+        <button
+          type="button"
+          className={styles.tool}
+          title="Settings"
+          aria-label="Open settings"
+          onClick={onOpenSettings}
+        >
           <Icon name="tune" size={22} />
         </button>
       </div>

@@ -21,7 +21,9 @@ export function MixGrid({ cards, cols, isLoading, onSelect, onTogglePin }: MixGr
     );
   }
   if (cards.length === 0) {
-    return <div className={styles.empty}>No mixes match — try another vibe or clear the search.</div>;
+    return (
+      <div className={styles.empty}>No mixes match — try another vibe or clear the search.</div>
+    );
   }
   return (
     <div className={styles.grid} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>

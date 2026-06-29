@@ -12,7 +12,14 @@ interface LibraryRowProps {
 }
 
 /** A mix row in the Library master list. */
-export function LibraryRow({ name, meta, gradient, artworkUrl, selected, onSelect }: LibraryRowProps) {
+export function LibraryRow({
+  name,
+  meta,
+  gradient,
+  artworkUrl,
+  selected,
+  onSelect,
+}: LibraryRowProps) {
   return (
     <button
       type="button"
@@ -20,7 +27,13 @@ export function LibraryRow({ name, meta, gradient, artworkUrl, selected, onSelec
       aria-current={selected}
       onClick={onSelect}
     >
-      <GradientCover gradient={gradient} artworkUrl={artworkUrl} width={40} height={40} radius={10} />
+      <GradientCover
+        gradient={gradient}
+        artworkUrl={artworkUrl}
+        width={40}
+        height={40}
+        radius={10}
+      />
       <span className={styles.meta}>
         <span className={styles.name}>{name}</span>
         <span className={styles.sub}>{meta}</span>

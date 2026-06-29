@@ -16,18 +16,18 @@ export class ApiError extends Error {
   }
 }
 
-interface ApiRequest<S extends z.ZodTypeAny> {
+interface ApiRequest<T> {
   token: string | null;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   body?: unknown;
   /** Response schema; omit for empty (204) responses. */
-  schema?: S;
+  schema?: z.ZodType<T>;
 }
 
-export async function apiFetch<S extends z.ZodTypeAny>(
+export async function apiFetch<T = void>(
   path: string,
-  { token, method = 'GET', body, schema }: ApiRequest<S>,
-): Promise<z.infer<S>> {
+  { token, method = 'GET', body, schema }: ApiRequest<T>,
+): Promise<T> {
   const res = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers: {
@@ -41,7 +41,7 @@ export async function apiFetch<S extends z.ZodTypeAny>(
     throw new ApiError(res.status, `Request to ${path} failed (${res.status}).`);
   }
   if (res.status === 204 || !schema) {
-    return undefined as z.infer<S>;
+    return undefined as T;
   }
   return schema.parse(await res.json());
 }

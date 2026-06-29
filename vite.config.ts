@@ -23,6 +23,16 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom', 'react-router-dom'],
+          query: ['@tanstack/react-query'],
+          auth: ['oidc-client-ts', 'react-oidc-context'],
+          validation: ['zod'],
+        },
+      },
+    },
   },
   test: {
     globals: true,
