@@ -1,0 +1,55 @@
+/**
+ * Device-level player settings, persisted to localStorage. These are tuning
+ * preferences (crossfade, ambient bed, keyboard) distinct from the synced
+ * UserPrefs (accent / columns / card label) that live in the data layer.
+ */
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
+export type AmbientKind = 'rain' | 'wind' | 'fire' | 'ocean';
+
+export const AMBIENT_KINDS: AmbientKind[] = ['rain', 'wind', 'fire', 'ocean'];
+
+interface SettingsState {
+  /** Crossfade duration in ms when switching mixes / skipping (0 disables). */
+  crossfadeMs: number;
+  /** Volume of the procedural ambient bed (0..1). */
+  ambientVolume: number;
+  /** Currently selected ambient bed, or null when off. */
+  ambientKind: AmbientKind | null;
+  keyboardEnabled: boolean;
+  /** Default sleep-timer length, in minutes. */
+  sleepTimerMinutes: number;
+  /** Mix id used by the Panic button (jump to combat). */
+  panicMixId: string | null;
+
+  setCrossfadeMs: (ms: number) => void;
+  setAmbientVolume: (v: number) => void;
+  setAmbientKind: (kind: AmbientKind | null) => void;
+  setKeyboardEnabled: (enabled: boolean) => void;
+  setSleepTimerMinutes: (minutes: number) => void;
+  setPanicMixId: (id: string | null) => void;
+}
+
+export const useSettingsStore = create<SettingsState>()(
+  persist(
+    (set) => ({
+      crossfadeMs: 2000,
+      ambientVolume: 0.4,
+      ambientKind: null,
+      keyboardEnabled: true,
+      sleepTimerMinutes: 45,
+      panicMixId: null,
+
+      setCrossfadeMs: (crossfadeMs) => set({ crossfadeMs: Math.min(8000, Math.max(0, crossfadeMs)) }),
+      setAmbientVolume: (ambientVolume) =>
+        set({ ambientVolume: Math.min(1, Math.max(0, ambientVolume)) }),
+      setAmbientKind: (ambientKind) => set({ ambientKind }),
+      setKeyboardEnabled: (keyboardEnabled) => set({ keyboardEnabled }),
+      setSleepTimerMinutes: (sleepTimerMinutes) =>
+        set({ sleepTimerMinutes: Math.max(1, Math.round(sleepTimerMinutes)) }),
+      setPanicMixId: (panicMixId) => set({ panicMixId }),
+    }),
+    { name: 'atmos.settings' },
+  ),
+);
