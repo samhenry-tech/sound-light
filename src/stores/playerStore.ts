@@ -45,6 +45,9 @@ interface PlayerState extends NowPlaying {
   setVolume: (volume: number) => void;
   toggleMute: () => void;
   pushHistory: (entry: HistoryEntry) => void;
+  /** Epoch ms when the sleep timer fires, or null when inactive. */
+  sleepEndsAt: number | null;
+  setSleepEndsAt: (endsAt: number | null) => void;
   reset: () => void;
 }
 
@@ -62,6 +65,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   holding: false,
   volume: 0.8,
   muted: false,
+  sleepEndsAt: null,
 
   startMix: ({ playingMixId, current, mixName, atmosphere, coverBg, queue }) =>
     set({
@@ -95,6 +99,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   setVolume: (volume) => set({ volume: Math.min(1, Math.max(0, volume)), muted: false }),
   toggleMute: () => set((s) => ({ muted: !s.muted })),
   pushHistory: (entry) => set((s) => ({ history: [entry, ...s.history].slice(0, HISTORY_LIMIT) })),
+  setSleepEndsAt: (sleepEndsAt) => set({ sleepEndsAt }),
   reset: () =>
     set({
       playingMixId: null,

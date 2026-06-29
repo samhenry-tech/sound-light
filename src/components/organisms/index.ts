@@ -6,3 +6,5 @@ export { LibraryMaster, type LibraryRowData } from './LibraryMaster';
 export { SearchToAdd } from './SearchToAdd';
 export { MixEditor } from './MixEditor';
 export { BanishedPanel, type BanishedTrackData } from './BanishedPanel';
+export { CommandPalette } from './CommandPalette';
+export { SettingsPanel } from './SettingsPanel';

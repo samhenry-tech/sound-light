@@ -1,0 +1,31 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  justify-content: center;
+  background: rgba(4, 6, 8, 0.6);
+  backdrop-filter: blur(4px);
+  padding: 24px;
+  animation: risein 0.16s ease-out;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.alignTop {
+  align-items: flex-start;
+  padding-top: 12vh;
+}
+
+.panel {
+  max-width: 100%;
+  max-height: 84vh;
+  overflow-y: auto;
+  background: var(--bg-screen);
+  border: 1px solid var(--line-12);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  animation: pop 0.16s ease-out;
+}

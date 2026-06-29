@@ -12,6 +12,8 @@ export interface PlayerActions {
   next: () => void;
   /** 👍 — mark the current track a good fit. */
   like: () => void;
+  /** Banish the current track from this mix (keyboard / palette equivalent of hold). */
+  banish: () => void;
   /** Pointer-down on 👎 — begins the hold-to-banish timer. */
   startHold: () => void;
   /** Pointer-up — if the hold hasn't completed, just skip. */
@@ -23,6 +25,9 @@ export interface PlayerActions {
   toggleMute: () => void;
   /** Instantly crossfade to the campaign's combat mix. */
   panic: () => void;
+  /** Start a sleep timer that fades out + pauses after `minutes`. */
+  startSleepTimer: (minutes: number) => void;
+  cancelSleepTimer: () => void;
 }
 
 export const PlayerContext = createContext<PlayerActions | null>(null);

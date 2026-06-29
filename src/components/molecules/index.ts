@@ -11,3 +11,4 @@ export { SourceRow } from './SourceRow';
 export { SearchResultRow } from './SearchResultRow';
 export { LibraryRow } from './LibraryRow';
 export { Select } from './Select';
+export { Modal } from './Modal';

@@ -10,7 +10,7 @@ import { coverFor } from '@/theme/atmosphere';
 import { mixName } from '@/lib/format';
 import { buildQueue, effectiveTracks } from '@/features/library/mixTracks';
 import { PlayerContext, type PlayerActions } from './PlayerContext';
-import { transitionTo } from './transition';
+import { fadeOutAndPause, transitionTo } from './transition';
 
 const HOLD_MS = 700;
 const FIVE_MIN = 5 * 60_000;
@@ -208,6 +208,35 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     useUiStore.getState().showToast('⚔️ Combat!');
   }, [selectMix]);
 
+  const banish = useCallback(() => banishCurrent(), [banishCurrent]);
+
+  const startSleepTimer = useCallback((minutes: number) => {
+    usePlayerStore.getState().setSleepEndsAt(Date.now() + minutes * 60_000);
+    useUiStore.getState().showToast(`Sleep timer set for ${minutes} min`);
+  }, []);
+
+  const cancelSleepTimer = useCallback(() => {
+    usePlayerStore.getState().setSleepEndsAt(null);
+    useUiStore.getState().showToast('Sleep timer cancelled');
+  }, []);
+
+  // Fire the sleep timer: fade out + pause when the deadline arrives.
+  const sleepEndsAt = usePlayerStore((s) => s.sleepEndsAt);
+  useEffect(() => {
+    if (!sleepEndsAt) return;
+    const delay = sleepEndsAt - Date.now();
+    if (delay <= 0) return;
+    const id = setTimeout(() => {
+      const player = playerRef.current;
+      void (async () => {
+        if (player) await fadeOutAndPause(player, targetVolume(), 2500);
+        usePlayerStore.getState().setSleepEndsAt(null);
+        useUiStore.getState().showToast('Sleep timer — music paused');
+      })();
+    }, delay);
+    return () => clearTimeout(id);
+  }, [sleepEndsAt]);
+
   // Create the player once, mirror its events, tear down on unmount.
   useEffect(() => {
     const player = provider.createPlayer();
@@ -230,6 +259,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       skip,
       next,
       like,
+      banish,
       startHold,
       endHold,
       cancelHold,
@@ -237,6 +267,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setVolume,
       toggleMute,
       panic,
+      startSleepTimer,
+      cancelSleepTimer,
     }),
     [
       selectMix,
@@ -244,6 +276,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       skip,
       next,
       like,
+      banish,
       startHold,
       endHold,
       cancelHold,
@@ -251,6 +284,8 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       setVolume,
       toggleMute,
       panic,
+      startSleepTimer,
+      cancelSleepTimer,
     ],
   );
 
