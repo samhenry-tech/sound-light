@@ -1,0 +1,18 @@
+.grid {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+}
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted-2);
+  font-size: 13.5px;
+}

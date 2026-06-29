@@ -1,0 +1,27 @@
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  border: 1px solid var(--line-10);
+  color: var(--text-icon-muted);
+  cursor: pointer;
+  transition:
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+
+.btn:hover {
+  border-color: var(--line-20);
+}
+
+.danger {
+  border-color: var(--danger-30);
+  color: var(--danger-text-2);
+}
+
+.ghost {
+  border-color: transparent;
+}

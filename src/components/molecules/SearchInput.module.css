@@ -1,0 +1,59 @@
+.field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  background: var(--surface-card);
+  border: 1px solid var(--line-10);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.16s ease;
+}
+
+.control {
+  background: var(--surface-control-alt);
+  border-color: var(--line-12);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+
+.input::placeholder {
+  color: var(--text-muted-2);
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.leading {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted-2);
+  pointer-events: none;
+}
+
+.clear {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-icon-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

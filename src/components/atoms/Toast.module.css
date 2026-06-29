@@ -1,0 +1,12 @@
+.toast {
+  background: var(--surface-toast);
+  border: 1px solid var(--line-12);
+  color: var(--text-soft);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 9px 16px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: risein 0.18s ease-out;
+  white-space: nowrap;
+}
