@@ -1,0 +1,38 @@
+/** Authenticated fetch wrapper for the Spotify Web API. */
+import type { z } from 'zod';
+import { SPOTIFY_ENDPOINTS } from '../config';
+import { getValidAccessToken, logoutSpotify } from '../auth/spotifyAuth';
+
+export class SpotifyNotLinkedError extends Error {
+  constructor() {
+    super('Spotify account is not linked.');
+    this.name = 'SpotifyNotLinkedError';
+  }
+}
+
+export async function spotifyFetch<S extends z.ZodTypeAny>(
+  path: string,
+  schema: S,
+  init?: RequestInit,
+): Promise<z.infer<S>> {
+  const token = await getValidAccessToken();
+  if (!token) throw new SpotifyNotLinkedError();
+
+  const res = await fetch(`${SPOTIFY_ENDPOINTS.api}${path}`, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      ...init?.headers,
+    },
+  });
+
+  if (res.status === 401) {
+    logoutSpotify();
+    throw new SpotifyNotLinkedError();
+  }
+  if (!res.ok) {
+    throw new Error(`Spotify API error ${res.status} on ${path}`);
+  }
+  return schema.parse(await res.json());
+}

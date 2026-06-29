@@ -1,0 +1,9 @@
+dist
+coverage
+node_modules
+*.tfstate
+*.tfstate.*
+.terraform
+infra/**/dist
+pnpm-lock.yaml
+package-lock.json

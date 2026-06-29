@@ -1,0 +1,197 @@
+/* =============================================================================
+   atmos design tokens
+   Ported verbatim from the Soundlight design handoff. Colors, type, radii and
+   dimensions live here as CSS custom properties; `--accent` is the single
+   themeable variable and is overridden at runtime by <ThemeProvider>.
+   ============================================================================= */
+
+:root {
+  /* Accent (themeable, default emerald). Tints derive from this via color-mix. */
+  --accent: #3ecf8e;
+
+  /* Backgrounds */
+  --bg-app: #06080a;
+  --bg-screen: #0c0e0f;
+  --bg-rail: #0a0c0d;
+  --bg-bar: #0f1213;
+
+  /* Surfaces */
+  --surface-card: #121515;
+  --surface-control: #15191a;
+  --surface-control-alt: #16191a;
+  --surface-selected: #15191a;
+  --surface-toast: #1a1f20;
+
+  /* Hairlines */
+  --line-07: rgba(255, 255, 255, 0.07);
+  --line-08: rgba(255, 255, 255, 0.08);
+  --line-10: rgba(255, 255, 255, 0.1);
+  --line-12: rgba(255, 255, 255, 0.12);
+  --line-14: rgba(255, 255, 255, 0.14);
+  --line-05: rgba(255, 255, 255, 0.05);
+  --line-20: rgba(255, 255, 255, 0.2);
+
+  /* Text */
+  --text-primary: #eef1f0;
+  --text-soft: #dfe4e2;
+  --text-quiet: #cdd2d0;
+  --text-muted: #7b827f;
+  --text-muted-2: #6b726f;
+  --text-muted-3: #868d8b;
+  --text-faint: #5f6764;
+  --text-faint-2: #4f5654;
+  --text-faint-3: #3f4644;
+  --text-icon-muted: #9aa3a0;
+
+  /* Danger / banish red */
+  --danger: #e5484d;
+  --danger-06: rgba(229, 72, 77, 0.06);
+  --danger-12: rgba(229, 72, 77, 0.12);
+  --danger-18: rgba(229, 72, 77, 0.18);
+  --danger-30: rgba(229, 72, 77, 0.3);
+  --danger-42: rgba(229, 72, 77, 0.42);
+  --danger-text: #dc9c9c;
+  --danger-text-2: #d98a8a;
+  --danger-text-3: #c98484;
+
+  /* Source tile accents */
+  --source-tile-bg: #1b2a23;
+  --source-tile-icon: #56b486;
+
+  /* Radii */
+  --radius-screen: 30px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 10px;
+  --radius-xs: 9px;
+  --radius-pill: 999px;
+
+  /* Dimensions */
+  --rail-w: 76px;
+  --bar-h: 96px;
+  --card-cover-h: 74px;
+  --play-btn: 58px;
+  --thumb-btn: 52px;
+  --master-w: 336px;
+  --detail-cover: 64px;
+
+  /* Type */
+  --font-sans: 'Onest', system-ui, -apple-system, sans-serif;
+  --font-icons: 'Material Symbols Rounded';
+
+  /* Canvas (iPad landscape) */
+  --canvas-w: 1194px;
+  --canvas-h: 834px;
+}
+
+/* ----------------------------------------------------------------------------
+   Reset + base
+   ---------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+select {
+  font-family: inherit;
+}
+
+/* Material Symbols Rounded helper */
+.material-symbol {
+  font-family: var(--font-icons);
+  font-feature-settings: 'liga';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+select option {
+  background: var(--surface-control-alt);
+  color: var(--text-primary);
+}
+
+/* ----------------------------------------------------------------------------
+   Scrollbars
+   ---------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-pill);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* ----------------------------------------------------------------------------
+   Animations
+   ---------------------------------------------------------------------------- */
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes risein {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
