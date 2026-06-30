@@ -1,5 +1,8 @@
-import { AccentButton, Badge, Icon } from '@/components/atoms';
-import { cn } from '@/lib/cn';
+import { AccentButton } from '~components/atoms/AccentButton';
+import { Badge } from '~components/atoms/Badge';
+import { Icon } from '~components/atoms/Icon';
+import { cn } from '~lib/cn';
+
 import styles from './SearchResultRow.module.css';
 
 interface SearchResultRowProps {

@@ -1,14 +1,19 @@
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
+    // `~foo/bar` -> `<root>/src/foo/bar`. A single wildcard, so new top-level
+    // folders under src/ are picked up automatically with no config change.
+    alias: [
+      {
+        find: /^~(.+)$/,
+        replacement: `${fileURLToPath(new URL('./src', import.meta.url))}/$1`,
+      },
+    ],
   },
   server: {
     // Spotify only allows the redirect URIs registered for the "atmos" app,

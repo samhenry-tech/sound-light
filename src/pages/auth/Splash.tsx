@@ -1,4 +1,5 @@
-import { Spinner } from '@/components/atoms';
+import { Spinner } from '~components/atoms/Spinner';
+
 import styles from './Splash.module.css';
 
 /** Full-screen centered spinner / message used during auth redirects. */

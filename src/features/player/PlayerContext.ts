@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
-import type { Mix } from '@/shared/contract';
+
+import type { Mix } from '~shared/contract';
 
 /** Imperative player actions exposed to the UI. State is read from the stores. */
 export interface PlayerActions {

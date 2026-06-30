@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import type { MusicTrack } from '@/music';
+
+import type { MusicTrack } from '~music/types';
+
 import { usePlayerStore } from './playerStore';
 
 const track = (uri: string): MusicTrack => ({

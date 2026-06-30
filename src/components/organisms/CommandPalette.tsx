@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState, type KeyboardEvent } from 'react';
+import { type KeyboardEvent,useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { cn } from '@/lib/cn';
-import { Icon } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { useMixes } from '@/api';
-import { usePlayerActions } from '@/features/player';
-import { useUiStore } from '@/stores/uiStore';
-import { mixName } from '@/lib/format';
+
+import { useMixes } from '~api/hooks';
+import { Icon } from '~components/atoms/Icon';
+import { Modal } from '~components/molecules/Modal';
+import { usePlayerActions } from '~features/player/PlayerContext';
+import { cn } from '~lib/cn';
+import { mixName } from '~lib/format';
+import { useUiStore } from '~stores/uiStore';
+
 import styles from './CommandPalette.module.css';
 
 interface Command {

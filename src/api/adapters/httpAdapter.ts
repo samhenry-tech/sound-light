@@ -1,5 +1,6 @@
 /** DataAdapter backed by the AWS HTTP API (API Gateway + Lambda + DynamoDB). */
-import { mixListSchema, mixSchema, userPrefsSchema } from '@/shared/contract';
+import { mixListSchema, mixSchema, userPrefsSchema } from '~shared/contract';
+
 import { apiFetch } from '../httpClient';
 import type { DataAdapter } from './types';
 

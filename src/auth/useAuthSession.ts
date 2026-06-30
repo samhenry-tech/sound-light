@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import { AuthSessionContext, type AuthSession } from './AuthSessionContext';
+
+import { type AuthSession,AuthSessionContext } from './AuthSessionContext';
 
 /** Access the current auth session. Throws if used outside the provider. */
 export function useAuthSession(): AuthSession {

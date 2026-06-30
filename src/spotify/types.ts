@@ -4,10 +4,10 @@
  * shared {@link MusicProvider} contract.
  */
 export type {
-  MusicTrack as SpotifyTrack,
-  MusicSource as SpotifySource,
-  MusicSourceKind as SpotifySourceKind,
+  PlaybackState,
   ResolvedSource,
   MusicSearchResults as SpotifySearchResults,
-  PlaybackState,
-} from '@/music/types';
+  MusicSource as SpotifySource,
+  MusicSourceKind as SpotifySourceKind,
+  MusicTrack as SpotifyTrack,
+} from '~music/types';

@@ -1,5 +1,6 @@
-import { cn } from '@/lib/cn';
-import { Icon } from '@/components/atoms';
+import { Icon } from '~components/atoms/Icon';
+import { cn } from '~lib/cn';
+
 import styles from './NavItem.module.css';
 
 interface NavItemProps {

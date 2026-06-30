@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+
 import { formatMs, formatTime, mixName, sample, shuffle } from './format';
 
 describe('format helpers', () => {

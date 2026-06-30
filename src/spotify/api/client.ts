@@ -1,7 +1,8 @@
 /** Authenticated fetch wrapper for the Spotify Web API. */
 import type { z } from 'zod';
-import { SPOTIFY_ENDPOINTS } from '../config';
+
 import { getValidAccessToken, logoutSpotify } from '../auth/spotifyAuth';
+import { SPOTIFY_ENDPOINTS } from '../config';
 
 export class SpotifyNotLinkedError extends Error {
   constructor() {

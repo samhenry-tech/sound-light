@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMusicProvider } from '@/music';
+
+import { useMusicProvider } from '~music/MusicProviderContext';
+
 import { Splash } from './Splash';
 
 /** Music-provider (Spotify) OAuth redirect target. Completes the token exchange. */

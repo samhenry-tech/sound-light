@@ -1,15 +1,18 @@
 import type { ReactNode } from 'react';
-import { useMixes, usePrefs, useUpdatePrefs } from '@/api';
-import { Icon } from '@/components/atoms';
-import { Modal, Select } from '@/components/molecules';
-import { useMusicAuth } from '@/music';
-import { usePlayerActions } from '@/features/player';
-import { usePlayerStore } from '@/stores/playerStore';
-import { AMBIENT_KINDS, useSettingsStore, type AmbientKind } from '@/stores/settingsStore';
-import { useUiStore } from '@/stores/uiStore';
-import { ACCENT_OPTIONS, capitalize } from '@/theme/atmosphere';
-import { mixName } from '@/lib/format';
-import { cn } from '@/lib/cn';
+
+import { useMixes, usePrefs, useUpdatePrefs } from '~api/hooks';
+import { Icon } from '~components/atoms/Icon';
+import { Modal } from '~components/molecules/Modal';
+import { Select } from '~components/molecules/Select';
+import { usePlayerActions } from '~features/player/PlayerContext';
+import { cn } from '~lib/cn';
+import { mixName } from '~lib/format';
+import { useMusicAuth } from '~music/useMusicAuth';
+import { usePlayerStore } from '~stores/playerStore';
+import { AMBIENT_KINDS, type AmbientKind,useSettingsStore } from '~stores/settingsStore';
+import { useUiStore } from '~stores/uiStore';
+import { ACCENT_OPTIONS, capitalize } from '~theme/atmosphere';
+
 import styles from './SettingsPanel.module.css';
 
 function Section({ title, children }: { title: string; children: ReactNode }) {

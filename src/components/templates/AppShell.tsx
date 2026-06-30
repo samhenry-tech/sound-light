@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react';
-import { cn } from '@/lib/cn';
-import { Toast } from '@/components/atoms';
-import { NavRail, NowPlayingBar, type Screen } from '@/components/organisms';
-import { useUiStore } from '@/stores/uiStore';
-import { useCanvasScale } from './useCanvasScale';
+
+import { Toast } from '~components/atoms/Toast';
+import { NavRail, type Screen } from '~components/organisms/NavRail';
+import { NowPlayingBar } from '~components/organisms/NowPlayingBar';
+import { cn } from '~lib/cn';
+import { useUiStore } from '~stores/uiStore';
+
 import styles from './AppShell.module.css';
+import { useCanvasScale } from './useCanvasScale';
 
 interface AppShellProps {
   active: Screen;

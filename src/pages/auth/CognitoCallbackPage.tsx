@@ -1,4 +1,5 @@
-import { useAuthSession } from '@/auth';
+import { useAuthSession } from '~auth/useAuthSession';
+
 import { Splash } from './Splash';
 
 /**

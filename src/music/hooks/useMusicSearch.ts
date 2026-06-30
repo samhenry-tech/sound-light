@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { useDebouncedValue } from '@/lib/useDebouncedValue';
+
+import { useDebouncedValue } from '~lib/useDebouncedValue';
+
 import { useMusicProvider } from '../MusicProviderContext';
 import type { MusicSearchResults } from '../types';
 import { musicKeys } from './queryKeys';

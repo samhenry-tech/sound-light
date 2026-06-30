@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useSettingsStore } from '@/stores/settingsStore';
+
+import { useSettingsStore } from '~stores/settingsStore';
+
 import { AmbientEngine } from './ambientEngine';
 
 /**

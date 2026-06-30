@@ -26,9 +26,8 @@
     "verbatimModuleSyntax": true,
 
     /* Paths */
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "~*": ["./src/*"]
     },
 
     /* Vitest globals */

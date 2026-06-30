@@ -1,11 +1,14 @@
 /** View-model for the Library detail editor of a single mix. */
 import { useMemo } from 'react';
-import { useDeleteMix, useUpdateMix } from '@/api';
-import { useMusicSearch, useResolvedSources, useResolvedTracks } from '@/music';
-import type { MusicSource, MusicTrack, ResolvedSource } from '@/music';
-import type { Mix } from '@/shared/contract';
-import { useUiStore } from '@/stores/uiStore';
-import type { Atmosphere } from '@/theme/atmosphere';
+
+import { useDeleteMix, useUpdateMix } from '~api/hooks';
+import { useMusicSearch } from '~music/hooks/useMusicSearch';
+import { useResolvedSources, useResolvedTracks } from '~music/hooks/useResolvedTracks';
+import type { MusicSource, MusicTrack, ResolvedSource } from '~music/types';
+import type { Mix } from '~shared/contract';
+import { useUiStore } from '~stores/uiStore';
+import type { Atmosphere } from '~theme/atmosphere';
+
 import { effectiveTracks, splitByBanished, type TrackWithOrigin } from './mixTracks';
 
 export interface EditorSearchResult {

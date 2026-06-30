@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { MusicTrack, ResolvedSource } from '@/music';
+
+import type { MusicTrack, ResolvedSource } from '~music/types';
+
 import { buildQueue, effectiveTracks, pickFrom, splitByBanished } from './mixTracks';
 
 function track(uri: string, title = uri): MusicTrack {

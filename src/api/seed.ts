@@ -3,9 +3,9 @@
  * faithful port of the prototype's `buildPlaylists`, pins, and banished tracks,
  * so a fresh offline session looks exactly like the design reference.
  */
-import type { Mix } from '@/shared/contract';
-import type { Atmosphere } from '@/theme/atmosphere';
-import { MOCK_SOURCE_URIS_BY_ATMOSPHERE, mockTrackUri } from '@/spotify';
+import type { Mix } from '~shared/contract';
+import { MOCK_SOURCE_URIS_BY_ATMOSPHERE, mockTrackUri } from '~spotify/mock/catalog';
+import type { Atmosphere } from '~theme/atmosphere';
 
 type Def = [id: string, location: string, atmosphere: Atmosphere];
 

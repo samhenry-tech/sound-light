@@ -5,8 +5,10 @@
  */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { useAuthSession } from '@/auth';
-import type { CreateMixInput, Mix, UpdateMixInput, UpdateUserPrefsInput } from '@/shared/contract';
+
+import { useAuthSession } from '~auth/useAuthSession';
+import type { CreateMixInput, Mix, UpdateMixInput, UpdateUserPrefsInput } from '~shared/contract';
+
 import type { DataContext } from './adapters/types';
 import { dataAdapter } from './dataAdapter';
 import { dataKeys } from './queryKeys';

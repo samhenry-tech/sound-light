@@ -1,4 +1,5 @@
-import { useEffect, type ReactNode } from 'react';
+import { type ReactNode,useEffect } from 'react';
+
 import styles from './Modal.module.css';
 
 interface ModalProps {

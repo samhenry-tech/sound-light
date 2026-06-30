@@ -1,6 +1,7 @@
-import { Chip } from '@/components/atoms';
-import type { AtmosphereFilter } from '@/stores/uiStore';
-import { ATMOSPHERES, capitalize } from '@/theme/atmosphere';
+import { Chip } from '~components/atoms/Chip';
+import type { AtmosphereFilter } from '~stores/uiStore';
+import { ATMOSPHERES, capitalize } from '~theme/atmosphere';
+
 import styles from './FilterChips.module.css';
 
 const FILTERS: { value: AtmosphereFilter; label: string }[] = [

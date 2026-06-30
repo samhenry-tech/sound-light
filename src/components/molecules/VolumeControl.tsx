@@ -1,4 +1,5 @@
-import { Icon } from '@/components/atoms';
+import { Icon } from '~components/atoms/Icon';
+
 import styles from './VolumeControl.module.css';
 
 interface VolumeControlProps {

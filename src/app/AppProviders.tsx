@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
-import { AppAuthProvider } from '@/auth';
-import { MusicProviderProvider } from '@/music';
-import { AmbientController } from '@/features/ambient';
-import { PlayerProvider } from '@/features/player';
+
+import { AppAuthProvider } from '~auth/AppAuthProvider';
+import { AmbientController } from '~features/ambient/AmbientController';
+import { PlayerProvider } from '~features/player/PlayerProvider';
+import { MusicProviderProvider } from '~music/MusicProviderContext';
+
 import { QueryProvider } from './providers/QueryProvider';
 import { ThemeProvider } from './providers/ThemeProvider';
 

@@ -1,17 +1,18 @@
 /** View-model for the Live grid: filter + search + pin-sort the GM's mixes. */
 import { useMemo } from 'react';
-import { useMixes, usePrefs } from '@/api';
-import type { Mix } from '@/shared/contract';
-import { usePlayerStore } from '@/stores/playerStore';
-import { useUiStore } from '@/stores/uiStore';
+
+import { useMixes, usePrefs } from '~api/hooks';
+import { mixName } from '~lib/format';
+import type { Mix } from '~shared/contract';
+import { usePlayerStore } from '~stores/playerStore';
+import { useUiStore } from '~stores/uiStore';
 import {
+  type Atmosphere,
   atmosphereColor,
   capitalize,
   coverFor,
   DEFAULT_COLUMNS,
-  type Atmosphere,
-} from '@/theme/atmosphere';
-import { mixName } from '@/lib/format';
+} from '~theme/atmosphere';
 
 export interface LiveCard {
   id: string;

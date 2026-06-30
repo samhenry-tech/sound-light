@@ -1,6 +1,7 @@
-import { cn } from '@/lib/cn';
-import { Icon } from '@/components/atoms';
-import { NavItem } from '@/components/molecules';
+import { Icon } from '~components/atoms/Icon';
+import { NavItem } from '~components/molecules/NavItem';
+import { cn } from '~lib/cn';
+
 import styles from './NavRail.module.css';
 
 export type Screen = 'live' | 'library';

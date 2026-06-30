@@ -1,13 +1,14 @@
 /** The Spotify implementation of the app's {@link MusicProvider} interface. */
-import type { MusicProvider } from '@/music/types';
-import { IS_SPOTIFY_MOCK, SPOTIFY_REDIRECT_URI } from './config';
-import { resolveSources, resolveTracks, searchSpotify } from './api';
+import type { MusicProvider } from '~music/types';
+
+import { resolveSources, resolveTracks, searchSpotify } from './api/spotifyDataApi';
 import {
   beginSpotifyLogin,
   completeSpotifyLogin,
   isSpotifyLinked,
   logoutSpotify,
 } from './auth/spotifyAuth';
+import { IS_SPOTIFY_MOCK, SPOTIFY_REDIRECT_URI } from './config';
 import { createPlayer } from './playback/createPlayer';
 
 /** Path Spotify redirects back to — derived from the registered redirect URI. */

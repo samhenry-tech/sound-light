@@ -1,4 +1,5 @@
-import { Icon } from '@/components/atoms';
+import { Icon } from '~components/atoms/Icon';
+
 import styles from './FeedbackButtons.module.css';
 
 /** 👍 — mark the current track a good fit for this mix. */

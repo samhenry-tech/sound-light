@@ -1,5 +1,6 @@
-import { Icon } from '@/components/atoms';
-import { useAuthSession } from '@/auth';
+import { useAuthSession } from '~auth/useAuthSession';
+import { Icon } from '~components/atoms/Icon';
+
 import styles from './LoginPage.module.css';
 
 /** Small multicolor Google "G". */

@@ -1,10 +1,12 @@
-import { useMixes, useUpdateMix } from '@/api';
-import { FilterChips, SearchInput } from '@/components/molecules';
-import { MixGrid } from '@/components/organisms';
-import { usePlayerActions } from '@/features/player';
-import { useLiveMixes } from '@/features/live/useLiveMixes';
-import { useUiStore } from '@/stores/uiStore';
-import { mixName } from '@/lib/format';
+import { useMixes, useUpdateMix } from '~api/hooks';
+import { FilterChips } from '~components/molecules/FilterChips';
+import { SearchInput } from '~components/molecules/SearchInput';
+import { MixGrid } from '~components/organisms/MixGrid';
+import { useLiveMixes } from '~features/live/useLiveMixes';
+import { usePlayerActions } from '~features/player/PlayerContext';
+import { mixName } from '~lib/format';
+import { useUiStore } from '~stores/uiStore';
+
 import styles from './LivePage.module.css';
 
 /** The Live screen — glance, tap a vibe, give feedback. */

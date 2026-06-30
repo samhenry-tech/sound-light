@@ -7,7 +7,8 @@
  * mirrors these shapes (see `infra/lambda/api`).
  */
 import { z } from 'zod';
-import { ATMOSPHERES, DEFAULT_ACCENT, type Atmosphere } from '@/theme/atmosphere';
+
+import { type Atmosphere,ATMOSPHERES, DEFAULT_ACCENT } from '~theme/atmosphere';
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 

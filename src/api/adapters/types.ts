@@ -4,7 +4,7 @@ import type {
   UpdateMixInput,
   UpdateUserPrefsInput,
   UserPrefs,
-} from '@/shared/contract';
+} from '~shared/contract';
 
 /** Per-request context: the access token and the owning user's id. */
 export interface DataContext {

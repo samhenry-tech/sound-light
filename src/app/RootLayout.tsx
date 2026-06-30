@@ -1,11 +1,14 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuthSession } from '@/auth';
-import { CommandPalette, SettingsPanel, type Screen } from '@/components/organisms';
-import { AppShell } from '@/components/templates';
-import { useKeyboardShortcuts } from '@/features/player/useKeyboardShortcuts';
-import { LoginPage } from '@/pages/auth/LoginPage';
-import { Splash } from '@/pages/auth/Splash';
-import { useUiStore } from '@/stores/uiStore';
+
+import { useAuthSession } from '~auth/useAuthSession';
+import { CommandPalette } from '~components/organisms/CommandPalette';
+import type { Screen } from '~components/organisms/NavRail';
+import { SettingsPanel } from '~components/organisms/SettingsPanel';
+import { AppShell } from '~components/templates/AppShell';
+import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
+import { LoginPage } from '~pages/auth/LoginPage';
+import { Splash } from '~pages/auth/Splash';
+import { useUiStore } from '~stores/uiStore';
 
 /** Auth gate + app shell that wraps the Live / Library routes. */
 export function RootLayout() {

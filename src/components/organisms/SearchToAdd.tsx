@@ -1,6 +1,8 @@
-import { Spinner } from '@/components/atoms';
-import { SearchInput, SearchResultRow } from '@/components/molecules';
-import type { EditorSearchResult } from '@/features/library/useMixEditor';
+import { Spinner } from '~components/atoms/Spinner';
+import { SearchInput } from '~components/molecules/SearchInput';
+import { SearchResultRow } from '~components/molecules/SearchResultRow';
+import type { EditorSearchResult } from '~features/library/useMixEditor';
+
 import styles from './SearchToAdd.module.css';
 
 interface SearchToAddProps {

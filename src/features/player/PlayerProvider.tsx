@@ -1,15 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMixes, useUpdateMix } from '@/api';
-import { musicKeys, useMusicProvider, type MusicPlayer, type MusicTrack } from '@/music';
-import type { Mix } from '@/shared/contract';
-import { usePlayerStore } from '@/stores/playerStore';
-import { useSettingsStore } from '@/stores/settingsStore';
-import { useUiStore } from '@/stores/uiStore';
-import { coverFor } from '@/theme/atmosphere';
-import { mixName } from '@/lib/format';
-import { buildQueue, effectiveTracks } from '@/features/library/mixTracks';
-import { PlayerContext, type PlayerActions } from './PlayerContext';
+import { type ReactNode,useCallback, useEffect, useMemo, useRef } from 'react';
+
+import { useMixes, useUpdateMix } from '~api/hooks';
+import { buildQueue, effectiveTracks } from '~features/library/mixTracks';
+import { mixName } from '~lib/format';
+import { musicKeys } from '~music/hooks/queryKeys';
+import { useMusicProvider } from '~music/MusicProviderContext';
+import type { MusicPlayer, MusicTrack } from '~music/types';
+import type { Mix } from '~shared/contract';
+import { usePlayerStore } from '~stores/playerStore';
+import { useSettingsStore } from '~stores/settingsStore';
+import { useUiStore } from '~stores/uiStore';
+import { coverFor } from '~theme/atmosphere';
+
+import { type PlayerActions,PlayerContext } from './PlayerContext';
 import { fadeOutAndPause, transitionTo } from './transition';
 
 const HOLD_MS = 700;

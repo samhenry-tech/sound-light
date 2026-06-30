@@ -1,6 +1,7 @@
 /** Ephemeral UI state (search queries, filters, selection, toast, modes). */
 import { create } from 'zustand';
-import type { Atmosphere } from '@/theme/atmosphere';
+
+import type { Atmosphere } from '~theme/atmosphere';
 
 export type AtmosphereFilter = 'all' | Atmosphere;
 

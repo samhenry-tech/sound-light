@@ -4,7 +4,8 @@
  * `VITE_SPOTIFY_MOCK` is on. Real URIs are synthesized deterministically so the
  * same seed data round-trips through the data layer.
  */
-import type { Atmosphere } from '@/theme/atmosphere';
+import type { Atmosphere } from '~theme/atmosphere';
+
 import type { ResolvedSource, SpotifyTrack } from '../types';
 
 interface RawTrack {

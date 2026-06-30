@@ -1,5 +1,6 @@
-import { Spinner } from '@/components/atoms';
-import type { LiveCard } from '@/features/live/useLiveMixes';
+import { Spinner } from '~components/atoms/Spinner';
+import type { LiveCard } from '~features/live/useLiveMixes';
+
 import { MixCard } from './MixCard';
 import styles from './MixGrid.module.css';
 

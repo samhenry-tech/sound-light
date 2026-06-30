@@ -1,7 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { LivePage } from '~pages/LivePage';
+
 import { AppProviders } from './AppProviders';
-import { LivePage } from '@/pages/LivePage';
 
 // LivePage has no router dependency, so it can mount under the providers alone.
 // With no AWS/Spotify env, this exercises the dev session + localStorage seed +

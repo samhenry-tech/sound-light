@@ -1,11 +1,15 @@
+import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { LivePage } from '@/pages/LivePage';
-import { LibraryPage } from '@/pages/LibraryPage';
-import { CognitoCallbackPage } from '@/pages/auth/CognitoCallbackPage';
-import { MusicCallbackPage } from '@/pages/auth/MusicCallbackPage';
-import { RootLayout } from './RootLayout';
 
-export const router = createBrowserRouter([
+import { CognitoCallbackPage } from '~pages/auth/CognitoCallbackPage';
+import { MusicCallbackPage } from '~pages/auth/MusicCallbackPage';
+import { LibraryPage } from '~pages/LibraryPage';
+import { LivePage } from '~pages/LivePage';
+
+import { AppProviders } from './app/AppProviders';
+import { RootLayout } from './app/RootLayout';
+
+const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
@@ -21,3 +25,9 @@ export const router = createBrowserRouter([
   { path: '/auth/spotify/', element: <MusicCallbackPage /> },
   { path: '*', element: <Navigate to="/live" replace /> },
 ]);
+
+export const App = () => (
+  <AppProviders>
+    <RouterProvider router={router} />
+  </AppProviders>
+);

@@ -4,9 +4,9 @@ import {
   mapSearchResults,
   mapTrack,
   playlistResponseSchema,
+  type RawSpotifyTrack,
   spotifySearchResponseSchema,
   tracksResponseSchema,
-  type RawSpotifyTrack,
 } from '../schemas';
 import type { ResolvedSource, SpotifySearchResults, SpotifyTrack } from '../types';
 import { idsOfType } from '../uri';

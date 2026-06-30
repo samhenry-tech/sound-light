@@ -1,5 +1,7 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
-import { formatMs } from '@/lib/format';
+
+import { formatMs } from '~lib/format';
+
 import styles from './ProgressBar.module.css';
 
 interface ProgressBarProps {

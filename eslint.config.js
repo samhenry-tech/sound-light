@@ -3,6 +3,7 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
@@ -25,9 +26,26 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [
+            // Node builtins + external packages.
+            ['^node:', '^@?\\w'],
+            // In-project absolute imports (`~` alias).
+            ['^~'],
+            // Relative imports (incl. CSS modules).
+            ['^\\.'],
+            // Side-effect imports (bare CSS) last.
+            ['^\\u0000'],
+          ],
+        },
+      ],
+      'simple-import-sort/exports': 'error',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-vars': [
         'error',

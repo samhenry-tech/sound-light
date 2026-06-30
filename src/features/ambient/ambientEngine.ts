@@ -4,7 +4,7 @@
  * audio assets, layered *under* the music so a location keeps its atmosphere
  * while the musical vibe changes.
  */
-import type { AmbientKind } from '@/stores/settingsStore';
+import type { AmbientKind } from '~stores/settingsStore';
 
 type NoiseColor = 'white' | 'brown';
 

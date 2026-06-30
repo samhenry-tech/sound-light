@@ -1,4 +1,4 @@
-import { capitalize, type Atmosphere } from '@/theme/atmosphere';
+import { type Atmosphere,capitalize } from '~theme/atmosphere';
 
 /** Display name for a mix: "{location} – {Atmosphere}" (en-dash, per handoff). */
 export function mixName(location: string, atmosphere: Atmosphere): string {

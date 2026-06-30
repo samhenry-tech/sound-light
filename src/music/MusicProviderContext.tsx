@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { createContext, type ReactNode,useContext, useMemo } from 'react';
+
 import { createActiveMusicProvider } from './registry';
 import type { MusicProvider } from './types';
 

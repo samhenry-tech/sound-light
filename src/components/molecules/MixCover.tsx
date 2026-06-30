@@ -1,6 +1,9 @@
 import type { MouseEvent } from 'react';
-import { cn } from '@/lib/cn';
-import { EqBars, GradientCover } from '@/components/atoms';
+
+import { EqBars } from '~components/atoms/EqBars';
+import { GradientCover } from '~components/atoms/GradientCover';
+import { cn } from '~lib/cn';
+
 import styles from './MixCover.module.css';
 
 interface MixCoverProps {

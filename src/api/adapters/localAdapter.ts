@@ -2,15 +2,16 @@
  * DataAdapter backed by localStorage — the zero-setup offline path. Seeds the
  * prototype's starter library on first use and scopes everything by owner.
  */
+import { createId } from '~lib/id';
 import {
   createMixInputSchema,
   DEFAULT_PREFS,
+  type Mix,
   updateMixInputSchema,
   updateUserPrefsInputSchema,
-  type Mix,
   type UserPrefs,
-} from '@/shared/contract';
-import { createId } from '@/lib/id';
+} from '~shared/contract';
+
 import { getSeedMixes } from '../seed';
 import type { DataAdapter, DataContext } from './types';
 

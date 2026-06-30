@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
-import { usePlayerStore } from '@/stores/playerStore';
-import { useSettingsStore } from '@/stores/settingsStore';
-import { useUiStore } from '@/stores/uiStore';
+
+import { usePlayerStore } from '~stores/playerStore';
+import { useSettingsStore } from '~stores/settingsStore';
+import { useUiStore } from '~stores/uiStore';
+
 import { usePlayerActions } from './PlayerContext';
 
 function isTyping(target: EventTarget | null): boolean {

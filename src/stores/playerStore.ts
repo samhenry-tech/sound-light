@@ -4,8 +4,9 @@
  * drive it live in <PlayerProvider>; this store is just the observable state.
  */
 import { create } from 'zustand';
-import type { MusicTrack, PlaybackState } from '@/music';
-import type { Atmosphere } from '@/theme/atmosphere';
+
+import type { MusicTrack, PlaybackState } from '~music/types';
+import type { Atmosphere } from '~theme/atmosphere';
 
 export interface HistoryEntry {
   track: MusicTrack;

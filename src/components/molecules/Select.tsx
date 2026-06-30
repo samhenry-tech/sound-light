@@ -1,4 +1,5 @@
-import { Icon } from '@/components/atoms';
+import { Icon } from '~components/atoms/Icon';
+
 import styles from './Select.module.css';
 
 interface SelectOption {

@@ -1,6 +1,7 @@
-import { cn } from '@/lib/cn';
-import { MixCover } from '@/components/molecules';
-import type { LiveCard } from '@/features/live/useLiveMixes';
+import { MixCover } from '~components/molecules/MixCover';
+import type { LiveCard } from '~features/live/useLiveMixes';
+import { cn } from '~lib/cn';
+
 import styles from './MixCard.module.css';
 
 interface MixCardProps {

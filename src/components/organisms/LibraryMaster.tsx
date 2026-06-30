@@ -1,5 +1,7 @@
-import { AccentButton } from '@/components/atoms';
-import { LibraryRow, SearchInput } from '@/components/molecules';
+import { AccentButton } from '~components/atoms/AccentButton';
+import { LibraryRow } from '~components/molecules/LibraryRow';
+import { SearchInput } from '~components/molecules/SearchInput';
+
 import styles from './LibraryMaster.module.css';
 
 export interface LibraryRowData {

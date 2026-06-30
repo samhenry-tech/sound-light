@@ -1,4 +1,6 @@
-import { Icon, IconButton } from '@/components/atoms';
+import { Icon } from '~components/atoms/Icon';
+import { IconButton } from '~components/atoms/IconButton';
+
 import styles from './TrackRow.module.css';
 
 interface TrackRowProps {

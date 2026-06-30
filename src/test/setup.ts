@@ -1,6 +1,7 @@
-import '@testing-library/jest-dom/vitest';
-import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
+
+import '@testing-library/jest-dom/vitest';
 
 // Unmount React trees and reset mocks between tests.
 afterEach(() => {

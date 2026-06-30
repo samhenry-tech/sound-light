@@ -3,7 +3,8 @@
  * centralized here so adding Apple Music / YouTube / local files is a one-line
  * change and the active provider can be chosen by env or, later, user setting.
  */
-import { createSpotifyMusicProvider } from '@/spotify';
+import { createSpotifyMusicProvider } from '~spotify/provider';
+
 import type { MusicProvider } from './types';
 
 export type MusicProviderId = 'spotify';

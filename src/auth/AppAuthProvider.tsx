@@ -1,6 +1,7 @@
-import { useMemo, type ReactNode } from 'react';
+import { type ReactNode,useMemo } from 'react';
 import { AuthProvider as OidcAuthProvider, useAuth } from 'react-oidc-context';
-import { AuthSessionContext, type AuthSession } from './AuthSessionContext';
+
+import { type AuthSession,AuthSessionContext } from './AuthSessionContext';
 import { buildHostedUiLogoutUrl, IS_AUTH_ENABLED, oidcConfig } from './oidcConfig';
 
 /** Fixed session used when Cognito is not configured (offline development). */

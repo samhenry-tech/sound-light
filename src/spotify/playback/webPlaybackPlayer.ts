@@ -3,8 +3,8 @@
  * a Spotify Connect device and drives playback through the Web API.
  * Requires a linked Spotify **Premium** account.
  */
-import { SPOTIFY_ENDPOINTS } from '../config';
 import { getValidAccessToken } from '../auth/spotifyAuth';
+import { SPOTIFY_ENDPOINTS } from '../config';
 import type { PlaybackState, SpotifyTrack } from '../types';
 import type { AtmosPlayer } from './types';
 

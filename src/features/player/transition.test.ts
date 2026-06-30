@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { MusicPlayer, MusicTrack } from '@/music';
+
+import type { MusicPlayer, MusicTrack } from '~music/types';
+
 import { transitionTo } from './transition';
 
 const track = (uri: string): MusicTrack => ({

@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
-import { useCreateMix, useMixes } from '@/api';
-import { LibraryMaster, MixEditor, type LibraryRowData } from '@/components/organisms';
-import { useMixEditor } from '@/features/library/useMixEditor';
-import type { Mix } from '@/shared/contract';
-import { useUiStore } from '@/stores/uiStore';
-import { coverFor } from '@/theme/atmosphere';
-import { mixName } from '@/lib/format';
+
+import { useCreateMix, useMixes } from '~api/hooks';
+import { LibraryMaster, type LibraryRowData } from '~components/organisms/LibraryMaster';
+import { MixEditor } from '~components/organisms/MixEditor';
+import { useMixEditor } from '~features/library/useMixEditor';
+import { mixName } from '~lib/format';
+import type { Mix } from '~shared/contract';
+import { useUiStore } from '~stores/uiStore';
+import { coverFor } from '~theme/atmosphere';
+
 import styles from './LibraryPage.module.css';
 
 function summarize(mix: Mix): string {

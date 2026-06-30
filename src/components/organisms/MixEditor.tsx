@@ -1,20 +1,24 @@
-import { GradientCover, Icon } from '@/components/atoms';
-import { Select, SourceRow, TrackRow } from '@/components/molecules';
-import type { Mix } from '@/shared/contract';
-import type { MixEditorModel } from '@/features/library/useMixEditor';
-import { useUiStore } from '@/stores/uiStore';
+import { GradientCover } from '~components/atoms/GradientCover';
+import { Icon } from '~components/atoms/Icon';
+import { Select } from '~components/molecules/Select';
+import { SourceRow } from '~components/molecules/SourceRow';
+import { TrackRow } from '~components/molecules/TrackRow';
+import type { MixEditorModel } from '~features/library/useMixEditor';
+import { mixName } from '~lib/format';
+import type { Mix } from '~shared/contract';
+import { useUiStore } from '~stores/uiStore';
 import {
-  ATMOSPHERES,
-  LOCATIONS,
+  type Atmosphere,
   atmosphereColor,
+  ATMOSPHERES,
   capitalize,
   coverFor,
-  type Atmosphere,
-} from '@/theme/atmosphere';
-import { mixName } from '@/lib/format';
+  LOCATIONS,
+} from '~theme/atmosphere';
+
 import { BanishedPanel } from './BanishedPanel';
-import { SearchToAdd } from './SearchToAdd';
 import styles from './MixEditor.module.css';
+import { SearchToAdd } from './SearchToAdd';
 
 interface MixEditorProps {
   mix: Mix;

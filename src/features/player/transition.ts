@@ -1,4 +1,4 @@
-import type { MusicPlayer, MusicTrack } from '@/music';
+import type { MusicPlayer, MusicTrack } from '~music/types';
 
 const STEP_MS = 50;
 

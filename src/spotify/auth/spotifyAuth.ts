@@ -18,8 +18,8 @@ import {
   getStoredTokens,
   setPkceState,
   setStoredTokens,
-  takePkceState,
   type SpotifyTokens,
+  takePkceState,
 } from './tokenStore';
 
 /** Skew so we refresh slightly before the token actually expires. */

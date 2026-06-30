@@ -1,6 +1,7 @@
-import { useEffect, type ReactNode } from 'react';
-import { usePrefs } from '@/api';
-import { DEFAULT_ACCENT } from '@/theme/atmosphere';
+import { type ReactNode,useEffect } from 'react';
+
+import { usePrefs } from '~api/hooks';
+import { DEFAULT_ACCENT } from '~theme/atmosphere';
 
 /** Applies the user's accent preference to the `--accent` CSS variable. */
 export function ThemeProvider({ children }: { children: ReactNode }) {

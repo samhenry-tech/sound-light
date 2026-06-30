@@ -1,5 +1,6 @@
-import { cn } from '@/lib/cn';
-import { GradientCover } from '@/components/atoms';
+import { GradientCover } from '~components/atoms/GradientCover';
+import { cn } from '~lib/cn';
+
 import styles from './LibraryRow.module.css';
 
 interface LibraryRowProps {
