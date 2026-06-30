@@ -6,8 +6,8 @@ import type { Screen } from '~components/organisms/NavRail';
 import { SettingsPanel } from '~components/organisms/SettingsPanel';
 import { AppShell } from '~components/templates/AppShell';
 import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
-import { LoginPage } from '~pages/auth/LoginPage';
-import { Splash } from '~pages/auth/Splash';
+import { LoginPage } from '~components/pages/auth/LoginPage';
+import { Splash } from '~components/pages/auth/Splash';
 import { useUiStore } from '~stores/uiStore';
 
 /** Auth gate + app shell that wraps the Live / Library routes. */

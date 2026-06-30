@@ -1,10 +1,10 @@
 import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import { CognitoCallbackPage } from '~pages/auth/CognitoCallbackPage';
-import { MusicCallbackPage } from '~pages/auth/MusicCallbackPage';
-import { LibraryPage } from '~pages/LibraryPage';
-import { LivePage } from '~pages/LivePage';
+import { CognitoCallbackPage } from '~components/pages/auth/CognitoCallbackPage';
+import { MusicCallbackPage } from '~components/pages/auth/MusicCallbackPage';
+import { LibraryPage } from '~components/pages/LibraryPage';
+import { LivePage } from '~components/pages/LivePage';
 
 import { AppProviders } from './app/AppProviders';
 import { RootLayout } from './app/RootLayout';
