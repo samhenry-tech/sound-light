@@ -17,8 +17,10 @@ import {
 } from '~theme/atmosphere';
 
 import { BanishedPanel } from './BanishedPanel';
-import styles from './MixEditor.module.css';
 import { SearchToAdd } from './SearchToAdd';
+
+const SECTION_LABEL =
+  'mb-2.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-faint';
 
 interface MixEditorProps {
   mix: Mix;
@@ -38,19 +40,19 @@ export function MixEditor({ mix, model }: MixEditorProps) {
   const count = model.active.length + model.banished.length;
 
   return (
-    <div className={styles.detail}>
-      <div className={styles.header}>
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+      <div className="flex flex-shrink-0 items-center gap-[18px] border-b border-line-07 px-[26px] pb-4 pt-[22px]">
         <GradientCover gradient={coverFor(mix.atmosphere)} width={64} height={64} radius={15} />
-        <div className={styles.headMain}>
-          <div className={styles.name}>{name}</div>
-          <div className={styles.selects}>
+        <div className="min-w-0 flex-1">
+          <div className="mb-[9px] text-[22px] font-extrabold tracking-[-0.02em]">{name}</div>
+          <div className="flex items-center gap-[9px]">
             <Select
               value={mix.location}
               options={LOCATIONS.map((l) => ({ value: l, label: l }))}
               onChange={model.actions.setLocation}
               ariaLabel="Location"
             />
-            <span className={styles.dash}>—</span>
+            <span className="font-bold text-faint-2">—</span>
             <Select
               value={mix.atmosphere}
               options={ATMOSPHERES.map((a) => ({ value: a, label: capitalize(a) }))}
@@ -59,9 +61,13 @@ export function MixEditor({ mix, model }: MixEditorProps) {
             />
           </div>
         </div>
-        <div className={styles.headRight}>
-          <span className={styles.count}>{count} tracks</span>
-          <button type="button" className={styles.delete} onClick={model.actions.remove}>
+        <div className="flex flex-shrink-0 flex-col items-end gap-2">
+          <span className="text-[13px] text-muted">{count} tracks</span>
+          <button
+            type="button"
+            className="flex items-center gap-[5px] rounded-xs border border-line-10 bg-transparent px-[11px] py-1.5 text-[12.5px] font-semibold text-icon-muted cursor-pointer"
+            onClick={model.actions.remove}
+          >
             <Icon name="delete" size={16} />
             Delete
           </button>
@@ -78,10 +84,10 @@ export function MixEditor({ mix, model }: MixEditorProps) {
         noResults={model.noResults}
       />
 
-      <div className={styles.contents}>
+      <div className="min-h-0 flex-1 overflow-y-auto px-[26px] pb-[26px] pt-3.5">
         {model.sources.length > 0 && (
           <>
-            <div className={styles.sectionLabel}>Playlists added · locked units</div>
+            <div className={SECTION_LABEL}>Playlists added · locked units</div>
             {model.sources.map((s) => (
               <SourceRow
                 key={s.uri}
@@ -94,10 +100,14 @@ export function MixEditor({ mix, model }: MixEditorProps) {
           </>
         )}
 
-        <div className={styles.tracksHead}>
-          <span className={styles.sectionLabel}>Tracks</span>
+        <div className="mb-2 mt-4 flex items-center justify-between">
+          <span className={SECTION_LABEL}>Tracks</span>
           {model.banished.length > 0 && (
-            <button type="button" className={styles.banishedToggle} onClick={toggleBanished}>
+            <button
+              type="button"
+              className="flex items-center gap-1.5 rounded-xs border border-danger-30 bg-transparent px-[11px] py-1.5 text-[12px] font-semibold text-danger-text-2 cursor-pointer"
+              onClick={toggleBanished}
+            >
               <Icon name="block" size={16} />
               Banished ({model.banished.length})
             </button>
@@ -118,7 +128,7 @@ export function MixEditor({ mix, model }: MixEditorProps) {
         ))}
 
         {count === 0 && (
-          <div className={styles.empty}>
+          <div className="rounded-[14px] border border-dashed border-line-12 p-[26px] text-center text-[13.5px] text-muted-2">
             Nothing here yet — search Spotify above to add tracks or a whole playlist.
           </div>
         )}

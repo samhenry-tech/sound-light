@@ -2,8 +2,6 @@ import type { CSSProperties, ReactNode } from 'react';
 
 import { cn } from '~lib/cn';
 
-import styles from './GradientCover.module.css';
-
 interface GradientCoverProps {
   /** Atmosphere gradient used as fallback cover art. */
   gradient: string;
@@ -34,10 +32,12 @@ export function GradientCover({
   const background = artworkUrl ? `center / cover no-repeat url(${artworkUrl})` : gradient;
   return (
     <div
-      className={cn(styles.cover, className)}
+      className={cn('relative flex-shrink-0 overflow-hidden', className)}
       style={{ width, height, borderRadius: radius, background, ...style }}
     >
-      {highlight && <div className={styles.highlight} />}
+      {highlight && (
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(75%_70%_at_30%_24%,rgba(255,255,255,0.14),transparent_65%)]" />
+      )}
       {children}
     </div>
   );

@@ -1,8 +1,6 @@
 import { Icon } from '~components/atoms/Icon';
 import { cn } from '~lib/cn';
 
-import styles from './SearchInput.module.css';
-
 interface SearchInputProps {
   value: string;
   onChange: (value: string) => void;
@@ -17,6 +15,14 @@ interface SearchInputProps {
   className?: string;
   autoFocus?: boolean;
 }
+
+const INPUT_BASE =
+  'w-full border text-primary text-[14px] outline-none transition-[border-color] duration-150 placeholder:text-muted-2 focus:border-accent';
+
+const TONES: Record<NonNullable<SearchInputProps['tone']>, string> = {
+  card: 'bg-surface-card border-line-10 rounded-sm px-3.5 py-2.5',
+  control: 'bg-surface-control-alt border-line-12 rounded-md px-3.5 py-3',
+};
 
 /** A themed text input with optional leading icon and clear button. */
 export function SearchInput({
@@ -33,10 +39,16 @@ export function SearchInput({
 }: SearchInputProps) {
   const showClear = clearable && value.length > 0;
   return (
-    <div className={cn(styles.field, className)}>
-      {leadingIcon && <Icon name={leadingIcon} size={20} className={styles.leading} />}
+    <div className={cn('relative flex items-center', className)}>
+      {leadingIcon && (
+        <Icon
+          name={leadingIcon}
+          size={20}
+          className="pointer-events-none absolute left-[13px] top-1/2 -translate-y-1/2 text-muted-2"
+        />
+      )}
       <input
-        className={cn(styles.input, styles[tone])}
+        className={cn(INPUT_BASE, TONES[tone])}
         value={value}
         placeholder={placeholder}
         aria-label={ariaLabel ?? placeholder}
@@ -50,7 +62,7 @@ export function SearchInput({
       {showClear && (
         <button
           type="button"
-          className={styles.clear}
+          className="absolute right-[9px] top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-lg border-none bg-transparent text-icon-muted cursor-pointer"
           aria-label="Clear"
           onClick={() => (onClear ? onClear() : onChange(''))}
         >

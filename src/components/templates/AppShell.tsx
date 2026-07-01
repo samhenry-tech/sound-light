@@ -6,7 +6,6 @@ import { NowPlayingBar } from '~components/organisms/NowPlayingBar';
 import { cn } from '~lib/cn';
 import { useUiStore } from '~stores/uiStore';
 
-import styles from './AppShell.module.css';
 import { useCanvasScale } from './useCanvasScale';
 
 interface AppShellProps {
@@ -34,12 +33,17 @@ export function AppShell({
   const scale = useCanvasScale(tableMode ? 0 : 24);
 
   return (
-    <div className={styles.stage}>
+    <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-app">
       <div
-        className={cn(styles.frame, tableMode && styles.tableFrame)}
-        style={{ transform: `scale(${scale})` }}
+        className={cn(
+          'relative flex w-[var(--canvas-w)] h-[var(--canvas-h)] flex-shrink-0 flex-col overflow-hidden bg-screen text-primary',
+          tableMode
+            ? 'rounded-none shadow-none'
+            : 'rounded-screen shadow-[0_40px_90px_rgba(0,0,0,0.55)]',
+        )}
+        style={{ transform: `scale(${scale})`, transformOrigin: 'center center' }}
       >
-        <div className={styles.bodyRow}>
+        <div className="flex min-h-0 flex-1">
           <NavRail
             active={active}
             onNavigate={onNavigate}
@@ -48,13 +52,13 @@ export function AppShell({
             onOpenPalette={onOpenPalette}
             onOpenSettings={onOpenSettings}
           />
-          <div className={styles.content}>{children}</div>
+          <div className="relative flex min-w-0 flex-1 flex-col">{children}</div>
         </div>
 
         <NowPlayingBar />
 
         {toast && (
-          <div className={styles.toastWrap}>
+          <div className="absolute bottom-[112px] left-1/2 z-40 -translate-x-1/2">
             <Toast message={toast} />
           </div>
         )}

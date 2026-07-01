@@ -7,8 +7,6 @@ import { usePlayerActions } from '~features/player/PlayerContext';
 import { mixName } from '~lib/format';
 import { useUiStore } from '~stores/uiStore';
 
-import styles from './LivePage.module.css';
-
 /** The Live screen — glance, tap a vibe, give feedback. */
 export function LivePage() {
   const { cards, cols, isLoading } = useLiveMixes();
@@ -36,23 +34,23 @@ export function LivePage() {
   };
 
   return (
-    <div className={styles.screen}>
-      <div className={styles.header}>
-        <div className={styles.session}>
-          Curse of the Hollow King <span className={styles.sessionSub}>· Session 14</span>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="flex flex-shrink-0 items-center justify-between gap-4 px-6 pt-[18px]">
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-muted-2">
+          Curse of the Hollow King <span className="text-faint-2">· Session 14</span>
         </div>
         <SearchInput
-          className={styles.search}
+          className="w-[300px] flex-shrink-0"
           value={liveQuery}
           onChange={setLiveQuery}
           placeholder="Search a location or vibe…"
           ariaLabel="Search mixes"
         />
       </div>
-      <div className={styles.filters}>
+      <div className="flex-shrink-0 px-6 pt-3.5 pb-3">
         <FilterChips value={liveFilter} onChange={setLiveFilter} />
       </div>
-      <div className={styles.gridWrap}>
+      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-6 pt-1 pb-[18px]">
         <MixGrid
           cards={cards}
           cols={cols}

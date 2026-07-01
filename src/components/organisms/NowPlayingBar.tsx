@@ -9,8 +9,6 @@ import { VolumeControl } from '~components/molecules/VolumeControl';
 import { usePlayerActions } from '~features/player/PlayerContext';
 import { usePlayerStore } from '~stores/playerStore';
 
-import styles from './NowPlayingBar.module.css';
-
 const FALLBACK_COVER = 'linear-gradient(150deg,#1a1f20,#0f1213)';
 
 /** The persistent now-playing bar. Connected to the player store + actions. */
@@ -32,9 +30,9 @@ export function NowPlayingBar() {
   const hasTrack = Boolean(state.current);
 
   return (
-    <div className={styles.bar}>
+    <div className="relative flex h-[var(--bar-h)] flex-shrink-0 items-center gap-[18px] border-t border-line-08 bg-bar px-[22px]">
       <GradientCover
-        className={styles.cover}
+        className="border border-line-08"
         gradient={state.coverBg || FALLBACK_COVER}
         artworkUrl={state.current?.artworkUrl}
         width={58}
@@ -44,9 +42,11 @@ export function NowPlayingBar() {
       />
       {hasTrack && state.isPlaying && <EqBars size={14} />}
 
-      <div className={styles.text}>
-        <div className={styles.name}>{state.mixName || 'atmos'}</div>
-        <div className={styles.sub}>
+      <div className="w-[248px] min-w-0 flex-shrink-0">
+        <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[17px] font-bold tracking-[-0.01em]">
+          {state.mixName || 'atmos'}
+        </div>
+        <div className="mt-px overflow-hidden text-ellipsis whitespace-nowrap text-[12.5px] text-muted">
           {state.current
             ? `${state.current.title} · ${state.current.artist}`
             : 'Tap a vibe to begin'}
@@ -66,19 +66,19 @@ export function NowPlayingBar() {
         onToggleMute={actions.toggleMute}
       />
 
-      <div className={styles.divider} />
+      <div className="h-11 w-px flex-shrink-0 bg-line-08" />
 
-      <div className={styles.controls}>
+      <div className="flex flex-shrink-0 items-center gap-3">
         <button
           type="button"
-          className={styles.panic}
+          className="flex h-[var(--play-btn)] flex-col items-center justify-center rounded-[15px] border border-danger-30 bg-danger-12 px-4 text-[14px] font-extrabold tracking-[0.08em] text-danger-text cursor-pointer transition-colors duration-150 hover:bg-danger-18 hover:text-white"
           onClick={actions.panic}
           title="Panic → jump to combat"
         >
           PANIC
         </button>
         <PlayButton isPlaying={state.isPlaying} onClick={actions.togglePlay} disabled={!hasTrack} />
-        <div className={styles.smallDivider} />
+        <div className="mx-0.5 h-[30px] w-px flex-shrink-0 bg-line-08" />
         <LikeButton onClick={actions.like} />
         <ThumbDownButton
           holding={state.holding}

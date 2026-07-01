@@ -9,8 +9,6 @@ import type { Mix } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import { coverFor } from '~theme/atmosphere';
 
-import styles from './LibraryPage.module.css';
-
 function summarize(mix: Mix): string {
   const parts: string[] = [];
   if (mix.sourceUris.length) parts.push(`${mix.sourceUris.length} playlists`);
@@ -59,7 +57,7 @@ export function LibraryPage() {
   };
 
   return (
-    <div className={styles.screen}>
+    <div className="flex min-h-0 flex-1">
       <LibraryMaster
         rows={rows}
         selectedId={selectedId}
@@ -71,7 +69,9 @@ export function LibraryPage() {
       {selectedMix ? (
         <MixEditor mix={selectedMix} model={model} />
       ) : (
-        <div className={styles.placeholder}>Create your first mix to start building a vibe.</div>
+        <div className="flex flex-1 items-center justify-center p-10 text-center text-[14px] text-muted-2">
+          Create your first mix to start building a vibe.
+        </div>
       )}
     </div>
   );

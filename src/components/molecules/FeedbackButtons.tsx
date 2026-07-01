@@ -1,13 +1,11 @@
 import { Icon } from '~components/atoms/Icon';
 
-import styles from './FeedbackButtons.module.css';
-
 /** 👍 — mark the current track a good fit for this mix. */
 export function LikeButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
-      className={styles.round}
+      className="flex h-[var(--thumb-btn)] w-[var(--thumb-btn)] flex-shrink-0 items-center justify-center rounded-pill border border-line-12 bg-surface-control text-icon-muted cursor-pointer"
       title="Good fit for this mix"
       aria-label="Good fit — keep this track"
       onClick={onClick}
@@ -35,11 +33,15 @@ export function ThumbDownButton({
   onHoldCancel,
 }: ThumbDownButtonProps) {
   return (
-    <div className={styles.thumbDownWrap}>
-      {holding && <span className={styles.hint}>release: fade · keep holding: banish</span>}
+    <div className="relative">
+      {holding && (
+        <span className="absolute bottom-[62px] right-0 whitespace-nowrap rounded-lg border border-line-12 bg-surface-control px-2.5 py-1.5 text-[11px] text-quiet shadow-[0_8px_20px_rgba(0,0,0,0.5)] animate-[risein_0.16s_ease-out]">
+          release: fade · keep holding: banish
+        </span>
+      )}
       <button
         type="button"
-        className={styles.thumbDown}
+        className="relative flex h-[var(--thumb-btn)] w-[var(--thumb-btn)] flex-shrink-0 items-center justify-center overflow-hidden rounded-pill border border-danger-30 bg-surface-control text-danger-text cursor-pointer touch-none"
         title="Doesn't fit — tap to fade & skip, hold to banish"
         aria-label="Doesn't fit — tap to skip, hold to banish"
         onPointerDown={(e) => {
@@ -49,8 +51,11 @@ export function ThumbDownButton({
         onPointerUp={onHoldEnd}
         onPointerLeave={onHoldCancel}
       >
-        <span className={styles.fill} style={{ height: holding ? '100%' : '0%' }} />
-        <Icon name="thumb_down" size={25} className={styles.thumbIcon} />
+        <span
+          className="absolute inset-x-0 bottom-0 bg-danger-42 transition-[height] duration-700 ease-linear"
+          style={{ height: holding ? '100%' : '0%' }}
+        />
+        <Icon name="thumb_down" size={25} className="relative" />
       </button>
     </div>
   );

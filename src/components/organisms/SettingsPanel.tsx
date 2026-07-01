@@ -13,12 +13,26 @@ import { AMBIENT_KINDS, type AmbientKind,useSettingsStore } from '~stores/settin
 import { useUiStore } from '~stores/uiStore';
 import { ACCENT_OPTIONS, capitalize } from '~theme/atmosphere';
 
-import styles from './SettingsPanel.module.css';
+const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
+const LABEL = 'text-[14px] text-quiet';
+const SEG_BTN =
+  'border-none px-3 py-1.5 text-[13px] font-semibold rounded-[7px] cursor-pointer';
+const SEG_ACTIVE = 'bg-accent/18 text-accent';
+const SEG_INACTIVE = 'bg-transparent text-muted';
+const SEGMENT = 'flex gap-1 rounded-sm border border-line-10 bg-surface-control p-[3px]';
+const SLIDER_ROW = 'flex items-center gap-3';
+const VALUE = 'min-w-[36px] text-right text-[13px] tabular-nums text-muted';
+const PRIMARY_BTN =
+  'rounded-sm border border-accent/45 bg-accent/16 px-3.5 py-2 text-[13px] font-semibold text-accent cursor-pointer';
+const DANGER_BTN =
+  'rounded-sm border border-danger-30 bg-danger-12 px-3.5 py-2 text-[13px] font-semibold text-danger-text cursor-pointer';
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className={styles.section}>
-      <h3 className={styles.sectionTitle}>{title}</h3>
+    <section className="border-b border-line-05 py-4">
+      <h3 className="mb-3 text-[11.5px] font-bold uppercase tracking-[0.14em] text-faint">
+        {title}
+      </h3>
       {children}
     </section>
   );
@@ -57,11 +71,11 @@ export function SettingsPanel() {
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} ariaLabel="Settings" width={620}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Settings</h2>
+      <div className="sticky top-0 z-[1] flex items-center justify-between border-b border-line-08 bg-screen px-[22px] py-[18px]">
+        <h2 className="m-0 text-[19px] font-extrabold tracking-[-0.02em]">Settings</h2>
         <button
           type="button"
-          className={styles.close}
+          className="flex h-[34px] w-[34px] items-center justify-center rounded-xs border-none bg-transparent text-icon-muted cursor-pointer"
           aria-label="Close settings"
           onClick={() => setOpen(false)}
         >
@@ -69,16 +83,21 @@ export function SettingsPanel() {
         </button>
       </div>
 
-      <div className={styles.body}>
+      <div className="px-[22px] pb-[22px] pt-2">
         <Section title="Appearance">
-          <div className={styles.row}>
-            <span className={styles.label}>Accent</span>
-            <div className={styles.swatches}>
+          <div className={ROW}>
+            <span className={LABEL}>Accent</span>
+            <div className="flex gap-2.5">
               {ACCENT_OPTIONS.map((c) => (
                 <button
                   key={c}
                   type="button"
-                  className={cn(styles.swatch, accent === c && styles.swatchActive)}
+                  className={cn(
+                    'h-[26px] w-[26px] rounded-full border-2 cursor-pointer',
+                    accent === c
+                      ? 'border-primary shadow-[0_0_0_2px_var(--color-screen)]'
+                      : 'border-transparent',
+                  )}
                   style={{ background: c }}
                   aria-label={`Accent ${c}`}
                   aria-pressed={accent === c}
@@ -87,14 +106,14 @@ export function SettingsPanel() {
               ))}
             </div>
           </div>
-          <div className={styles.row}>
-            <span className={styles.label}>Grid density</span>
-            <div className={styles.segment}>
+          <div className={ROW}>
+            <span className={LABEL}>Grid density</span>
+            <div className={SEGMENT}>
               {[4, 5, 6].map((n) => (
                 <button
                   key={n}
                   type="button"
-                  className={cn(styles.segBtn, columns === n && styles.segActive)}
+                  className={cn(SEG_BTN, columns === n ? SEG_ACTIVE : SEG_INACTIVE)}
                   onClick={() => updatePrefs.mutate({ columns: n })}
                 >
                   {n}
@@ -102,14 +121,14 @@ export function SettingsPanel() {
               ))}
             </div>
           </div>
-          <div className={styles.row}>
-            <span className={styles.label}>Card label</span>
-            <div className={styles.segment}>
+          <div className={ROW}>
+            <span className={LABEL}>Card label</span>
+            <div className={SEGMENT}>
               {(['split', 'combined'] as const).map((v) => (
                 <button
                   key={v}
                   type="button"
-                  className={cn(styles.segBtn, cardLabel === v && styles.segActive)}
+                  className={cn(SEG_BTN, cardLabel === v ? SEG_ACTIVE : SEG_INACTIVE)}
                   onClick={() => updatePrefs.mutate({ cardLabel: v })}
                 >
                   {capitalize(v)}
@@ -120,22 +139,23 @@ export function SettingsPanel() {
         </Section>
 
         <Section title="Playback">
-          <div className={styles.row}>
-            <span className={styles.label}>Crossfade</span>
-            <div className={styles.sliderRow}>
+          <div className={ROW}>
+            <span className={LABEL}>Crossfade</span>
+            <div className={SLIDER_ROW}>
               <input
                 type="range"
+                className="w-[160px] accent-accent"
                 min={0}
                 max={8000}
                 step={500}
                 value={settings.crossfadeMs}
                 onChange={(e) => settings.setCrossfadeMs(Number(e.target.value))}
               />
-              <span className={styles.value}>{(settings.crossfadeMs / 1000).toFixed(1)}s</span>
+              <span className={VALUE}>{(settings.crossfadeMs / 1000).toFixed(1)}s</span>
             </div>
           </div>
-          <div className={styles.row}>
-            <span className={styles.label}>Panic target</span>
+          <div className={ROW}>
+            <span className={LABEL}>Panic target</span>
             <Select
               ariaLabel="Panic target mix"
               value={settings.panicMixId ?? ''}
@@ -149,12 +169,12 @@ export function SettingsPanel() {
         </Section>
 
         <Section title="Ambient bed">
-          <div className={styles.row}>
-            <span className={styles.label}>Sound</span>
-            <div className={styles.segment}>
+          <div className={ROW}>
+            <span className={LABEL}>Sound</span>
+            <div className={SEGMENT}>
               <button
                 type="button"
-                className={cn(styles.segBtn, settings.ambientKind === null && styles.segActive)}
+                className={cn(SEG_BTN, settings.ambientKind === null ? SEG_ACTIVE : SEG_INACTIVE)}
                 onClick={() => settings.setAmbientKind(null)}
               >
                 Off
@@ -163,7 +183,7 @@ export function SettingsPanel() {
                 <button
                   key={k}
                   type="button"
-                  className={cn(styles.segBtn, settings.ambientKind === k && styles.segActive)}
+                  className={cn(SEG_BTN, settings.ambientKind === k ? SEG_ACTIVE : SEG_INACTIVE)}
                   onClick={() => settings.setAmbientKind(k)}
                 >
                   {capitalize(k)}
@@ -171,31 +191,32 @@ export function SettingsPanel() {
               ))}
             </div>
           </div>
-          <div className={styles.row}>
-            <span className={styles.label}>Ambient volume</span>
-            <div className={styles.sliderRow}>
+          <div className={ROW}>
+            <span className={LABEL}>Ambient volume</span>
+            <div className={SLIDER_ROW}>
               <input
                 type="range"
+                className="w-[160px] accent-accent"
                 min={0}
                 max={1}
                 step={0.05}
                 value={settings.ambientVolume}
                 onChange={(e) => settings.setAmbientVolume(Number(e.target.value))}
               />
-              <span className={styles.value}>{Math.round(settings.ambientVolume * 100)}%</span>
+              <span className={VALUE}>{Math.round(settings.ambientVolume * 100)}%</span>
             </div>
           </div>
         </Section>
 
         <Section title="Sleep timer">
-          <div className={styles.row}>
-            <span className={styles.label}>Fade out after</span>
+          <div className={ROW}>
+            <span className={LABEL}>Fade out after</span>
             {sleepEndsAt ? (
-              <button type="button" className={styles.dangerBtn} onClick={actions.cancelSleepTimer}>
+              <button type="button" className={DANGER_BTN} onClick={actions.cancelSleepTimer}>
                 Cancel timer
               </button>
             ) : (
-              <div className={styles.sliderRow}>
+              <div className={SLIDER_ROW}>
                 <Select
                   ariaLabel="Sleep timer minutes"
                   value={String(settings.sleepTimerMinutes)}
@@ -207,7 +228,7 @@ export function SettingsPanel() {
                 />
                 <button
                   type="button"
-                  className={styles.primaryBtn}
+                  className={PRIMARY_BTN}
                   onClick={() => actions.startSleepTimer(settings.sleepTimerMinutes)}
                 >
                   Start
@@ -218,42 +239,48 @@ export function SettingsPanel() {
         </Section>
 
         <Section title={`Music — ${auth.providerName}`}>
-          <div className={styles.row}>
-            <span className={styles.label}>Account</span>
+          <div className={ROW}>
+            <span className={LABEL}>Account</span>
             {auth.capabilities.needsAccountLink ? (
               auth.linked ? (
-                <button type="button" className={styles.dangerBtn} onClick={auth.logout}>
+                <button type="button" className={DANGER_BTN} onClick={auth.logout}>
                   Unlink {auth.providerName}
                 </button>
               ) : (
-                <button type="button" className={styles.primaryBtn} onClick={auth.login}>
+                <button type="button" className={PRIMARY_BTN} onClick={auth.login}>
                   Link {auth.providerName}
                 </button>
               )
             ) : (
-              <span className={styles.note}>Demo mode — bundled catalog, no account needed</span>
+              <span className="text-[12.5px] text-muted-2">
+                Demo mode — bundled catalog, no account needed
+              </span>
             )}
           </div>
           {auth.capabilities.requiresPremium && (
-            <p className={styles.hint}>Playback requires {auth.providerName} Premium.</p>
+            <p className="mt-2 text-[12px] text-muted-2">
+              Playback requires {auth.providerName} Premium.
+            </p>
           )}
         </Section>
 
         <Section title="Keyboard">
-          <div className={styles.row}>
-            <span className={styles.label}>Shortcuts</span>
+          <div className={ROW}>
+            <span className={LABEL}>Shortcuts</span>
             <button
               type="button"
-              className={cn(styles.segBtn, settings.keyboardEnabled && styles.segActive)}
+              className={cn(SEG_BTN, settings.keyboardEnabled ? SEG_ACTIVE : SEG_INACTIVE)}
               onClick={() => settings.setKeyboardEnabled(!settings.keyboardEnabled)}
             >
               {settings.keyboardEnabled ? 'On' : 'Off'}
             </button>
           </div>
-          <div className={styles.shortcuts}>
+          <div className="mt-2.5 grid grid-cols-2 gap-x-[18px] gap-y-2">
             {SHORTCUTS.map(([key, desc]) => (
-              <div key={key} className={styles.shortcut}>
-                <kbd className={styles.kbd}>{key}</kbd>
+              <div key={key} className="flex items-center gap-2.5 text-[12.5px] text-muted">
+                <kbd className="min-w-[28px] rounded-[5px] border border-line-12 px-[7px] py-0.5 text-center text-[10.5px] font-bold text-quiet">
+                  {key}
+                </kbd>
                 <span>{desc}</span>
               </div>
             ))}
@@ -262,11 +289,11 @@ export function SettingsPanel() {
 
         {history.length > 0 && (
           <Section title="Recently played">
-            <div className={styles.history}>
+            <div className="flex flex-col gap-2">
               {history.slice(0, 8).map((h, i) => (
-                <div key={`${h.track.uri}-${i}`} className={styles.historyRow}>
-                  <span className={styles.historyTitle}>{h.track.title}</span>
-                  <span className={styles.historySub}>
+                <div key={`${h.track.uri}-${i}`} className="flex flex-col gap-px">
+                  <span className="text-[13.5px] font-semibold">{h.track.title}</span>
+                  <span className="text-[11.5px] text-muted-2">
                     {h.track.artist} · {h.mixName}
                   </span>
                 </div>

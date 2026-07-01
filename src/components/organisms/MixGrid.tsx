@@ -2,7 +2,6 @@ import { Spinner } from '~components/atoms/Spinner';
 import type { LiveCard } from '~features/live/useLiveMixes';
 
 import { MixCard } from './MixCard';
-import styles from './MixGrid.module.css';
 
 interface MixGridProps {
   cards: LiveCard[];
@@ -16,18 +15,23 @@ interface MixGridProps {
 export function MixGrid({ cards, cols, isLoading, onSelect, onTogglePin }: MixGridProps) {
   if (isLoading) {
     return (
-      <div className={styles.center}>
+      <div className="flex justify-center p-[60px]">
         <Spinner size={22} />
       </div>
     );
   }
   if (cards.length === 0) {
     return (
-      <div className={styles.empty}>No mixes match — try another vibe or clear the search.</div>
+      <div className="p-10 text-center text-[13.5px] text-muted-2">
+        No mixes match — try another vibe or clear the search.
+      </div>
     );
   }
   return (
-    <div className={styles.grid} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+    <div
+      className="grid content-start gap-3"
+      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+    >
       {cards.map((card) => (
         <MixCard
           key={card.id}

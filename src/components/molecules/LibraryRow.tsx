@@ -1,8 +1,6 @@
 import { GradientCover } from '~components/atoms/GradientCover';
 import { cn } from '~lib/cn';
 
-import styles from './LibraryRow.module.css';
-
 interface LibraryRowProps {
   name: string;
   meta: string;
@@ -11,6 +9,9 @@ interface LibraryRowProps {
   selected: boolean;
   onSelect: () => void;
 }
+
+const BASE =
+  'flex w-full items-center gap-3 text-left px-[11px] py-[9px] rounded-md cursor-pointer text-primary border';
 
 /** A mix row in the Library master list. */
 export function LibraryRow({
@@ -24,7 +25,12 @@ export function LibraryRow({
   return (
     <button
       type="button"
-      className={cn(styles.row, selected && styles.selected)}
+      className={cn(
+        BASE,
+        selected
+          ? 'bg-surface-selected border-line-12'
+          : 'bg-transparent border-transparent hover:bg-[rgba(255,255,255,0.025)]',
+      )}
       aria-current={selected}
       onClick={onSelect}
     >
@@ -35,9 +41,9 @@ export function LibraryRow({
         height={40}
         radius={10}
       />
-      <span className={styles.meta}>
-        <span className={styles.name}>{name}</span>
-        <span className={styles.sub}>{meta}</span>
+      <span className="flex flex-1 flex-col gap-0.5 min-w-0">
+        <span className="truncate text-[14px] font-semibold">{name}</span>
+        <span className="truncate text-[11px] text-muted-2">{meta}</span>
       </span>
     </button>
   );

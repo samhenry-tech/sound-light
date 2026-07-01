@@ -2,8 +2,6 @@ import { Icon } from '~components/atoms/Icon';
 import { NavItem } from '~components/molecules/NavItem';
 import { cn } from '~lib/cn';
 
-import styles from './NavRail.module.css';
-
 export type Screen = 'live' | 'library';
 
 interface NavRailProps {
@@ -15,6 +13,9 @@ interface NavRailProps {
   onOpenSettings: () => void;
 }
 
+const TOOL =
+  'flex h-11 w-11 items-center justify-center rounded-[13px] border-none bg-transparent text-muted-2 cursor-pointer transition-colors duration-150 hover:text-quiet';
+
 /** Left rail: app mark, primary navigation, and quick tools. */
 export function NavRail({
   active,
@@ -25,12 +26,17 @@ export function NavRail({
   onOpenSettings,
 }: NavRailProps) {
   return (
-    <nav className={styles.rail} aria-label="Primary">
-      <div className={styles.brand}>
-        <div className={styles.mark}>
-          <Icon name="graphic_eq" size={22} className={styles.markIcon} />
+    <nav
+      className="flex w-[var(--rail-w)] flex-shrink-0 flex-col items-center gap-2 border-r border-line-07 bg-rail py-4"
+      aria-label="Primary"
+    >
+      <div className="mb-3 flex flex-col items-center gap-1.5">
+        <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px] bg-accent">
+          <Icon name="graphic_eq" size={22} className="text-[#0c0e0f]" />
         </div>
-        <span className={styles.brandName}>atmos</span>
+        <span className="whitespace-nowrap text-[9.5px] font-bold tracking-[-0.01em] text-quiet">
+          atmos
+        </span>
       </div>
 
       <NavItem
@@ -46,12 +52,12 @@ export function NavRail({
         onClick={() => onNavigate('library')}
       />
 
-      <div className={styles.spacer} />
+      <div className="flex-1" />
 
-      <div className={styles.tools}>
+      <div className="flex flex-col items-center gap-1.5">
         <button
           type="button"
-          className={styles.tool}
+          className={TOOL}
           title="Command palette (⌘K)"
           aria-label="Open command palette"
           onClick={onOpenPalette}
@@ -60,7 +66,7 @@ export function NavRail({
         </button>
         <button
           type="button"
-          className={cn(styles.tool, tableMode && styles.activeTool)}
+          className={cn(TOOL, tableMode && 'bg-accent/15 text-accent hover:text-accent')}
           title="Table mode"
           aria-label="Toggle table mode"
           aria-pressed={tableMode}
@@ -70,7 +76,7 @@ export function NavRail({
         </button>
         <button
           type="button"
-          className={styles.tool}
+          className={TOOL}
           title="Settings"
           aria-label="Open settings"
           onClick={onOpenSettings}

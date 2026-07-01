@@ -9,8 +9,6 @@ import { cn } from '~lib/cn';
 import { mixName } from '~lib/format';
 import { useUiStore } from '~stores/uiStore';
 
-import styles from './CommandPalette.module.css';
-
 interface Command {
   id: string;
   label: string;
@@ -86,11 +84,11 @@ export function CommandPalette() {
       width={580}
       align="top"
     >
-      <div className={styles.search}>
-        <Icon name="search" size={20} className={styles.searchIcon} />
+      <div className="flex items-center gap-3 border-b border-line-08 px-[18px] py-4">
+        <Icon name="search" size={20} className="text-muted-2" />
         <input
           autoFocus
-          className={styles.input}
+          className="flex-1 border-none bg-transparent text-[16px] text-primary outline-none placeholder:text-muted-2"
           placeholder="Jump to a mix or run a command…"
           value={query}
           onChange={(e) => {
@@ -99,23 +97,33 @@ export function CommandPalette() {
           }}
           onKeyDown={onKeyDown}
         />
-        <kbd className={styles.kbd}>esc</kbd>
+        <kbd className="rounded-[6px] border border-line-12 px-1.5 py-[3px] text-[10px] font-bold uppercase text-faint">
+          esc
+        </kbd>
       </div>
-      <div className={styles.list}>
-        {items.map((cmd, i) => (
-          <button
-            key={cmd.id}
-            type="button"
-            className={cn(styles.item, i === active && styles.activeItem)}
-            onMouseEnter={() => setActive(i)}
-            onClick={() => run(cmd)}
-          >
-            <Icon name={cmd.icon} size={18} className={styles.itemIcon} />
-            <span className={styles.itemLabel}>{cmd.label}</span>
-            {cmd.hint && <span className={styles.itemHint}>{cmd.hint}</span>}
-          </button>
-        ))}
-        {items.length === 0 && <div className={styles.noResults}>No matches.</div>}
+      <div className="flex flex-col gap-0.5 p-2">
+        {items.map((cmd, i) => {
+          const isActive = i === active;
+          return (
+            <button
+              key={cmd.id}
+              type="button"
+              className={cn(
+                'flex items-center gap-3 rounded-sm border-none px-3 py-2.5 text-left text-primary cursor-pointer',
+                isActive ? 'bg-accent/14' : 'bg-transparent',
+              )}
+              onMouseEnter={() => setActive(i)}
+              onClick={() => run(cmd)}
+            >
+              <Icon name={cmd.icon} size={18} className={isActive ? 'text-accent' : 'text-icon-muted'} />
+              <span className="flex-1 text-[14px] font-medium">{cmd.label}</span>
+              {cmd.hint && <span className="text-[11px] text-faint">{cmd.hint}</span>}
+            </button>
+          );
+        })}
+        {items.length === 0 && (
+          <div className="p-6 text-center text-[13.5px] text-muted-2">No matches.</div>
+        )}
       </div>
     </Modal>
   );

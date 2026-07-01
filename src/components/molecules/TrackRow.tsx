@@ -1,8 +1,6 @@
 import { Icon } from '~components/atoms/Icon';
 import { IconButton } from '~components/atoms/IconButton';
 
-import styles from './TrackRow.module.css';
-
 interface TrackRowProps {
   title: string;
   artist: string;
@@ -26,11 +24,11 @@ export function TrackRow({
   onRemove,
 }: TrackRowProps) {
   return (
-    <div className={styles.row}>
-      <span className={styles.dot} style={{ background: dotColor }} />
-      <span className={styles.meta}>
-        <span className={styles.title}>{title}</span>
-        <span className={styles.sub}>
+    <div className="flex items-center gap-[13px] px-1.5 py-[9px] border-b border-line-05">
+      <span className="h-1.5 w-1.5 flex-shrink-0 rounded-pill" style={{ background: dotColor }} />
+      <span className="flex flex-1 flex-col gap-px min-w-0">
+        <span className="truncate text-[14px] font-semibold text-primary">{title}</span>
+        <span className="truncate text-[11.5px] text-muted-2">
           {artist} · {origin}
         </span>
       </span>
@@ -38,7 +36,10 @@ export function TrackRow({
         <IconButton icon="close" size={30} iconSize={16} label="Remove track" onClick={onRemove} />
       )}
       {locked && (
-        <span className={styles.lock} title="From a locked playlist — remove the playlist above">
+        <span
+          className="flex h-[30px] w-[30px] flex-shrink-0 items-center justify-center text-faint-3"
+          title="From a locked playlist — remove the playlist above"
+        >
           <Icon name="lock" size={15} />
         </span>
       )}

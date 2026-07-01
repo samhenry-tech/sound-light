@@ -4,8 +4,6 @@ import { EqBars } from '~components/atoms/EqBars';
 import { GradientCover } from '~components/atoms/GradientCover';
 import { cn } from '~lib/cn';
 
-import styles from './MixCover.module.css';
-
 interface MixCoverProps {
   gradient: string;
   artworkUrl?: string;
@@ -32,19 +30,31 @@ export function MixCover({
     <GradientCover gradient={gradient} artworkUrl={artworkUrl} height={height}>
       <button
         type="button"
-        className={styles.pin}
+        className="absolute top-[7px] right-[7px] flex h-[30px] w-[30px] items-center justify-center rounded-xs border border-line-10 bg-[rgba(8,10,11,0.42)] cursor-pointer"
         title={pinned ? 'Unpin' : 'Pin to top'}
         aria-label={pinned ? 'Unpin mix' : 'Pin mix to top'}
         aria-pressed={pinned}
         onClick={togglePin}
       >
-        <span className={cn(styles.tack, pinned ? styles.pinned : styles.unpinned)}>
-          <span className={styles.dot} />
-          <span className={styles.stem} />
+        <span className={cn('flex flex-col items-center', !pinned && 'opacity-65')}>
+          <span
+            className={cn(
+              'h-[9px] w-[9px] rounded-pill',
+              pinned
+                ? 'bg-accent shadow-[0_0_8px_color-mix(in_srgb,var(--accent)_60%,transparent)]'
+                : 'border-[1.5px] border-[rgba(255,255,255,0.5)]',
+            )}
+          />
+          <span
+            className={cn(
+              'h-[5px] w-[2px] rounded-b-[2px]',
+              pinned ? 'bg-accent' : 'bg-[rgba(255,255,255,0.5)]',
+            )}
+          />
         </span>
       </button>
       {isActive && (
-        <span className={styles.eq}>
+        <span className="absolute left-[9px] bottom-[9px]">
           <EqBars size={13} />
         </span>
       )}

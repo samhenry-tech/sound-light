@@ -2,7 +2,6 @@ import type { ButtonHTMLAttributes } from 'react';
 
 import { cn } from '~lib/cn';
 
-import styles from './AccentButton.module.css';
 import { Icon } from './Icon';
 
 interface AccentButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,7 +11,14 @@ interface AccentButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 /** Accent-tinted action button (New, Add). */
 export function AccentButton({ icon, children, className, ...props }: AccentButtonProps) {
   return (
-    <button type="button" className={cn(styles.btn, className)} {...props}>
+    <button
+      type="button"
+      className={cn(
+        'inline-flex cursor-pointer items-center gap-1.5 rounded-sm border border-accent/45 bg-accent/16 px-[13px] py-2 text-[13px] font-semibold text-accent disabled:cursor-default disabled:opacity-50',
+        className,
+      )}
+      {...props}
+    >
       {icon && <Icon name={icon} size={18} />}
       {children}
     </button>

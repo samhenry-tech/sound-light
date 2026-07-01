@@ -1,8 +1,6 @@
 import { Icon } from '~components/atoms/Icon';
 import { IconButton } from '~components/atoms/IconButton';
 
-import styles from './SourceRow.module.css';
-
 interface SourceRowProps {
   name: string;
   owner: string;
@@ -13,13 +11,13 @@ interface SourceRowProps {
 /** A "locked unit" playlist/album row in the editor. */
 export function SourceRow({ name, owner, count, onRemove }: SourceRowProps) {
   return (
-    <div className={styles.row}>
-      <span className={styles.tile}>
+    <div className="flex items-center gap-[13px] mb-2 px-3.5 py-[11px] bg-surface-card border border-line-08 rounded-md">
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xs bg-source-bg text-source-icon">
         <Icon name="queue_music" size={19} />
       </span>
-      <span className={styles.meta}>
-        <span className={styles.name}>{name}</span>
-        <span className={styles.sub}>
+      <span className="flex flex-1 flex-col gap-0.5 min-w-0">
+        <span className="truncate text-[14px] font-semibold">{name}</span>
+        <span className="text-[11.5px] text-muted-2">
           {owner} · {count} tracks
         </span>
       </span>

@@ -3,8 +3,6 @@ import { SearchInput } from '~components/molecules/SearchInput';
 import { SearchResultRow } from '~components/molecules/SearchResultRow';
 import type { EditorSearchResult } from '~features/library/useMixEditor';
 
-import styles from './SearchToAdd.module.css';
-
 interface SearchToAddProps {
   query: string;
   onQuery: (q: string) => void;
@@ -26,7 +24,7 @@ export function SearchToAdd({
   noResults,
 }: SearchToAddProps) {
   return (
-    <div className={styles.wrap}>
+    <div className="relative z-[6] flex-shrink-0 px-[26px] pb-1 pt-4">
       <SearchInput
         value={query}
         onChange={onQuery}
@@ -38,7 +36,7 @@ export function SearchToAdd({
         ariaLabel="Search Spotify"
       />
       {active && (
-        <div className={styles.dropdown}>
+        <div className="absolute left-[26px] right-[26px] top-[62px] z-[8] max-h-[368px] overflow-y-auto rounded-[14px] border border-line-14 bg-[#161a1b] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.6)] animate-[risein_0.16s_ease-out]">
           {results.map((r) => (
             <SearchResultRow
               key={`${r.kind}:${r.uri}`}
@@ -50,11 +48,15 @@ export function SearchToAdd({
             />
           ))}
           {isSearching && results.length === 0 && (
-            <div className={styles.searching}>
+            <div className="flex items-center justify-center gap-2 p-3.5 text-[13px] text-muted-2">
               <Spinner size={16} /> Searching Spotify…
             </div>
           )}
-          {noResults && <div className={styles.note}>No matches on Spotify for that.</div>}
+          {noResults && (
+            <div className="p-[18px] text-center text-[13.5px] text-muted-2">
+              No matches on Spotify for that.
+            </div>
+          )}
         </div>
       )}
     </div>

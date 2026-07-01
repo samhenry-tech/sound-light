@@ -4,10 +4,10 @@ import { useAuthSession } from '~auth/useAuthSession';
 import { CommandPalette } from '~components/organisms/CommandPalette';
 import type { Screen } from '~components/organisms/NavRail';
 import { SettingsPanel } from '~components/organisms/SettingsPanel';
-import { AppShell } from '~components/templates/AppShell';
-import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
 import { LoginPage } from '~components/pages/auth/LoginPage';
 import { Splash } from '~components/pages/auth/Splash';
+import { AppShell } from '~components/templates/AppShell';
+import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
 import { useUiStore } from '~stores/uiStore';
 
 /** Auth gate + app shell that wraps the Live / Library routes. */

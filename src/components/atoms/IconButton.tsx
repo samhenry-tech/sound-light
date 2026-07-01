@@ -3,7 +3,6 @@ import type { ButtonHTMLAttributes } from 'react';
 import { cn } from '~lib/cn';
 
 import { Icon } from './Icon';
-import styles from './IconButton.module.css';
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: string;
@@ -14,6 +13,15 @@ interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Required for a11y since the button is icon-only. */
   label: string;
 }
+
+const BASE =
+  'flex flex-shrink-0 items-center justify-center rounded-xs border bg-transparent cursor-pointer transition-colors duration-150';
+
+const VARIANTS: Record<NonNullable<IconButtonProps['variant']>, string> = {
+  default: 'border-line-10 text-icon-muted hover:border-line-20',
+  danger: 'border-danger-30 text-danger-text-2 hover:border-line-20',
+  ghost: 'border-transparent text-icon-muted hover:border-line-20',
+};
 
 /** A square, hairline-bordered icon button (remove ✕, delete, close). */
 export function IconButton({
@@ -30,7 +38,7 @@ export function IconButton({
       type="button"
       title={label}
       aria-label={label}
-      className={cn(styles.btn, styles[variant], className)}
+      className={cn(BASE, VARIANTS[variant], className)}
       style={{ width: size, height: size }}
       {...props}
     >

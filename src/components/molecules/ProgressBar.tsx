@@ -2,8 +2,6 @@ import type { KeyboardEvent, MouseEvent } from 'react';
 
 import { formatMs } from '~lib/format';
 
-import styles from './ProgressBar.module.css';
-
 interface ProgressBarProps {
   positionMs: number;
   durationMs: number;
@@ -11,6 +9,8 @@ interface ProgressBarProps {
 }
 
 const SEEK_STEP_MS = 5000;
+
+const TIME = 'text-[11px] text-muted-2 flex-shrink-0 min-w-[30px] [font-variant-numeric:tabular-nums]';
 
 /** Elapsed · seekable track · total, driven by player position. */
 export function ProgressBar({ positionMs, durationMs, onSeek }: ProgressBarProps) {
@@ -32,10 +32,10 @@ export function ProgressBar({ positionMs, durationMs, onSeek }: ProgressBarProps
   };
 
   return (
-    <div className={styles.wrap}>
-      <span className={styles.time}>{formatMs(positionMs)}</span>
+    <div className="flex flex-1 items-center gap-3 min-w-0">
+      <span className={`${TIME} text-right`}>{formatMs(positionMs)}</span>
       <div
-        className={styles.track}
+        className="flex-1 h-1 rounded-pill bg-[rgba(255,255,255,0.1)] overflow-hidden cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-[3px]"
         role="slider"
         tabIndex={onSeek ? 0 : -1}
         aria-label="Seek"
@@ -45,9 +45,9 @@ export function ProgressBar({ positionMs, durationMs, onSeek }: ProgressBarProps
         onClick={onClick}
         onKeyDown={onKeyDown}
       >
-        <div className={styles.fill} style={{ width: `${pct}%` }} />
+        <div className="h-full bg-accent rounded-pill" style={{ width: `${pct}%` }} />
       </div>
-      <span className={styles.time}>{formatMs(durationMs)}</span>
+      <span className={TIME}>{formatMs(durationMs)}</span>
     </div>
   );
 }
