@@ -8,7 +8,7 @@ import { AmbientEngine } from './ambientEngine';
  * Headless component that owns the {@link AmbientEngine} and keeps it in sync
  * with the ambient settings. Rendered once near the app root.
  */
-export function AmbientController() {
+export const AmbientController = () => {
   const kind = useSettingsStore((s) => s.ambientKind);
   const volume = useSettingsStore((s) => s.ambientVolume);
   const engineRef = useRef<AmbientEngine | null>(null);
@@ -34,4 +34,4 @@ export function AmbientController() {
   }, [volume]);
 
   return null;
-}
+};

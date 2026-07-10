@@ -14,7 +14,7 @@ interface SearchToAddProps {
 }
 
 /** The Spotify search-to-add input + floating results dropdown. */
-export function SearchToAdd({
+export const SearchToAdd = ({
   query,
   onQuery,
   onClear,
@@ -22,7 +22,7 @@ export function SearchToAdd({
   isSearching,
   results,
   noResults,
-}: SearchToAddProps) {
+}: SearchToAddProps) => {
   return (
     <div className="relative z-[6] flex-shrink-0 px-[26px] pb-1 pt-4">
       <SearchInput
@@ -61,4 +61,4 @@ export function SearchToAdd({
       )}
     </div>
   );
-}
+};

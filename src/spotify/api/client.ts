@@ -11,11 +11,7 @@ export class SpotifyNotLinkedError extends Error {
   }
 }
 
-export async function spotifyFetch<S extends z.ZodTypeAny>(
-  path: string,
-  schema: S,
-  init?: RequestInit,
-): Promise<z.infer<S>> {
+export const spotifyFetch = async <S extends z.ZodTypeAny>(path: string, schema: S, init?: RequestInit): Promise<z.infer<S>> => {
   const token = await getValidAccessToken();
   if (!token) throw new SpotifyNotLinkedError();
 
@@ -39,4 +35,4 @@ export async function spotifyFetch<S extends z.ZodTypeAny>(
   // schema's inferred output. ZodTypeAny is required because several Spotify
   // schemas use `.default`, so their input and output types differ.
   return schema.parse(await res.json()) as z.infer<S>;
-}
+};

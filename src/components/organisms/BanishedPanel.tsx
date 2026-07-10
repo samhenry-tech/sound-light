@@ -11,7 +11,7 @@ interface BanishedPanelProps {
 }
 
 /** Red-tinted panel listing banished tracks, each with Restore. */
-export function BanishedPanel({ tracks, onRestore }: BanishedPanelProps) {
+export const BanishedPanel = ({ tracks, onRestore }: BanishedPanelProps) => {
   return (
     <div className="mt-[18px] rounded-[14px] border border-danger-18 bg-danger-06 px-4 py-3.5">
       <div className="mb-2.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-danger-text-3">
@@ -38,4 +38,4 @@ export function BanishedPanel({ tracks, onRestore }: BanishedPanelProps) {
       ))}
     </div>
   );
-}
+};

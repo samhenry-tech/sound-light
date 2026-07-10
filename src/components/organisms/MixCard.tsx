@@ -1,6 +1,7 @@
+import { clsx } from 'clsx';
+
 import { MixCover } from '~components/molecules/MixCover';
 import type { LiveCard } from '~features/live/useLiveMixes';
-import { cn } from '~lib/cn';
 
 interface MixCardProps {
   card: LiveCard;
@@ -12,10 +13,10 @@ const CARD =
   'relative flex flex-col overflow-hidden rounded-lg border bg-surface-card text-left text-primary cursor-pointer transition-[border-color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2';
 
 /** A vibe card in the Live grid. Tap to crossfade; pin in the top-right. */
-export function MixCard({ card, onSelect, onTogglePin }: MixCardProps) {
+export const MixCard = ({ card, onSelect, onTogglePin }: MixCardProps) => {
   return (
     <div
-      className={cn(CARD, card.isActive ? 'border-line-08' : 'border-line-08 hover:border-line-20')}
+      className={clsx(CARD, card.isActive ? 'border-line-08' : 'border-line-08 hover:border-line-20')}
       role="button"
       tabIndex={0}
       aria-label={`Play ${card.name}`}
@@ -51,4 +52,4 @@ export function MixCard({ card, onSelect, onTogglePin }: MixCardProps) {
       )}
     </div>
   );
-}
+};

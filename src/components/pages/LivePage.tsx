@@ -4,11 +4,11 @@ import { SearchInput } from '~components/molecules/SearchInput';
 import { MixGrid } from '~components/organisms/MixGrid';
 import { useLiveMixes } from '~features/live/useLiveMixes';
 import { usePlayerActions } from '~features/player/PlayerContext';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import { useUiStore } from '~stores/uiStore';
 
 /** The Live screen — glance, tap a vibe, give feedback. */
-export function LivePage() {
+export const LivePage = () => {
   const { cards, cols, isLoading } = useLiveMixes();
   const { data: mixes = [] } = useMixes();
   const updateMix = useUpdateMix();
@@ -61,4 +61,4 @@ export function LivePage() {
       </div>
     </div>
   );
-}
+};

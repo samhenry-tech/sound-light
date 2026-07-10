@@ -2,7 +2,7 @@ import { useAuthSession } from '~auth/useAuthSession';
 import { Icon } from '~components/atoms/Icon';
 
 /** Small multicolor Google "G". */
-function GoogleG() {
+const GoogleG = () => {
   return (
     <svg className="h-[18px] w-[18px]" viewBox="0 0 18 18" aria-hidden="true">
       <path
@@ -23,10 +23,10 @@ function GoogleG() {
       />
     </svg>
   );
-}
+};
 
 /** Sign-in gate shown when Cognito is configured and the user is signed out. */
-export function LoginPage() {
+export const LoginPage = () => {
   const { login, loginWithGoogle, error } = useAuthSession();
 
   return (
@@ -66,4 +66,4 @@ export function LoginPage() {
       </div>
     </div>
   );
-}
+};

@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
 import { useMixes, usePrefs, useUpdatePrefs } from '~api/hooks';
@@ -5,8 +6,7 @@ import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { Select } from '~components/molecules/Select';
 import { usePlayerActions } from '~features/player/PlayerContext';
-import { cn } from '~lib/cn';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import { useMusicAuth } from '~music/useMusicAuth';
 import { usePlayerStore } from '~stores/playerStore';
 import { AMBIENT_KINDS, type AmbientKind,useSettingsStore } from '~stores/settingsStore';
@@ -27,7 +27,7 @@ const PRIMARY_BTN =
 const DANGER_BTN =
   'rounded-sm border border-danger-30 bg-danger-12 px-3.5 py-2 text-[13px] font-semibold text-danger-text cursor-pointer';
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+const Section = ({ title, children }: { title: string; children: ReactNode }) => {
   return (
     <section className="border-b border-line-05 py-4">
       <h3 className="mb-3 text-[11.5px] font-bold uppercase tracking-[0.14em] text-faint">
@@ -36,7 +36,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
       {children}
     </section>
   );
-}
+};
 
 const SHORTCUTS: [string, string][] = [
   ['Space', 'Play / pause'],
@@ -51,7 +51,7 @@ const SHORTCUTS: [string, string][] = [
 ];
 
 /** The settings modal — theming, playback, ambient, account, shortcuts. */
-export function SettingsPanel() {
+export const SettingsPanel = () => {
   const open = useUiStore((s) => s.settingsOpen);
   const setOpen = useUiStore((s) => s.setSettingsOpen);
 
@@ -92,7 +92,7 @@ export function SettingsPanel() {
                 <button
                   key={c}
                   type="button"
-                  className={cn(
+                  className={clsx(
                     'h-[26px] w-[26px] rounded-full border-2 cursor-pointer',
                     accent === c
                       ? 'border-primary shadow-[0_0_0_2px_var(--color-screen)]'
@@ -113,7 +113,7 @@ export function SettingsPanel() {
                 <button
                   key={n}
                   type="button"
-                  className={cn(SEG_BTN, columns === n ? SEG_ACTIVE : SEG_INACTIVE)}
+                  className={clsx(SEG_BTN, columns === n ? SEG_ACTIVE : SEG_INACTIVE)}
                   onClick={() => updatePrefs.mutate({ columns: n })}
                 >
                   {n}
@@ -128,7 +128,7 @@ export function SettingsPanel() {
                 <button
                   key={v}
                   type="button"
-                  className={cn(SEG_BTN, cardLabel === v ? SEG_ACTIVE : SEG_INACTIVE)}
+                  className={clsx(SEG_BTN, cardLabel === v ? SEG_ACTIVE : SEG_INACTIVE)}
                   onClick={() => updatePrefs.mutate({ cardLabel: v })}
                 >
                   {capitalize(v)}
@@ -174,7 +174,7 @@ export function SettingsPanel() {
             <div className={SEGMENT}>
               <button
                 type="button"
-                className={cn(SEG_BTN, settings.ambientKind === null ? SEG_ACTIVE : SEG_INACTIVE)}
+                className={clsx(SEG_BTN, settings.ambientKind === null ? SEG_ACTIVE : SEG_INACTIVE)}
                 onClick={() => settings.setAmbientKind(null)}
               >
                 Off
@@ -183,7 +183,7 @@ export function SettingsPanel() {
                 <button
                   key={k}
                   type="button"
-                  className={cn(SEG_BTN, settings.ambientKind === k ? SEG_ACTIVE : SEG_INACTIVE)}
+                  className={clsx(SEG_BTN, settings.ambientKind === k ? SEG_ACTIVE : SEG_INACTIVE)}
                   onClick={() => settings.setAmbientKind(k)}
                 >
                   {capitalize(k)}
@@ -269,7 +269,7 @@ export function SettingsPanel() {
             <span className={LABEL}>Shortcuts</span>
             <button
               type="button"
-              className={cn(SEG_BTN, settings.keyboardEnabled ? SEG_ACTIVE : SEG_INACTIVE)}
+              className={clsx(SEG_BTN, settings.keyboardEnabled ? SEG_ACTIVE : SEG_INACTIVE)}
               onClick={() => settings.setKeyboardEnabled(!settings.keyboardEnabled)}
             >
               {settings.keyboardEnabled ? 'On' : 'Off'}
@@ -304,4 +304,4 @@ export function SettingsPanel() {
       </div>
     </Modal>
   );
-}
+};

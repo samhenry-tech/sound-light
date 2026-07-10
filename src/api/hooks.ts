@@ -13,7 +13,7 @@ import type { DataContext } from './adapters/types';
 import { dataAdapter } from './dataAdapter';
 import { dataKeys } from './queryKeys';
 
-function useDataContext(): DataContext & { ready: boolean } {
+const useDataContext = (): DataContext & { ready: boolean } => {
   const { user, accessToken, isAuthenticated } = useAuthSession();
   return useMemo(
     () => ({
@@ -23,9 +23,9 @@ function useDataContext(): DataContext & { ready: boolean } {
     }),
     [accessToken, user, isAuthenticated],
   );
-}
+};
 
-export function useMixes() {
+export const useMixes = () => {
   const ctx = useDataContext();
   return useQuery({
     queryKey: dataKeys.mixes(ctx.owner),
@@ -33,9 +33,9 @@ export function useMixes() {
     enabled: ctx.ready,
     staleTime: 60_000,
   });
-}
+};
 
-export function usePrefs() {
+export const usePrefs = () => {
   const ctx = useDataContext();
   return useQuery({
     queryKey: dataKeys.prefs(ctx.owner),
@@ -43,9 +43,9 @@ export function usePrefs() {
     enabled: ctx.ready,
     staleTime: 5 * 60_000,
   });
-}
+};
 
-export function useCreateMix() {
+export const useCreateMix = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
   return useMutation({
@@ -54,9 +54,9 @@ export function useCreateMix() {
       qc.setQueryData<Mix[]>(dataKeys.mixes(ctx.owner), (prev) => [...(prev ?? []), mix]);
     },
   });
-}
+};
 
-export function useUpdateMix() {
+export const useUpdateMix = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
   const key = dataKeys.mixes(ctx.owner);
@@ -77,9 +77,9 @@ export function useUpdateMix() {
     },
     onSettled: () => void qc.invalidateQueries({ queryKey: key }),
   });
-}
+};
 
-export function useDeleteMix() {
+export const useDeleteMix = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
   const key = dataKeys.mixes(ctx.owner);
@@ -97,9 +97,9 @@ export function useDeleteMix() {
     },
     onSettled: () => void qc.invalidateQueries({ queryKey: key }),
   });
-}
+};
 
-export function useUpdatePrefs() {
+export const useUpdatePrefs = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
   const key = dataKeys.prefs(ctx.owner);
@@ -117,4 +117,4 @@ export function useUpdatePrefs() {
     },
     onSettled: () => void qc.invalidateQueries({ queryKey: key }),
   });
-}
+};

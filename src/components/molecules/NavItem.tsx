@@ -1,5 +1,6 @@
+import { clsx } from 'clsx';
+
 import { Icon } from '~components/atoms/Icon';
-import { cn } from '~lib/cn';
 
 interface NavItemProps {
   icon: string;
@@ -12,11 +13,11 @@ const BASE =
   'flex flex-col items-center justify-center gap-[5px] w-[62px] h-[60px] border-none rounded-[15px] cursor-pointer text-[10.5px] font-semibold transition-[background-color,color] duration-150';
 
 /** A vertical icon + label button in the left nav rail. */
-export function NavItem({ icon, label, active, onClick }: NavItemProps) {
+export const NavItem = ({ icon, label, active, onClick }: NavItemProps) => {
   return (
     <button
       type="button"
-      className={cn(BASE, active ? 'bg-accent/15 text-accent' : 'bg-transparent text-muted-2')}
+      className={clsx(BASE, active ? 'bg-accent/15 text-accent' : 'bg-transparent text-muted-2')}
       aria-current={active ? 'page' : undefined}
       onClick={onClick}
     >
@@ -24,4 +25,4 @@ export function NavItem({ icon, label, active, onClick }: NavItemProps) {
       <span>{label}</span>
     </button>
   );
-}
+};

@@ -12,7 +12,7 @@ import { ThemeProvider } from './providers/ThemeProvider';
  * Composition root. Order matters: auth → query → music provider → theme
  * (reads prefs) → player (needs query + music + data).
  */
-export function AppProviders({ children }: { children: ReactNode }) {
+export const AppProviders = ({ children }: { children: ReactNode }) => {
   return (
     <AppAuthProvider>
       <QueryProvider>
@@ -27,4 +27,4 @@ export function AppProviders({ children }: { children: ReactNode }) {
       </QueryProvider>
     </AppAuthProvider>
   );
-}
+};

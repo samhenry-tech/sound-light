@@ -1,9 +1,9 @@
+import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
 import { Toast } from '~components/atoms/Toast';
 import { NavRail, type Screen } from '~components/organisms/NavRail';
 import { NowPlayingBar } from '~components/organisms/NowPlayingBar';
-import { cn } from '~lib/cn';
 import { useUiStore } from '~stores/uiStore';
 
 import { useCanvasScale } from './useCanvasScale';
@@ -20,13 +20,13 @@ interface AppShellProps {
  * The iPad-canvas app frame: left rail + routed content + the persistent
  * now-playing bar (rendered outside the route so music never stops on nav).
  */
-export function AppShell({
+export const AppShell = ({
   active,
   onNavigate,
   onOpenPalette,
   onOpenSettings,
   children,
-}: AppShellProps) {
+}: AppShellProps) => {
   const tableMode = useUiStore((s) => s.tableMode);
   const toggleTableMode = useUiStore((s) => s.toggleTableMode);
   const toast = useUiStore((s) => s.toast);
@@ -35,7 +35,7 @@ export function AppShell({
   return (
     <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-app">
       <div
-        className={cn(
+        className={clsx(
           'relative flex w-[var(--canvas-w)] h-[var(--canvas-h)] flex-shrink-0 flex-col overflow-hidden bg-screen text-primary',
           tableMode
             ? 'rounded-none shadow-none'
@@ -65,4 +65,4 @@ export function AppShell({
       </div>
     </div>
   );
-}
+};

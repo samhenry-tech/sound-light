@@ -6,7 +6,7 @@ import { useMusicProvider } from '~music/MusicProviderContext';
 import { Splash } from './Splash';
 
 /** Music-provider (Spotify) OAuth redirect target. Completes the token exchange. */
-export function MusicCallbackPage() {
+export const MusicCallbackPage = () => {
   const provider = useMusicProvider();
   const navigate = useNavigate();
   const [error, setError] = useState<string | undefined>();
@@ -22,4 +22,4 @@ export function MusicCallbackPage() {
   }, [provider, navigate]);
 
   return <Splash title={`Linking ${provider.name}…`} error={error} />;
-}
+};

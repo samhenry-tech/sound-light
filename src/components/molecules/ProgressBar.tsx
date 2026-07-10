@@ -1,6 +1,6 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
 
-import { formatMs } from '~lib/format';
+import { formatMs } from '~utils/formatUtils';
 
 interface ProgressBarProps {
   positionMs: number;
@@ -13,7 +13,7 @@ const SEEK_STEP_MS = 5000;
 const TIME = 'text-[11px] text-muted-2 flex-shrink-0 min-w-[30px] [font-variant-numeric:tabular-nums]';
 
 /** Elapsed · seekable track · total, driven by player position. */
-export function ProgressBar({ positionMs, durationMs, onSeek }: ProgressBarProps) {
+export const ProgressBar = ({ positionMs, durationMs, onSeek }: ProgressBarProps) => {
   const pct = durationMs > 0 ? Math.min(100, (positionMs / durationMs) * 100) : 0;
 
   const seekToClient = (clientX: number, el: HTMLElement) => {
@@ -50,4 +50,4 @@ export function ProgressBar({ positionMs, durationMs, onSeek }: ProgressBarProps
       <span className={TIME}>{formatMs(durationMs)}</span>
     </div>
   );
-}
+};

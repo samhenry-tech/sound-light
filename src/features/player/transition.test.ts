@@ -13,7 +13,7 @@ const track = (uri: string): MusicTrack => ({
 });
 
 /** A fake player that records the order of playback + volume operations. */
-function fakePlayer() {
+const fakePlayer = () => {
   const events: string[] = [];
   const player: MusicPlayer = {
     playTrack: (t) => {
@@ -32,7 +32,7 @@ function fakePlayer() {
     destroy: () => {},
   };
   return { player, events };
-}
+};
 
 describe('transitionTo (single-stream crossfade)', () => {
   it('fades the outgoing track to zero, swaps, then fades the incoming in', async () => {

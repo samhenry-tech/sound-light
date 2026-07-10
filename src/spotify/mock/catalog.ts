@@ -167,29 +167,29 @@ export const MOCK_SOURCE_IDS_BY_ATMOSPHERE: Record<Atmosphere, string[]> = {
 
 /* --------------------------------- builders -------------------------------- */
 
-function slug(text: string): string {
+const slug = (text: string): string => {
   return text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-}
+};
 
 /** Deterministic pseudo-duration (2:30–5:30) so mock tracks feel real. */
-function durationFor(title: string): number {
+const durationFor = (title: string): number => {
   let hash = 0;
   for (let i = 0; i < title.length; i++) hash = (hash * 31 + title.charCodeAt(i)) % 100000;
   return (150 + (hash % 181)) * 1000;
-}
+};
 
-export function mockTrackUri(title: string): string {
+export const mockTrackUri = (title: string): string => {
   return `spotify:track:${slug(title)}`;
-}
+};
 
-export function mockSourceUri(sourceId: string): string {
+export const mockSourceUri = (sourceId: string): string => {
   return `spotify:playlist:${sourceId}`;
-}
+};
 
-function toTrack(raw: RawTrack): SpotifyTrack {
+const toTrack = (raw: RawTrack): SpotifyTrack => {
   return {
     uri: mockTrackUri(raw.title),
     id: slug(raw.title),
@@ -197,7 +197,7 @@ function toTrack(raw: RawTrack): SpotifyTrack {
     artist: raw.artist,
     durationMs: durationFor(raw.title),
   };
-}
+};
 
 export const MOCK_SOURCES: ResolvedSource[] = RAW_SOURCES.map((s) => ({
   uri: mockSourceUri(s.id),

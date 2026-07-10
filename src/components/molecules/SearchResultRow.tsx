@@ -1,7 +1,8 @@
+import { clsx } from 'clsx';
+
 import { AccentButton } from '~components/atoms/AccentButton';
 import { Badge } from '~components/atoms/Badge';
 import { Icon } from '~components/atoms/Icon';
-import { cn } from '~lib/cn';
 
 interface SearchResultRowProps {
   kind: 'playlist' | 'track';
@@ -12,11 +13,11 @@ interface SearchResultRowProps {
 }
 
 /** One Spotify search result with an Add / Added ✓ action. */
-export function SearchResultRow({ kind, title, sub, added, onAdd }: SearchResultRowProps) {
+export const SearchResultRow = ({ kind, title, sub, added, onAdd }: SearchResultRowProps) => {
   return (
     <div className="flex items-center gap-3 p-[9px] rounded-sm hover:bg-[rgba(255,255,255,0.03)]">
       <span
-        className={cn(
+        className={clsx(
           'flex h-[38px] w-[38px] flex-shrink-0 items-center justify-center rounded-xs',
           kind === 'playlist' ? 'bg-source-bg text-source-icon' : 'bg-[#1a1f20] text-icon-muted',
         )}
@@ -38,4 +39,4 @@ export function SearchResultRow({ kind, title, sub, added, onAdd }: SearchResult
       )}
     </div>
   );
-}
+};

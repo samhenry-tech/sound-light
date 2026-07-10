@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatMs, formatTime, mixName, sample, shuffle } from './format';
+import { formatMs, formatTime, mixName, sample, shuffle } from './formatUtils';
 
 describe('format helpers', () => {
   it('builds a mix name with an en-dash', () => {

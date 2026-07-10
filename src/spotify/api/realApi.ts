@@ -12,15 +12,15 @@ import type { ResolvedSource, SpotifySearchResults, SpotifyTrack } from '../type
 import { idsOfType } from '../uri';
 import { spotifyFetch } from './client';
 
-export async function realSearch(query: string): Promise<SpotifySearchResults> {
+export const realSearch = async (query: string): Promise<SpotifySearchResults> => {
   const q = query.trim();
   if (!q) return { tracks: [], sources: [] };
   const params = new URLSearchParams({ q, type: 'track,playlist', limit: '8' });
   const payload = await spotifyFetch(`/search?${params.toString()}`, spotifySearchResponseSchema);
   return mapSearchResults(payload);
-}
+};
 
-export async function realResolveSources(uris: readonly string[]): Promise<ResolvedSource[]> {
+export const realResolveSources = async (uris: readonly string[]): Promise<ResolvedSource[]> => {
   const ids = idsOfType(uris, 'playlist');
   const resolved = await Promise.all(
     ids.map(async (id): Promise<ResolvedSource | null> => {
@@ -33,9 +33,9 @@ export async function realResolveSources(uris: readonly string[]): Promise<Resol
     }),
   );
   return resolved.filter((s): s is ResolvedSource => Boolean(s));
-}
+};
 
-export async function realResolveTracks(uris: readonly string[]): Promise<SpotifyTrack[]> {
+export const realResolveTracks = async (uris: readonly string[]): Promise<SpotifyTrack[]> => {
   const ids = idsOfType(uris, 'track');
   const batches: string[][] = [];
   for (let i = 0; i < ids.length; i += 50) batches.push(ids.slice(i, i + 50));
@@ -47,4 +47,4 @@ export async function realResolveTracks(uris: readonly string[]): Promise<Spotif
     }),
   );
   return results.flat();
-}
+};

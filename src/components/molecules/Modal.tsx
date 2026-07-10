@@ -1,6 +1,5 @@
+import { clsx } from 'clsx';
 import { type ReactNode,useEffect } from 'react';
-
-import { cn } from '~lib/cn';
 
 interface ModalProps {
   open: boolean;
@@ -16,14 +15,14 @@ const BACKDROP =
   'fixed inset-0 z-[80] flex justify-center bg-[rgba(4,6,8,0.6)] backdrop-blur-[4px] p-6 animate-[risein_0.16s_ease-out]';
 
 /** Accessible overlay dialog with Escape + backdrop dismissal. */
-export function Modal({
+export const Modal = ({
   open,
   onClose,
   ariaLabel,
   width = 560,
   align = 'center',
   children,
-}: ModalProps) {
+}: ModalProps) => {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -37,7 +36,7 @@ export function Modal({
 
   return (
     <div
-      className={cn(BACKDROP, align === 'top' ? 'items-start pt-[12vh]' : 'items-center')}
+      className={clsx(BACKDROP, align === 'top' ? 'items-start pt-[12vh]' : 'items-center')}
       role="dialog"
       aria-modal="true"
       aria-label={ariaLabel}
@@ -52,4 +51,4 @@ export function Modal({
       </div>
     </div>
   );
-}
+};

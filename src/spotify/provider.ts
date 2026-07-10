@@ -12,15 +12,15 @@ import { IS_SPOTIFY_MOCK, SPOTIFY_REDIRECT_URI } from './config';
 import { createPlayer } from './playback/createPlayer';
 
 /** Path Spotify redirects back to — derived from the registered redirect URI. */
-function callbackPath(): string {
+const callbackPath = (): string => {
   try {
     return new URL(SPOTIFY_REDIRECT_URI).pathname;
   } catch {
     return '/auth/spotify/';
   }
-}
+};
 
-export function createSpotifyMusicProvider(): MusicProvider {
+export const createSpotifyMusicProvider = (): MusicProvider => {
   return {
     id: 'spotify',
     name: 'Spotify',
@@ -42,4 +42,4 @@ export function createSpotifyMusicProvider(): MusicProvider {
     resolveTracks,
     createPlayer,
   };
-}
+};

@@ -4,11 +4,11 @@ import type { MusicTrack, ResolvedSource } from '~music/types';
 
 import { buildQueue, effectiveTracks, pickFrom, splitByBanished } from './mixTracks';
 
-function track(uri: string, title = uri): MusicTrack {
+const track = (uri: string, title = uri): MusicTrack => {
   return { id: uri, uri, title, artist: 'Artist', durationMs: 200_000 };
-}
+};
 
-function source(uri: string, tracks: MusicTrack[]): ResolvedSource {
+const source = (uri: string, tracks: MusicTrack[]): ResolvedSource => {
   return {
     id: uri,
     uri,
@@ -18,7 +18,7 @@ function source(uri: string, tracks: MusicTrack[]): ResolvedSource {
     trackCount: tracks.length,
     tracks,
   };
-}
+};
 
 describe('effectiveTracks', () => {
   it('lists source tracks (with origin) then individually-added, deduped by uri', () => {

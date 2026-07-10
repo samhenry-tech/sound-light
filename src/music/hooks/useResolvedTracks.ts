@@ -6,7 +6,7 @@ import { musicKeys } from './queryKeys';
 const FIVE_MIN = 5 * 60_000;
 
 /** Resolve playlist/album source URIs to their full track lists. */
-export function useResolvedSources(uris: readonly string[]) {
+export const useResolvedSources = (uris: readonly string[]) => {
   const provider = useMusicProvider();
   return useQuery({
     queryKey: musicKeys.sources(provider.id, uris),
@@ -14,10 +14,10 @@ export function useResolvedSources(uris: readonly string[]) {
     enabled: uris.length > 0,
     staleTime: FIVE_MIN,
   });
-}
+};
 
 /** Resolve individually-added track URIs to track metadata. */
-export function useResolvedTracks(uris: readonly string[]) {
+export const useResolvedTracks = (uris: readonly string[]) => {
   const provider = useMusicProvider();
   return useQuery({
     queryKey: musicKeys.tracks(provider.id, uris),
@@ -25,4 +25,4 @@ export function useResolvedTracks(uris: readonly string[]) {
     enabled: uris.length > 0,
     staleTime: FIVE_MIN,
   });
-}
+};

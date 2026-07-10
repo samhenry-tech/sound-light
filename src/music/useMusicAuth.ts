@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useMusicProvider } from './MusicProviderContext';
 
 /** React surface over the active provider's account-link state + actions. */
-export function useMusicAuth() {
+export const useMusicAuth = () => {
   const provider = useMusicProvider();
   const [linked, setLinked] = useState(() => provider.auth.isLinked());
 
@@ -28,4 +28,4 @@ export function useMusicAuth() {
     logout,
     refresh,
   };
-}
+};

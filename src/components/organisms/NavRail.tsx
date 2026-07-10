@@ -1,6 +1,7 @@
+import { clsx } from 'clsx';
+
 import { Icon } from '~components/atoms/Icon';
 import { NavItem } from '~components/molecules/NavItem';
-import { cn } from '~lib/cn';
 
 export type Screen = 'live' | 'library';
 
@@ -17,14 +18,14 @@ const TOOL =
   'flex h-11 w-11 items-center justify-center rounded-[13px] border-none bg-transparent text-muted-2 cursor-pointer transition-colors duration-150 hover:text-quiet';
 
 /** Left rail: app mark, primary navigation, and quick tools. */
-export function NavRail({
+export const NavRail = ({
   active,
   onNavigate,
   tableMode,
   onToggleTable,
   onOpenPalette,
   onOpenSettings,
-}: NavRailProps) {
+}: NavRailProps) => {
   return (
     <nav
       className="flex w-[var(--rail-w)] flex-shrink-0 flex-col items-center gap-2 border-r border-line-07 bg-rail py-4"
@@ -66,7 +67,7 @@ export function NavRail({
         </button>
         <button
           type="button"
-          className={cn(TOOL, tableMode && 'bg-accent/15 text-accent hover:text-accent')}
+          className={clsx(TOOL, tableMode && 'bg-accent/15 text-accent hover:text-accent')}
           title="Table mode"
           aria-label="Toggle table mode"
           aria-pressed={tableMode}
@@ -86,4 +87,4 @@ export function NavRail({
       </div>
     </nav>
   );
-}
+};

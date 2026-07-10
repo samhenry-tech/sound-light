@@ -6,7 +6,7 @@
 import type { PlaybackState, SpotifyTrack } from '../types';
 import type { AtmosPlayer } from './types';
 
-export function createMockPlayer(): AtmosPlayer {
+export const createMockPlayer = (): AtmosPlayer => {
   let track: SpotifyTrack | null = null;
   let positionMs = 0;
   let isPlaying = false;
@@ -74,4 +74,4 @@ export function createMockPlayer(): AtmosPlayer {
       endedListeners.clear();
     },
   };
-}
+};

@@ -1,8 +1,8 @@
+import { clsx } from 'clsx';
 import type { MouseEvent } from 'react';
 
 import { EqBars } from '~components/atoms/EqBars';
 import { GradientCover } from '~components/atoms/GradientCover';
-import { cn } from '~lib/cn';
 
 interface MixCoverProps {
   gradient: string;
@@ -14,14 +14,14 @@ interface MixCoverProps {
 }
 
 /** Card cover: atmosphere gradient with a pin tack and (when active) eq bars. */
-export function MixCover({
+export const MixCover = ({
   gradient,
   artworkUrl,
   pinned,
   isActive,
   onTogglePin,
   height = 74,
-}: MixCoverProps) {
+}: MixCoverProps) => {
   const togglePin = (e: MouseEvent) => {
     e.stopPropagation();
     onTogglePin();
@@ -36,9 +36,9 @@ export function MixCover({
         aria-pressed={pinned}
         onClick={togglePin}
       >
-        <span className={cn('flex flex-col items-center', !pinned && 'opacity-65')}>
+        <span className={clsx('flex flex-col items-center', !pinned && 'opacity-65')}>
           <span
-            className={cn(
+            className={clsx(
               'h-[9px] w-[9px] rounded-pill',
               pinned
                 ? 'bg-accent shadow-[0_0_8px_color-mix(in_srgb,var(--accent)_60%,transparent)]'
@@ -46,7 +46,7 @@ export function MixCover({
             )}
           />
           <span
-            className={cn(
+            className={clsx(
               'h-[5px] w-[2px] rounded-b-[2px]',
               pinned ? 'bg-accent' : 'bg-[rgba(255,255,255,0.5)]',
             )}
@@ -60,4 +60,4 @@ export function MixCover({
       )}
     </GradientCover>
   );
-}
+};

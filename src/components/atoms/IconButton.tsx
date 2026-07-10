@@ -1,6 +1,5 @@
+import { clsx } from 'clsx';
 import type { ButtonHTMLAttributes } from 'react';
-
-import { cn } from '~lib/cn';
 
 import { Icon } from './Icon';
 
@@ -24,7 +23,7 @@ const VARIANTS: Record<NonNullable<IconButtonProps['variant']>, string> = {
 };
 
 /** A square, hairline-bordered icon button (remove ✕, delete, close). */
-export function IconButton({
+export const IconButton = ({
   icon,
   size = 34,
   iconSize = 18,
@@ -32,17 +31,17 @@ export function IconButton({
   label,
   className,
   ...props
-}: IconButtonProps) {
+}: IconButtonProps) => {
   return (
     <button
       type="button"
       title={label}
       aria-label={label}
-      className={cn(BASE, VARIANTS[variant], className)}
+      className={clsx(BASE, VARIANTS[variant], className)}
       style={{ width: size, height: size }}
       {...props}
     >
       <Icon name={icon} size={iconSize} />
     </button>
   );
-}
+};

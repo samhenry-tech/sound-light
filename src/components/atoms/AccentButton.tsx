@@ -1,6 +1,5 @@
+import { clsx } from 'clsx';
 import type { ButtonHTMLAttributes } from 'react';
-
-import { cn } from '~lib/cn';
 
 import { Icon } from './Icon';
 
@@ -9,11 +8,11 @@ interface AccentButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /** Accent-tinted action button (New, Add). */
-export function AccentButton({ icon, children, className, ...props }: AccentButtonProps) {
+export const AccentButton = ({ icon, children, className, ...props }: AccentButtonProps) => {
   return (
     <button
       type="button"
-      className={cn(
+      className={clsx(
         'inline-flex cursor-pointer items-center gap-1.5 rounded-sm border border-accent/45 bg-accent/16 px-[13px] py-2 text-[13px] font-semibold text-accent disabled:cursor-default disabled:opacity-50',
         className,
       )}
@@ -23,4 +22,4 @@ export function AccentButton({ icon, children, className, ...props }: AccentButt
       {children}
     </button>
   );
-}
+};

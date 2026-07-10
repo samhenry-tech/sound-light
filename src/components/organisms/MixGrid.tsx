@@ -12,7 +12,7 @@ interface MixGridProps {
 }
 
 /** The scrolling grid of Live vibe cards. */
-export function MixGrid({ cards, cols, isLoading, onSelect, onTogglePin }: MixGridProps) {
+export const MixGrid = ({ cards, cols, isLoading, onSelect, onTogglePin }: MixGridProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center p-[60px]">
@@ -42,4 +42,4 @@ export function MixGrid({ cards, cols, isLoading, onSelect, onTogglePin }: MixGr
       ))}
     </div>
   );
-}
+};

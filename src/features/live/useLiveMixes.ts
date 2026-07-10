@@ -2,7 +2,7 @@
 import { useMemo } from 'react';
 
 import { useMixes, usePrefs } from '~api/hooks';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import type { Mix } from '~shared/contract';
 import { usePlayerStore } from '~stores/playerStore';
 import { useUiStore } from '~stores/uiStore';
@@ -27,7 +27,7 @@ export interface LiveCard {
   line2: string;
 }
 
-function toCard(mix: Mix, combined: boolean, playingMixId: string | null): LiveCard {
+const toCard = (mix: Mix, combined: boolean, playingMixId: string | null): LiveCard => {
   const name = mixName(mix.location, mix.atmosphere);
   return {
     id: mix.id,
@@ -41,9 +41,9 @@ function toCard(mix: Mix, combined: boolean, playingMixId: string | null): LiveC
     line1: combined ? name : mix.location,
     line2: combined ? '' : capitalize(mix.atmosphere),
   };
-}
+};
 
-export function useLiveMixes() {
+export const useLiveMixes = () => {
   const { data: mixes = [], isLoading } = useMixes();
   const { data: prefs } = usePrefs();
   const liveQuery = useUiStore((s) => s.liveQuery);
@@ -78,4 +78,4 @@ export function useLiveMixes() {
   }, [mixes, liveQuery, liveFilter, combined, playingMixId]);
 
   return { cards, cols, isLoading };
-}
+};

@@ -25,12 +25,12 @@ import {
 /** Skew so we refresh slightly before the token actually expires. */
 const EXPIRY_SKEW_MS = 60_000;
 
-export function isSpotifyLinked(): boolean {
+export const isSpotifyLinked = (): boolean => {
   if (IS_SPOTIFY_MOCK) return true;
   return getStoredTokens() !== null;
-}
+};
 
-export async function beginSpotifyLogin(): Promise<void> {
+export const beginSpotifyLogin = async (): Promise<void> => {
   if (IS_SPOTIFY_MOCK) return;
   const verifier = generateCodeVerifier();
   const state = randomString(16);
@@ -47,12 +47,9 @@ export async function beginSpotifyLogin(): Promise<void> {
     scope: SPOTIFY_SCOPES.join(' '),
   });
   window.location.assign(`${SPOTIFY_ENDPOINTS.authorize}?${params.toString()}`);
-}
+};
 
-function persist(
-  parsed: ReturnType<typeof tokenResponseSchema.parse>,
-  fallbackRefresh?: string,
-): SpotifyTokens {
+const persist = (parsed: ReturnType<typeof tokenResponseSchema.parse>, fallbackRefresh?: string): SpotifyTokens => {
   const tokens: SpotifyTokens = {
     accessToken: parsed.access_token,
     refreshToken: parsed.refresh_token ?? fallbackRefresh,
@@ -60,9 +57,9 @@ function persist(
   };
   setStoredTokens(tokens);
   return tokens;
-}
+};
 
-export async function completeSpotifyLogin(query: URLSearchParams): Promise<void> {
+export const completeSpotifyLogin = async (query: URLSearchParams): Promise<void> => {
   if (IS_SPOTIFY_MOCK) return;
 
   const error = query.get('error');
@@ -89,9 +86,9 @@ export async function completeSpotifyLogin(query: URLSearchParams): Promise<void
   });
   if (!res.ok) throw new Error(`Spotify token exchange failed (${res.status}).`);
   persist(tokenResponseSchema.parse(await res.json()));
-}
+};
 
-async function refreshAccessToken(refreshToken: string): Promise<SpotifyTokens> {
+const refreshAccessToken = async (refreshToken: string): Promise<SpotifyTokens> => {
   const body = new URLSearchParams({
     client_id: SPOTIFY_CLIENT_ID,
     grant_type: 'refresh_token',
@@ -107,10 +104,10 @@ async function refreshAccessToken(refreshToken: string): Promise<SpotifyTokens> 
     throw new Error(`Spotify token refresh failed (${res.status}).`);
   }
   return persist(tokenResponseSchema.parse(await res.json()), refreshToken);
-}
+};
 
 /** Returns a non-expired access token, refreshing if needed, or null if unlinked. */
-export async function getValidAccessToken(): Promise<string | null> {
+export const getValidAccessToken = async (): Promise<string | null> => {
   if (IS_SPOTIFY_MOCK) return null;
   const tokens = getStoredTokens();
   if (!tokens) return null;
@@ -121,8 +118,8 @@ export async function getValidAccessToken(): Promise<string | null> {
   }
   const refreshed = await refreshAccessToken(tokens.refreshToken);
   return refreshed.accessToken;
-}
+};
 
-export function logoutSpotify(): void {
+export const logoutSpotify = (): void => {
   clearStoredTokens();
-}
+};

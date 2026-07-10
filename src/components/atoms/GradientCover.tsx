@@ -1,6 +1,5 @@
+import { clsx } from 'clsx';
 import type { CSSProperties, ReactNode } from 'react';
-
-import { cn } from '~lib/cn';
 
 interface GradientCoverProps {
   /** Atmosphere gradient used as fallback cover art. */
@@ -18,7 +17,7 @@ interface GradientCoverProps {
 }
 
 /** A cover tile backed by an atmosphere gradient or real artwork. */
-export function GradientCover({
+export const GradientCover = ({
   gradient,
   artworkUrl,
   width = '100%',
@@ -28,11 +27,11 @@ export function GradientCover({
   className,
   children,
   style,
-}: GradientCoverProps) {
+}: GradientCoverProps) => {
   const background = artworkUrl ? `center / cover no-repeat url(${artworkUrl})` : gradient;
   return (
     <div
-      className={cn('relative flex-shrink-0 overflow-hidden', className)}
+      className={clsx('relative flex-shrink-0 overflow-hidden', className)}
       style={{ width, height, borderRadius: radius, background, ...style }}
     >
       {highlight && (
@@ -41,4 +40,4 @@ export function GradientCover({
       {children}
     </div>
   );
-}
+};

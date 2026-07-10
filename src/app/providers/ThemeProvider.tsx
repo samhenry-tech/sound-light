@@ -4,7 +4,7 @@ import { usePrefs } from '~api/hooks';
 import { DEFAULT_ACCENT } from '~theme/atmosphere';
 
 /** Applies the user's accent preference to the `--accent` CSS variable. */
-export function ThemeProvider({ children }: { children: ReactNode }) {
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const { data: prefs } = usePrefs();
   const accent = prefs?.accent ?? DEFAULT_ACCENT;
 
@@ -13,4 +13,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [accent]);
 
   return <>{children}</>;
-}
+};

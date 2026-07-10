@@ -1,5 +1,6 @@
+import { clsx } from 'clsx';
+
 import { Icon } from '~components/atoms/Icon';
-import { cn } from '~lib/cn';
 
 interface SearchInputProps {
   value: string;
@@ -25,7 +26,7 @@ const TONES: Record<NonNullable<SearchInputProps['tone']>, string> = {
 };
 
 /** A themed text input with optional leading icon and clear button. */
-export function SearchInput({
+export const SearchInput = ({
   value,
   onChange,
   placeholder,
@@ -36,10 +37,10 @@ export function SearchInput({
   ariaLabel,
   className,
   autoFocus,
-}: SearchInputProps) {
+}: SearchInputProps) => {
   const showClear = clearable && value.length > 0;
   return (
-    <div className={cn('relative flex items-center', className)}>
+    <div className={clsx('relative flex items-center', className)}>
       {leadingIcon && (
         <Icon
           name={leadingIcon}
@@ -48,7 +49,7 @@ export function SearchInput({
         />
       )}
       <input
-        className={cn(INPUT_BASE, TONES[tone])}
+        className={clsx(INPUT_BASE, TONES[tone])}
         value={value}
         placeholder={placeholder}
         aria-label={ariaLabel ?? placeholder}
@@ -71,4 +72,4 @@ export function SearchInput({
       )}
     </div>
   );
-}
+};

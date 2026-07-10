@@ -14,8 +14,8 @@ const factories: Record<MusicProviderId, () => MusicProvider> = {
 };
 
 /** Build the active music provider for this session. */
-export function createActiveMusicProvider(): MusicProvider {
+export const createActiveMusicProvider = (): MusicProvider => {
   const id = (import.meta.env.VITE_MUSIC_PROVIDER as MusicProviderId | undefined) ?? 'spotify';
   const factory = factories[id] ?? factories.spotify;
   return factory();
-}
+};

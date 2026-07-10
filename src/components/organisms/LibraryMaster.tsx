@@ -20,14 +20,14 @@ interface LibraryMasterProps {
 }
 
 /** Library master column: title, New, a filter, and the list of mixes. */
-export function LibraryMaster({
+export const LibraryMaster = ({
   rows,
   selectedId,
   query,
   onQuery,
   onNew,
   onSelect,
-}: LibraryMasterProps) {
+}: LibraryMasterProps) => {
   return (
     <div className="flex w-[var(--master-w)] min-h-0 flex-shrink-0 flex-col border-r border-line-07">
       <div className="flex-shrink-0 px-[18px] pb-3 pt-5">
@@ -59,4 +59,4 @@ export function LibraryMaster({
       </div>
     </div>
   );
-}
+};

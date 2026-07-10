@@ -3,7 +3,7 @@ import { type ReactNode,useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useMixes, useUpdateMix } from '~api/hooks';
 import { buildQueue, effectiveTracks } from '~features/library/mixTracks';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import { musicKeys } from '~music/hooks/queryKeys';
 import { useMusicProvider } from '~music/MusicProviderContext';
 import type { MusicPlayer, MusicTrack } from '~music/types';
@@ -24,7 +24,7 @@ const FIVE_MIN = 5 * 60_000;
  * into the player store, and exposes the player actions to the UI. Mounted once,
  * outside the router, so music never stops when navigating.
  */
-export function PlayerProvider({ children }: { children: ReactNode }) {
+export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const provider = useMusicProvider();
   const qc = useQueryClient();
   const updateMix = useUpdateMix();
@@ -306,4 +306,4 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   );
 
   return <PlayerContext.Provider value={actions}>{children}</PlayerContext.Provider>;
-}
+};

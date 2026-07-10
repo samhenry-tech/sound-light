@@ -7,7 +7,7 @@ interface EqBarsProps {
 const BAR = 'h-full w-[3px] origin-bottom animate-eq rounded-[2px]';
 
 /** Three animated equalizer bars — the "this mix is playing" indicator. */
-export function EqBars({ size = 14, color = 'var(--accent)' }: EqBarsProps) {
+export const EqBars = ({ size = 14, color = 'var(--accent)' }: EqBarsProps) => {
   return (
     <span
       className="flex flex-shrink-0 items-end gap-[3px]"
@@ -19,4 +19,4 @@ export function EqBars({ size = 14, color = 'var(--accent)' }: EqBarsProps) {
       <span className={BAR} style={{ background: color, animationDelay: '0.45s' }} />
     </span>
   );
-}
+};

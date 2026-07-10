@@ -5,7 +5,7 @@ const CANVAS_H = 834;
 const MAX_SCALE = 2;
 
 /** Scale factor to fit the fixed 1194×834 iPad canvas into the viewport. */
-export function useCanvasScale(padding: number): number {
+export const useCanvasScale = (padding: number): number => {
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
@@ -20,4 +20,4 @@ export function useCanvasScale(padding: number): number {
   }, [padding]);
 
   return scale;
-}
+};

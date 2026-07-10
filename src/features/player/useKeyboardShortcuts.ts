@@ -6,7 +6,7 @@ import { useUiStore } from '~stores/uiStore';
 
 import { usePlayerActions } from './PlayerContext';
 
-function isTyping(target: EventTarget | null): boolean {
+const isTyping = (target: EventTarget | null): boolean => {
   const el = target as HTMLElement | null;
   if (!el) return false;
   return (
@@ -15,12 +15,12 @@ function isTyping(target: EventTarget | null): boolean {
     el.tagName === 'SELECT' ||
     el.isContentEditable
   );
-}
+};
 
 const VOLUME_STEP = 0.05;
 
 /** Global keyboard shortcuts for hands-on play. Mounted once inside the gate. */
-export function useKeyboardShortcuts() {
+export const useKeyboardShortcuts = () => {
   const actions = usePlayerActions();
   const enabled = useSettingsStore((s) => s.keyboardEnabled);
 
@@ -74,4 +74,4 @@ export function useKeyboardShortcuts() {
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [actions, enabled]);
-}
+};

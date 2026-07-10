@@ -74,7 +74,7 @@ export type SpotifyTokenResponse = z.infer<typeof tokenResponseSchema>;
 
 /* ----------------------------------- mappers ---------------------------------- */
 
-export function mapTrack(raw: RawSpotifyTrack): SpotifyTrack {
+export const mapTrack = (raw: RawSpotifyTrack): SpotifyTrack => {
   return {
     uri: raw.uri,
     id: raw.id,
@@ -83,9 +83,9 @@ export function mapTrack(raw: RawSpotifyTrack): SpotifyTrack {
     durationMs: raw.duration_ms,
     artworkUrl: raw.album?.images?.[0]?.url,
   };
-}
+};
 
-export function mapPlaylistToSource(raw: z.infer<typeof spotifyPlaylistSchema>): SpotifySource {
+export const mapPlaylistToSource = (raw: z.infer<typeof spotifyPlaylistSchema>): SpotifySource => {
   return {
     uri: raw.uri,
     id: raw.id,
@@ -95,9 +95,9 @@ export function mapPlaylistToSource(raw: z.infer<typeof spotifyPlaylistSchema>):
     trackCount: raw.tracks?.total ?? 0,
     artworkUrl: raw.images?.[0]?.url,
   };
-}
+};
 
-export function mapSearchResults(payload: unknown): SpotifySearchResults {
+export const mapSearchResults = (payload: unknown): SpotifySearchResults => {
   const parsed = spotifySearchResponseSchema.parse(payload);
   const tracks = (parsed.tracks?.items ?? [])
     .filter((t): t is RawSpotifyTrack => Boolean(t))
@@ -106,9 +106,9 @@ export function mapSearchResults(payload: unknown): SpotifySearchResults {
     .filter((p): p is z.infer<typeof spotifyPlaylistSchema> => Boolean(p))
     .map(mapPlaylistToSource);
   return { tracks, sources };
-}
+};
 
-export function mapResolvedSource(payload: unknown): ResolvedSource {
+export const mapResolvedSource = (payload: unknown): ResolvedSource => {
   const parsed = playlistResponseSchema.parse(payload);
   const tracks = (parsed.tracks?.items ?? [])
     .map((i) => i.track)
@@ -119,4 +119,4 @@ export function mapResolvedSource(payload: unknown): ResolvedSource {
     trackCount: parsed.tracks?.total ?? tracks.length,
     tracks,
   };
-}
+};

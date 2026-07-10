@@ -65,7 +65,7 @@ const CONFIGS: Record<AmbientKind, KindConfig> = {
 
 const FADE_S = 0.8;
 
-function fillNoise(buffer: AudioBuffer, color: NoiseColor): void {
+const fillNoise = (buffer: AudioBuffer, color: NoiseColor): void => {
   const data = buffer.getChannelData(0);
   let last = 0;
   for (let i = 0; i < data.length; i++) {
@@ -77,7 +77,7 @@ function fillNoise(buffer: AudioBuffer, color: NoiseColor): void {
       data[i] = white;
     }
   }
-}
+};
 
 export class AmbientEngine {
   private ctx: AudioContext | null = null;

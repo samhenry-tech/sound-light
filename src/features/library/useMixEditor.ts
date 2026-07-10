@@ -43,7 +43,7 @@ export interface MixEditorModel {
   actions: EditorActions;
 }
 
-export function useMixEditor(mix: Mix | undefined): MixEditorModel {
+export const useMixEditor = (mix: Mix | undefined): MixEditorModel => {
   const updateMix = useUpdateMix();
   const deleteMix = useDeleteMix();
   const editorQuery = useUiStore((s) => s.editorQuery);
@@ -134,4 +134,4 @@ export function useMixEditor(mix: Mix | undefined): MixEditorModel {
     isLoading: sourcesQuery.isLoading || tracksQuery.isLoading,
     actions,
   };
-}
+};

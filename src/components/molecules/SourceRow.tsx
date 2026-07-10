@@ -9,7 +9,7 @@ interface SourceRowProps {
 }
 
 /** A "locked unit" playlist/album row in the editor. */
-export function SourceRow({ name, owner, count, onRemove }: SourceRowProps) {
+export const SourceRow = ({ name, owner, count, onRemove }: SourceRowProps) => {
   return (
     <div className="flex items-center gap-[13px] mb-2 px-3.5 py-[11px] bg-surface-card border border-line-08 rounded-md">
       <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xs bg-source-bg text-source-icon">
@@ -24,4 +24,4 @@ export function SourceRow({ name, owner, count, onRemove }: SourceRowProps) {
       <IconButton icon="close" size={34} label="Remove this playlist" onClick={onRemove} />
     </div>
   );
-}
+};

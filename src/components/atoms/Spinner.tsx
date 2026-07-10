@@ -1,4 +1,4 @@
-export function Spinner({ size = 18 }: { size?: number }) {
+export const Spinner = ({ size = 18 }: { size?: number }) => {
   return (
     <span
       className="inline-block animate-[spin_0.7s_linear_infinite] rounded-full border-2 border-line-12 border-t-accent"
@@ -7,4 +7,4 @@ export function Spinner({ size = 18 }: { size?: number }) {
       aria-label="Loading"
     />
   );
-}
+};

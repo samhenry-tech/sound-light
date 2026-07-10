@@ -13,7 +13,7 @@ interface FilterChipsProps {
 }
 
 /** Horizontal scroll row of atmosphere filter chips. */
-export function FilterChips({ value, onChange }: FilterChipsProps) {
+export const FilterChips = ({ value, onChange }: FilterChipsProps) => {
   return (
     <div
       className="flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -27,4 +27,4 @@ export function FilterChips({ value, onChange }: FilterChipsProps) {
       ))}
     </div>
   );
-}
+};

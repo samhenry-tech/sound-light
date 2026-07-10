@@ -4,20 +4,20 @@ import { useCreateMix, useMixes } from '~api/hooks';
 import { LibraryMaster, type LibraryRowData } from '~components/organisms/LibraryMaster';
 import { MixEditor } from '~components/organisms/MixEditor';
 import { useMixEditor } from '~features/library/useMixEditor';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import type { Mix } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import { coverFor } from '~theme/atmosphere';
 
-function summarize(mix: Mix): string {
+const summarize = (mix: Mix): string => {
   const parts: string[] = [];
   if (mix.sourceUris.length) parts.push(`${mix.sourceUris.length} playlists`);
   if (mix.trackUris.length) parts.push(`${mix.trackUris.length} tracks`);
   return parts.join(' · ') || 'Empty';
-}
+};
 
 /** The Library screen — build & edit mixes between sessions. */
-export function LibraryPage() {
+export const LibraryPage = () => {
   const { data: mixes = [] } = useMixes();
   const createMix = useCreateMix();
 
@@ -75,4 +75,4 @@ export function LibraryPage() {
       )}
     </div>
   );
-}
+};

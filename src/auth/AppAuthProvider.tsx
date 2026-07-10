@@ -17,7 +17,7 @@ const DEV_SESSION: AuthSession = {
 };
 
 /** Bridges `react-oidc-context` into the app's normalized {@link AuthSession}. */
-function OidcSessionBridge({ children }: { children: ReactNode }) {
+const OidcSessionBridge = ({ children }: { children: ReactNode }) => {
   const auth = useAuth();
 
   const session = useMemo<AuthSession>(() => {
@@ -42,14 +42,14 @@ function OidcSessionBridge({ children }: { children: ReactNode }) {
   }, [auth]);
 
   return <AuthSessionContext.Provider value={session}>{children}</AuthSessionContext.Provider>;
-}
+};
 
 /**
  * Wraps the app in auth. With Cognito configured it mounts the OIDC provider and
  * bridges it; otherwise it provides a local dev session so the app is usable
  * without any backend.
  */
-export function AppAuthProvider({ children }: { children: ReactNode }) {
+export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
   if (!IS_AUTH_ENABLED) {
     return (
       <AuthSessionContext.Provider value={DEV_SESSION}>{children}</AuthSessionContext.Provider>
@@ -60,4 +60,4 @@ export function AppAuthProvider({ children }: { children: ReactNode }) {
       <OidcSessionBridge>{children}</OidcSessionBridge>
     </OidcAuthProvider>
   );
-}
+};

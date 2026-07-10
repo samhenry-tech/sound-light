@@ -14,7 +14,7 @@ interface TrackRowProps {
 }
 
 /** A track line in the editor: atmosphere dot, title, "artist · origin". */
-export function TrackRow({
+export const TrackRow = ({
   title,
   artist,
   origin,
@@ -22,7 +22,7 @@ export function TrackRow({
   removable,
   locked,
   onRemove,
-}: TrackRowProps) {
+}: TrackRowProps) => {
   return (
     <div className="flex items-center gap-[13px] px-1.5 py-[9px] border-b border-line-05">
       <span className="h-1.5 w-1.5 flex-shrink-0 rounded-pill" style={{ background: dotColor }} />
@@ -45,4 +45,4 @@ export function TrackRow({
       )}
     </div>
   );
-}
+};

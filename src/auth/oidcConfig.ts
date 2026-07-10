@@ -36,10 +36,10 @@ export const oidcConfig: AuthProviderProps = {
 };
 
 /** Cognito Hosted UI logout endpoint (clears the federated session too). */
-export function buildHostedUiLogoutUrl(): string {
+export const buildHostedUiLogoutUrl = (): string => {
   const params = new URLSearchParams({
     client_id: COGNITO_CLIENT_ID,
     logout_uri: COGNITO_LOGOUT_URI,
   });
   return `${COGNITO_HOSTED_UI}/logout?${params.toString()}`;
-}
+};

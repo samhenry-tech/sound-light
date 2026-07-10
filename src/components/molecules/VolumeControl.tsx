@@ -7,11 +7,11 @@ interface VolumeControlProps {
   onToggleMute: () => void;
 }
 
-function volumeIcon(volume: number, muted: boolean): string {
+const volumeIcon = (volume: number, muted: boolean): string => {
   if (muted || volume === 0) return 'volume_off';
   if (volume < 0.5) return 'volume_down';
   return 'volume_up';
-}
+};
 
 const THUMB =
   '[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:border-none [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-accent [&::-moz-range-thumb]:border-none';
@@ -19,7 +19,7 @@ const THUMB =
 const SLIDER = `appearance-none w-[92px] h-1 rounded-pill cursor-pointer bg-[linear-gradient(to_right,var(--accent)_var(--pct,80%),rgba(255,255,255,0.1)_var(--pct,80%))] ${THUMB}`;
 
 /** Mute toggle + volume slider. */
-export function VolumeControl({ volume, muted, onChange, onToggleMute }: VolumeControlProps) {
+export const VolumeControl = ({ volume, muted, onChange, onToggleMute }: VolumeControlProps) => {
   const value = muted ? 0 : volume;
   return (
     <div className="flex items-center gap-2">
@@ -44,4 +44,4 @@ export function VolumeControl({ volume, muted, onChange, onToggleMute }: VolumeC
       />
     </div>
   );
-}
+};

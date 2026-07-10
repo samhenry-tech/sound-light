@@ -1,5 +1,6 @@
+import { clsx } from 'clsx';
+
 import { GradientCover } from '~components/atoms/GradientCover';
-import { cn } from '~lib/cn';
 
 interface LibraryRowProps {
   name: string;
@@ -14,18 +15,18 @@ const BASE =
   'flex w-full items-center gap-3 text-left px-[11px] py-[9px] rounded-md cursor-pointer text-primary border';
 
 /** A mix row in the Library master list. */
-export function LibraryRow({
+export const LibraryRow = ({
   name,
   meta,
   gradient,
   artworkUrl,
   selected,
   onSelect,
-}: LibraryRowProps) {
+}: LibraryRowProps) => {
   return (
     <button
       type="button"
-      className={cn(
+      className={clsx(
         BASE,
         selected
           ? 'bg-surface-selected border-line-12'
@@ -47,4 +48,4 @@ export function LibraryRow({
       </span>
     </button>
   );
-}
+};

@@ -13,7 +13,7 @@ const NEAR_END_MS = 2000;
 
 let sdkPromise: Promise<void> | null = null;
 
-function loadSdk(): Promise<void> {
+const loadSdk = (): Promise<void> => {
   if (sdkPromise) return sdkPromise;
   sdkPromise = new Promise<void>((resolve) => {
     if (window.Spotify) {
@@ -27,9 +27,9 @@ function loadSdk(): Promise<void> {
     document.body.appendChild(script);
   });
   return sdkPromise;
-}
+};
 
-export function createWebPlaybackPlayer(): AtmosPlayer {
+export const createWebPlaybackPlayer = (): AtmosPlayer => {
   const stateListeners = new Set<(state: PlaybackState) => void>();
   const endedListeners = new Set<() => void>();
 
@@ -89,7 +89,7 @@ export function createWebPlaybackPlayer(): AtmosPlayer {
     return player;
   })();
 
-  async function command(path: string, init?: RequestInit): Promise<void> {
+  const command = async (path: string, init?: RequestInit): Promise<void> => {
     const token = await getValidAccessToken();
     if (!token) throw new Error('Spotify account is not linked.');
     const res = await fetch(`${SPOTIFY_ENDPOINTS.api}${path}`, {
@@ -102,7 +102,7 @@ export function createWebPlaybackPlayer(): AtmosPlayer {
     });
     if (!res.ok && res.status !== 204)
       throw new Error(`Spotify playback command failed (${res.status}).`);
-  }
+  };
 
   return {
     async playTrack(track) {
@@ -145,4 +145,4 @@ export function createWebPlaybackPlayer(): AtmosPlayer {
       endedListeners.clear();
     },
   };
-}
+};

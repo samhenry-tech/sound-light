@@ -1,7 +1,7 @@
 import { Icon } from '~components/atoms/Icon';
 
 /** 👍 — mark the current track a good fit for this mix. */
-export function LikeButton({ onClick }: { onClick: () => void }) {
+export const LikeButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
       type="button"
@@ -13,7 +13,7 @@ export function LikeButton({ onClick }: { onClick: () => void }) {
       <Icon name="thumb_up" size={25} />
     </button>
   );
-}
+};
 
 interface ThumbDownButtonProps {
   holding: boolean;
@@ -26,12 +26,12 @@ interface ThumbDownButtonProps {
  * 👎 — tap to fade & skip, press-and-hold to banish. While held, a red ring
  * charges bottom-up and a hint floats above (matching the prototype exactly).
  */
-export function ThumbDownButton({
+export const ThumbDownButton = ({
   holding,
   onHoldStart,
   onHoldEnd,
   onHoldCancel,
-}: ThumbDownButtonProps) {
+}: ThumbDownButtonProps) => {
   return (
     <div className="relative">
       {holding && (
@@ -59,4 +59,4 @@ export function ThumbDownButton({
       </button>
     </div>
   );
-}
+};

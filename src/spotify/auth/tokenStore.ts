@@ -10,33 +10,33 @@ export interface SpotifyTokens {
 const TOKENS_KEY = 'atmos.spotify.tokens';
 const PKCE_KEY = 'atmos.spotify.pkce';
 
-export function getStoredTokens(): SpotifyTokens | null {
+export const getStoredTokens = (): SpotifyTokens | null => {
   try {
     const raw = localStorage.getItem(TOKENS_KEY);
     return raw ? (JSON.parse(raw) as SpotifyTokens) : null;
   } catch {
     return null;
   }
-}
+};
 
-export function setStoredTokens(tokens: SpotifyTokens): void {
+export const setStoredTokens = (tokens: SpotifyTokens): void => {
   localStorage.setItem(TOKENS_KEY, JSON.stringify(tokens));
-}
+};
 
-export function clearStoredTokens(): void {
+export const clearStoredTokens = (): void => {
   localStorage.removeItem(TOKENS_KEY);
-}
+};
 
 export interface PkceState {
   verifier: string;
   state: string;
 }
 
-export function setPkceState(state: PkceState): void {
+export const setPkceState = (state: PkceState): void => {
   sessionStorage.setItem(PKCE_KEY, JSON.stringify(state));
-}
+};
 
-export function takePkceState(): PkceState | null {
+export const takePkceState = (): PkceState | null => {
   try {
     const raw = sessionStorage.getItem(PKCE_KEY);
     sessionStorage.removeItem(PKCE_KEY);
@@ -44,4 +44,4 @@ export function takePkceState(): PkceState | null {
   } catch {
     return null;
   }
-}
+};

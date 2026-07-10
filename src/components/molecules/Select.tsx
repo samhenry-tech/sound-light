@@ -13,7 +13,7 @@ interface SelectProps {
 }
 
 /** A themed wrapper around a native <select> (location / atmosphere). */
-export function Select({ value, options, onChange, ariaLabel }: SelectProps) {
+export const Select = ({ value, options, onChange, ariaLabel }: SelectProps) => {
   return (
     <span className="relative inline-flex items-center">
       <select
@@ -35,4 +35,4 @@ export function Select({ value, options, onChange, ariaLabel }: SelectProps) {
       />
     </span>
   );
-}
+};

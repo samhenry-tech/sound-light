@@ -24,10 +24,7 @@ interface ApiRequest<T> {
   schema?: z.ZodType<T>;
 }
 
-export async function apiFetch<T = void>(
-  path: string,
-  { token, method = 'GET', body, schema }: ApiRequest<T>,
-): Promise<T> {
+export const apiFetch = async <T = void>(path: string, { token, method = 'GET', body, schema }: ApiRequest<T>): Promise<T> => {
   const res = await fetch(`${API_BASE_URL}${path}`, {
     method,
     headers: {
@@ -44,4 +41,4 @@ export async function apiFetch<T = void>(
     return undefined as T;
   }
   return schema.parse(await res.json());
-}
+};

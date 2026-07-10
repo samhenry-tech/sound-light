@@ -2,7 +2,7 @@
  * DataAdapter backed by localStorage — the zero-setup offline path. Seeds the
  * prototype's starter library on first use and scopes everything by owner.
  */
-import { createId } from '~lib/id';
+import { createId } from '~utils/idUtils';
 import {
   createMixInputSchema,
   DEFAULT_PREFS,
@@ -22,7 +22,11 @@ interface LocalStore {
 
 const storeKey = (owner: string) => `atmos.data.${owner}`;
 
-function read(owner: string): LocalStore {
+const write = (owner: string, store: LocalStore): void => {
+  localStorage.setItem(storeKey(owner), JSON.stringify(store));
+};
+
+const read = (owner: string): LocalStore => {
   try {
     const raw = localStorage.getItem(storeKey(owner));
     if (raw) return JSON.parse(raw) as LocalStore;
@@ -32,15 +36,11 @@ function read(owner: string): LocalStore {
   const seeded: LocalStore = { mixes: getSeedMixes(owner), prefs: null };
   write(owner, seeded);
   return seeded;
-}
+};
 
-function write(owner: string, store: LocalStore): void {
-  localStorage.setItem(storeKey(owner), JSON.stringify(store));
-}
-
-function defaultPrefs(owner: string): UserPrefs {
+const defaultPrefs = (owner: string): UserPrefs => {
   return { owner, ...DEFAULT_PREFS, updatedAt: new Date().toISOString() };
-}
+};
 
 export const localAdapter: DataAdapter = {
   listMixes({ owner }: DataContext) {

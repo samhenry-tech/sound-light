@@ -72,11 +72,11 @@ const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}), {
   marshallOptions: { removeUndefinedValues: true },
 });
 
-function requireEnv(name: string): string {
+const requireEnv = (name: string): string => {
   const value = process.env[name];
   if (!value) throw new Error(`Missing required environment variable: ${name}`);
   return value;
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /* HTTP helpers                                                               */
@@ -92,20 +92,20 @@ class HttpError extends Error {
   }
 }
 
-function json(statusCode: number, body: unknown): APIGatewayProxyResultV2 {
+const json = (statusCode: number, body: unknown): APIGatewayProxyResultV2 => {
   return {
     statusCode,
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   };
-}
+};
 
 /** 204 No Content has no body. */
-function noContent(): APIGatewayProxyResultV2 {
+const noContent = (): APIGatewayProxyResultV2 => {
   return { statusCode: 204, body: '' };
-}
+};
 
-function parseBody(raw: string | undefined, isBase64Encoded: boolean): Record<string, unknown> {
+const parseBody = (raw: string | undefined, isBase64Encoded: boolean): Record<string, unknown> => {
   if (!raw) return {};
   // HTTP APIs may base64-encode the body; the event flag tells us authoritatively.
   const text = isBase64Encoded ? Buffer.from(raw, 'base64').toString('utf8') : raw;
@@ -119,66 +119,66 @@ function parseBody(raw: string | undefined, isBase64Encoded: boolean): Record<st
     if (err instanceof HttpError) throw err;
     throw new HttpError(400, 'Invalid JSON in request body');
   }
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /* Validation helpers                                                         */
 /* -------------------------------------------------------------------------- */
 
-function asStringArray(value: unknown, field: string): string[] {
+const asStringArray = (value: unknown, field: string): string[] => {
   if (!Array.isArray(value) || !value.every((v) => typeof v === 'string')) {
     throw new HttpError(400, `Field "${field}" must be an array of strings`);
   }
   return value as string[];
-}
+};
 
-function asAtmosphere(value: unknown): Atmosphere {
+const asAtmosphere = (value: unknown): Atmosphere => {
   if (typeof value !== 'string' || !ATMOSPHERES.includes(value as Atmosphere)) {
     throw new HttpError(400, `Field "atmosphere" must be one of: ${ATMOSPHERES.join(', ')}`);
   }
   return value as Atmosphere;
-}
+};
 
-function asCardLabel(value: unknown): CardLabel {
+const asCardLabel = (value: unknown): CardLabel => {
   if (typeof value !== 'string' || !CARD_LABELS.includes(value as CardLabel)) {
     throw new HttpError(400, `Field "cardLabel" must be one of: ${CARD_LABELS.join(', ')}`);
   }
   return value as CardLabel;
-}
+};
 
-function asColumns(value: unknown): number {
+const asColumns = (value: unknown): number => {
   if (typeof value !== 'number' || !Number.isInteger(value) || value < 4 || value > 6) {
     throw new HttpError(400, 'Field "columns" must be an integer from 4 to 6');
   }
   return value;
-}
+};
 
-function asAccent(value: unknown): string {
+const asAccent = (value: unknown): string => {
   if (typeof value !== 'string' || !HEX_COLOR.test(value)) {
     throw new HttpError(400, 'Field "accent" must be a #RRGGBB hex color');
   }
   return value;
-}
+};
 
-function asSortIndex(value: unknown): number {
+const asSortIndex = (value: unknown): number => {
   if (typeof value !== 'number' || !Number.isInteger(value)) {
     throw new HttpError(400, 'Field "sortIndex" must be an integer');
   }
   return value;
-}
+};
 
-function asNonEmptyString(value: unknown, field: string): string {
+const asNonEmptyString = (value: unknown, field: string): string => {
   if (typeof value !== 'string' || value.length < 1) {
     throw new HttpError(400, `Field "${field}" must be a non-empty string`);
   }
   return value;
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /* Mix handlers                                                               */
 /* -------------------------------------------------------------------------- */
 
-async function listMixes(owner: string): Promise<APIGatewayProxyResultV2> {
+const listMixes = async (owner: string): Promise<APIGatewayProxyResultV2> => {
   const result = await ddb.send(
     new QueryCommand({
       TableName: MIXES_TABLE,
@@ -191,12 +191,9 @@ async function listMixes(owner: string): Promise<APIGatewayProxyResultV2> {
   // Stable, predictable order for the client grid.
   items.sort((a, b) => a.sortIndex - b.sortIndex || a.createdAt.localeCompare(b.createdAt));
   return json(200, items);
-}
+};
 
-async function createMix(
-  owner: string,
-  body: Record<string, unknown>,
-): Promise<APIGatewayProxyResultV2> {
+const createMix = async (owner: string, body: Record<string, unknown>): Promise<APIGatewayProxyResultV2> => {
   const now = new Date().toISOString();
   const mix: Mix = {
     id: `mix-${randomUUID()}`,
@@ -217,19 +214,15 @@ async function createMix(
 
   await ddb.send(new PutCommand({ TableName: MIXES_TABLE, Item: mix }));
   return json(201, mix);
-}
+};
 
-async function getMix(owner: string, id: string): Promise<APIGatewayProxyResultV2> {
+const getMix = async (owner: string, id: string): Promise<APIGatewayProxyResultV2> => {
   const mix = await fetchMix(owner, id);
   if (!mix) throw new HttpError(404, 'Mix not found');
   return json(200, mix);
-}
+};
 
-async function updateMix(
-  owner: string,
-  id: string,
-  body: Record<string, unknown>,
-): Promise<APIGatewayProxyResultV2> {
+const updateMix = async (owner: string, id: string, body: Record<string, unknown>): Promise<APIGatewayProxyResultV2> => {
   const existing = await fetchMix(owner, id);
   if (!existing) throw new HttpError(404, 'Mix not found');
 
@@ -259,9 +252,9 @@ async function updateMix(
 
   await ddb.send(new PutCommand({ TableName: MIXES_TABLE, Item: updated }));
   return json(200, updated);
-}
+};
 
-async function deleteMix(owner: string, id: string): Promise<APIGatewayProxyResultV2> {
+const deleteMix = async (owner: string, id: string): Promise<APIGatewayProxyResultV2> => {
   await ddb.send(
     new DeleteCommand({
       TableName: MIXES_TABLE,
@@ -270,9 +263,9 @@ async function deleteMix(owner: string, id: string): Promise<APIGatewayProxyResu
   );
   // Idempotent: 204 whether or not the item existed.
   return noContent();
-}
+};
 
-async function fetchMix(owner: string, id: string): Promise<Mix | undefined> {
+const fetchMix = async (owner: string, id: string): Promise<Mix | undefined> => {
   const result = await ddb.send(
     new GetCommand({
       TableName: MIXES_TABLE,
@@ -280,20 +273,20 @@ async function fetchMix(owner: string, id: string): Promise<Mix | undefined> {
     }),
   );
   return result.Item as Mix | undefined;
-}
+};
 
-function asBoolean(value: unknown, field: string): boolean {
+const asBoolean = (value: unknown, field: string): boolean => {
   if (typeof value !== 'boolean') {
     throw new HttpError(400, `Field "${field}" must be a boolean`);
   }
   return value;
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /* Prefs handlers                                                             */
 /* -------------------------------------------------------------------------- */
 
-async function getPrefs(owner: string): Promise<APIGatewayProxyResultV2> {
+const getPrefs = async (owner: string): Promise<APIGatewayProxyResultV2> => {
   const result = await ddb.send(
     new GetCommand({
       TableName: PREFS_TABLE,
@@ -312,12 +305,9 @@ async function getPrefs(owner: string): Promise<APIGatewayProxyResultV2> {
     updatedAt: new Date().toISOString(),
   };
   return json(200, prefs);
-}
+};
 
-async function putPrefs(
-  owner: string,
-  body: Record<string, unknown>,
-): Promise<APIGatewayProxyResultV2> {
+const putPrefs = async (owner: string, body: Record<string, unknown>): Promise<APIGatewayProxyResultV2> => {
   // Load existing (if any) so a partial PUT preserves untouched fields, then
   // upsert the merged result.
   const existing = (await ddb.send(new GetCommand({ TableName: PREFS_TABLE, Key: { owner } })))
@@ -339,7 +329,7 @@ async function putPrefs(
 
   await ddb.send(new PutCommand({ TableName: PREFS_TABLE, Item: prefs }));
   return json(200, prefs);
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /* Router + entrypoint                                                        */
@@ -387,7 +377,7 @@ export const handler = async (
   }
 };
 
-function requireId(id: string | undefined): string {
+const requireId = (id: string | undefined): string => {
   if (!id) throw new HttpError(400, 'Missing path parameter: id');
   return id;
-}
+};

@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import { type KeyboardEvent,useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -5,8 +6,7 @@ import { useMixes } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { usePlayerActions } from '~features/player/PlayerContext';
-import { cn } from '~lib/cn';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import { useUiStore } from '~stores/uiStore';
 
 interface Command {
@@ -18,7 +18,7 @@ interface Command {
 }
 
 /** ⌘K command palette — jump to any mix or run an action. */
-export function CommandPalette() {
+export const CommandPalette = () => {
   const open = useUiStore((s) => s.paletteOpen);
   const setOpen = useUiStore((s) => s.setPaletteOpen);
   const setSettingsOpen = useUiStore((s) => s.setSettingsOpen);
@@ -108,7 +108,7 @@ export function CommandPalette() {
             <button
               key={cmd.id}
               type="button"
-              className={cn(
+              className={clsx(
                 'flex items-center gap-3 rounded-sm border-none px-3 py-2.5 text-left text-primary cursor-pointer',
                 isActive ? 'bg-accent/14' : 'bg-transparent',
               )}
@@ -127,4 +127,4 @@ export function CommandPalette() {
       </div>
     </Modal>
   );
-}
+};

@@ -33,8 +33,8 @@ export interface PlayerActions {
 
 export const PlayerContext = createContext<PlayerActions | null>(null);
 
-export function usePlayerActions(): PlayerActions {
+export const usePlayerActions = (): PlayerActions => {
   const ctx = useContext(PlayerContext);
   if (!ctx) throw new Error('usePlayerActions must be used within <PlayerProvider>');
   return ctx;
-}
+};

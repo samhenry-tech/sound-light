@@ -63,14 +63,14 @@ export const COLUMN_MAX = 6;
 export const DEFAULT_COLUMNS = 5;
 
 /** Capitalize an atmosphere for display. */
-export function capitalize(value: string): string {
+export const capitalize = (value: string): string => {
   return value.charAt(0).toUpperCase() + value.slice(1);
-}
+};
 
-export function coverFor(atmosphere: Atmosphere): string {
+export const coverFor = (atmosphere: Atmosphere): string => {
   return ATMOSPHERE_COVERS[atmosphere];
-}
+};
 
-export function atmosphereColor(atmosphere: Atmosphere): string {
+export const atmosphereColor = (atmosphere: Atmosphere): string => {
   return ATMOSPHERE_COLORS[atmosphere];
-}
+};

@@ -12,7 +12,7 @@ import { usePlayerStore } from '~stores/playerStore';
 const FALLBACK_COVER = 'linear-gradient(150deg,#1a1f20,#0f1213)';
 
 /** The persistent now-playing bar. Connected to the player store + actions. */
-export function NowPlayingBar() {
+export const NowPlayingBar = () => {
   const state = usePlayerStore(
     useShallow((s) => ({
       current: s.current,
@@ -89,4 +89,4 @@ export function NowPlayingBar() {
       </div>
     </div>
   );
-}
+};

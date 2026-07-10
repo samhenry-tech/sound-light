@@ -5,7 +5,7 @@ interface PlayButtonProps {
 }
 
 /** The large round accent play/pause button. */
-export function PlayButton({ isPlaying, onClick, disabled }: PlayButtonProps) {
+export const PlayButton = ({ isPlaying, onClick, disabled }: PlayButtonProps) => {
   return (
     <button
       type="button"
@@ -24,4 +24,4 @@ export function PlayButton({ isPlaying, onClick, disabled }: PlayButtonProps) {
       )}
     </button>
   );
-}
+};

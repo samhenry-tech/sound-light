@@ -11,7 +11,7 @@ import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
 import { useUiStore } from '~stores/uiStore';
 
 /** Auth gate + app shell that wraps the Live / Library routes. */
-export function RootLayout() {
+export const RootLayout = () => {
   const session = useAuthSession();
   const location = useLocation();
   const navigate = useNavigate();
@@ -38,4 +38,4 @@ export function RootLayout() {
       <SettingsPanel />
     </>
   );
-}
+};

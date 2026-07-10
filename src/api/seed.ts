@@ -39,7 +39,7 @@ const BANISHED: Record<string, string[]> = {
   'general-battle': ['Unrelenting'],
 };
 
-export function getSeedMixes(owner: string): Mix[] {
+export const getSeedMixes = (owner: string): Mix[] => {
   const now = new Date().toISOString();
   return DEFS.map(([id, location, atmosphere], index) => ({
     id,
@@ -54,4 +54,4 @@ export function getSeedMixes(owner: string): Mix[] {
     createdAt: now,
     updatedAt: now,
   }));
-}
+};

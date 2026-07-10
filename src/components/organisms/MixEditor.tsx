@@ -4,7 +4,7 @@ import { Select } from '~components/molecules/Select';
 import { SourceRow } from '~components/molecules/SourceRow';
 import { TrackRow } from '~components/molecules/TrackRow';
 import type { MixEditorModel } from '~features/library/useMixEditor';
-import { mixName } from '~lib/format';
+import { mixName } from '~utils/formatUtils';
 import type { Mix } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import {
@@ -28,7 +28,7 @@ interface MixEditorProps {
 }
 
 /** The Library detail editor for one mix. */
-export function MixEditor({ mix, model }: MixEditorProps) {
+export const MixEditor = ({ mix, model }: MixEditorProps) => {
   const editorQuery = useUiStore((s) => s.editorQuery);
   const setEditorQuery = useUiStore((s) => s.setEditorQuery);
   const clearEditorQuery = useUiStore((s) => s.clearEditorQuery);
@@ -147,4 +147,4 @@ export function MixEditor({ mix, model }: MixEditorProps) {
       </div>
     </div>
   );
-}
+};
