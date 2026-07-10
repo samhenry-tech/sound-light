@@ -21,14 +21,11 @@ export interface AuthSession {
   /** Raw Google ID token (JWT) exchanged with the Cognito Identity Pool. */
   googleIdToken: string | null;
   error?: string;
-  /**
-   * Complete sign-in from a Google ID token — used by both the GIS popup
-   * button (onSuccess credential) and the redirect callback page.
-   */
-  loginWithGoogleCredential: (credential: string) => Promise<void>;
-  /** Full-page redirect fallback for browsers that block the GIS popup. */
-  loginWithGoogleRedirect: () => void;
-  logout: () => void;
+  /** Redirect to Google for OAuth code + PKCE sign-in. */
+  beginGoogleLogin: () => Promise<void>;
+  /** Complete sign-in from the OAuth callback `?code=` query. */
+  loginWithGoogleCode: (query: URLSearchParams) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 export const AuthSessionContext = createContext<AuthSession | null>(null);

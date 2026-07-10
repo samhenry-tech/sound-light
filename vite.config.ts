@@ -34,7 +34,6 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom', 'react-router-dom'],
           query: ['@tanstack/react-query'],
-          auth: ['@react-oauth/google'],
           aws: [
             '@aws-sdk/client-cognito-identity',
             '@aws-sdk/client-dynamodb',

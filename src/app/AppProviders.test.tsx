@@ -18,9 +18,9 @@ vi.mock('~auth/AppAuthProvider', async () => {
     user: { sub: 'google-sub-123', email: 'gm@example.com', name: 'Test GM' },
     owner: 'us-east-1:00000000-0000-0000-0000-000000000000',
     googleIdToken: 'test-google-id-token',
-    loginWithGoogleCredential: async () => {},
-    loginWithGoogleRedirect: () => {},
-    logout: () => {},
+    beginGoogleLogin: async () => {},
+    loginWithGoogleCode: async () => {},
+    logout: async () => {},
   };
   return {
     AppAuthProvider: ({ children }: { children: ReactNode }) => (

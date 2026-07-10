@@ -68,16 +68,23 @@ export const userSettingsSchema = z.object({
   columns: z.number().int().min(4).max(6),
   cardLabel: cardLabelSchema,
   spotifyLinked: z.boolean(),
+  /** Auth-internal: Google OAuth refresh token for silent session renewal. */
+  googleRefreshToken: z.string().min(1).optional(),
   updatedAt: z.string(),
 });
 
 export type UserSettings = z.infer<typeof userSettingsSchema>;
+
+/** Settings shape safe to expose to UI hooks (omits auth secrets). */
+export const publicUserSettingsSchema = userSettingsSchema.omit({ googleRefreshToken: true });
+export type PublicUserSettings = z.infer<typeof publicUserSettingsSchema>;
 
 export const updateUserSettingsInputSchema = z.object({
   accent: z.string().regex(HEX_COLOR).optional(),
   columns: z.number().int().min(4).max(6).optional(),
   cardLabel: cardLabelSchema.optional(),
   spotifyLinked: z.boolean().optional(),
+  googleRefreshToken: z.string().min(1).nullable().optional(),
 });
 
 export type UpdateUserSettingsInput = z.infer<typeof updateUserSettingsInputSchema>;

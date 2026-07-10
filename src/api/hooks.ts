@@ -7,7 +7,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useAuthSession } from '~auth/useAuthSession';
-import type { CreateMixInput, Mix, UpdateMixInput, UpdateUserSettingsInput } from '~shared/contract';
+import type {
+  CreateMixInput,
+  Mix,
+  PublicUserSettings,
+  UpdateMixInput,
+  UpdateUserSettingsInput,
+} from '~shared/contract';
+import { publicUserSettingsSchema } from '~shared/contract';
 
 import type { DataContext } from './adapters/types';
 import { dataAdapter } from './dataAdapter';
@@ -39,7 +46,11 @@ export const useUserSettings = () => {
   const ctx = useDataContext();
   return useQuery({
     queryKey: dataKeys.settings(ctx.owner),
-    queryFn: () => dataAdapter.getSettings(ctx),
+    queryFn: async (): Promise<PublicUserSettings> => {
+      const settings = await dataAdapter.getSettings(ctx);
+      const { googleRefreshToken: _removed, ...publicSettings } = settings;
+      return publicUserSettingsSchema.parse(publicSettings);
+    },
     enabled: ctx.ready,
     staleTime: 5 * 60_000,
   });

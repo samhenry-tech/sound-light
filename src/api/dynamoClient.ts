@@ -34,3 +34,9 @@ export const getDynamoClient = (googleIdToken: string): DynamoDBDocumentClient =
   cached = { googleIdToken, client };
   return client;
 };
+
+/** Drop the cached client (e.g. on logout or after an ID-token rotation). */
+export const destroyDynamoClientCache = (): void => {
+  cached?.client.destroy();
+  cached = null;
+};

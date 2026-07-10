@@ -110,12 +110,18 @@ export const dynamoAdapter: DataAdapter = {
   async updateSettings(ctx, input) {
     const patch = updateUserSettingsInputSchema.parse(input);
     const base = (await fetchSettings(ctx)) ?? { owner: ctx.owner, ...DEFAULT_SETTINGS };
+    const { googleRefreshToken, ...uiPatch } = patch;
     const settings: UserSettings = {
       ...base,
-      ...patch,
+      ...uiPatch,
       owner: ctx.owner,
       updatedAt: new Date().toISOString(),
     };
+    if (googleRefreshToken) {
+      settings.googleRefreshToken = googleRefreshToken;
+    } else if (googleRefreshToken === null) {
+      delete settings.googleRefreshToken;
+    }
     await getDynamoClient(ctx.googleIdToken).send(
       new PutCommand({ TableName: SETTINGS_TABLE, Item: settings }),
     );

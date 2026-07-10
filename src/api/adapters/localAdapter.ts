@@ -93,12 +93,18 @@ export const localAdapter: DataAdapter = {
   updateSettings({ owner }: DataContext, input) {
     const store = read(owner);
     const patch = updateUserSettingsInputSchema.parse(input);
+    const { googleRefreshToken, ...uiPatch } = patch;
     const next: UserSettings = {
       ...(store.settings ?? defaultSettings(owner)),
-      ...patch,
+      ...uiPatch,
       owner,
       updatedAt: new Date().toISOString(),
     };
+    if (googleRefreshToken) {
+      next.googleRefreshToken = googleRefreshToken;
+    } else if (googleRefreshToken === null) {
+      delete next.googleRefreshToken;
+    }
     store.settings = next;
     write(owner, store);
     return Promise.resolve(next);
