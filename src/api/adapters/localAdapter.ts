@@ -1,15 +1,15 @@
 /**
- * DataAdapter backed by localStorage — the zero-setup offline path. Seeds the
+ * DataAdapter backed by localStorage — used as a test double. Seeds the
  * prototype's starter library on first use and scopes everything by owner.
  */
 import { createId } from '~utils/idUtils';
 import {
   createMixInputSchema,
-  DEFAULT_PREFS,
+  DEFAULT_SETTINGS,
   type Mix,
   updateMixInputSchema,
-  updateUserPrefsInputSchema,
-  type UserPrefs,
+  updateUserSettingsInputSchema,
+  type UserSettings,
 } from '~shared/contract';
 
 import { getSeedMixes } from '../seed';
@@ -17,7 +17,7 @@ import type { DataAdapter, DataContext } from './types';
 
 interface LocalStore {
   mixes: Mix[];
-  prefs: UserPrefs | null;
+  settings: UserSettings | null;
 }
 
 const storeKey = (owner: string) => `atmos.data.${owner}`;
@@ -33,13 +33,13 @@ const read = (owner: string): LocalStore => {
   } catch {
     // fall through to seed
   }
-  const seeded: LocalStore = { mixes: getSeedMixes(owner), prefs: null };
+  const seeded: LocalStore = { mixes: getSeedMixes(owner), settings: null };
   write(owner, seeded);
   return seeded;
 };
 
-const defaultPrefs = (owner: string): UserPrefs => {
-  return { owner, ...DEFAULT_PREFS, updatedAt: new Date().toISOString() };
+const defaultSettings = (owner: string): UserSettings => {
+  return { owner, ...DEFAULT_SETTINGS, updatedAt: new Date().toISOString() };
 };
 
 export const localAdapter: DataAdapter = {
@@ -86,20 +86,20 @@ export const localAdapter: DataAdapter = {
     return Promise.resolve();
   },
 
-  getPrefs({ owner }: DataContext) {
-    return Promise.resolve(read(owner).prefs ?? defaultPrefs(owner));
+  getSettings({ owner }: DataContext) {
+    return Promise.resolve(read(owner).settings ?? defaultSettings(owner));
   },
 
-  updatePrefs({ owner }: DataContext, input) {
+  updateSettings({ owner }: DataContext, input) {
     const store = read(owner);
-    const patch = updateUserPrefsInputSchema.parse(input);
-    const next: UserPrefs = {
-      ...(store.prefs ?? defaultPrefs(owner)),
+    const patch = updateUserSettingsInputSchema.parse(input);
+    const next: UserSettings = {
+      ...(store.settings ?? defaultSettings(owner)),
       ...patch,
       owner,
       updatedAt: new Date().toISOString(),
     };
-    store.prefs = next;
+    store.settings = next;
     write(owner, store);
     return Promise.resolve(next);
   },

@@ -4,8 +4,8 @@ import { SearchInput } from '~components/molecules/SearchInput';
 import { MixGrid } from '~components/organisms/MixGrid';
 import { useLiveMixes } from '~features/live/useLiveMixes';
 import { usePlayerActions } from '~features/player/PlayerContext';
-import { mixName } from '~utils/formatUtils';
 import { useUiStore } from '~stores/uiStore';
+import { mixName } from '~utils/formatUtils';
 
 /** The Live screen — glance, tap a vibe, give feedback. */
 export const LivePage = () => {

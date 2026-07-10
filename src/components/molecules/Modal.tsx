@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { type ReactNode,useEffect } from 'react';
+import { type ReactNode, useEffect } from 'react';
 
 interface ModalProps {
   open: boolean;

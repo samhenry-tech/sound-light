@@ -2,5 +2,5 @@
 export const dataKeys = {
   all: ['data'] as const,
   mixes: (owner: string) => [...dataKeys.all, 'mixes', owner] as const,
-  prefs: (owner: string) => [...dataKeys.all, 'prefs', owner] as const,
+  settings: (owner: string) => [...dataKeys.all, 'settings', owner] as const,
 };

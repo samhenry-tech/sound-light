@@ -6,7 +6,12 @@ const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-const rampVolume = async (player: MusicPlayer, from: number, to: number, ms: number): Promise<void> => {
+const rampVolume = async (
+  player: MusicPlayer,
+  from: number,
+  to: number,
+  ms: number,
+): Promise<void> => {
   const steps = Math.max(1, Math.round(ms / STEP_MS));
   for (let i = 1; i <= steps; i++) {
     await player.setVolume(from + (to - from) * (i / steps));
@@ -29,7 +34,14 @@ const rampVolume = async (player: MusicPlayer, from: number, to: number, ms: num
  * @param onSwap fired the instant the new track starts (start of the fade-in),
  *   so the now-playing UI flips exactly when the audio does.
  */
-export const transitionTo = async (player: MusicPlayer, track: MusicTrack, target: number, crossfadeMs: number, fadeOut = false, onSwap?: () => void): Promise<void> => {
+export const transitionTo = async (
+  player: MusicPlayer,
+  track: MusicTrack,
+  target: number,
+  crossfadeMs: number,
+  fadeOut = false,
+  onSwap?: () => void,
+): Promise<void> => {
   if (crossfadeMs <= 0) {
     await player.playTrack(track);
     onSwap?.();
@@ -53,7 +65,11 @@ export const transitionTo = async (player: MusicPlayer, track: MusicTrack, targe
 };
 
 /** Gently fade out, pause, then restore volume so the next resume isn't silent. */
-export const fadeOutAndPause = async (player: MusicPlayer, fromVolume: number, fadeMs: number): Promise<void> => {
+export const fadeOutAndPause = async (
+  player: MusicPlayer,
+  fromVolume: number,
+  fadeMs: number,
+): Promise<void> => {
   await rampVolume(player, fromVolume, 0, fadeMs);
   await player.pause();
   await player.setVolume(fromVolume);

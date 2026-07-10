@@ -1,14 +1,15 @@
 /**
  * The data contract shared across the app's data layer.
  *
- * These Zod schemas are the single source of truth for the shapes the AWS HTTP
- * API returns and accepts. Everything that crosses the network boundary is
- * validated here so the rest of the app can trust its types. The Lambda backend
- * mirrors these shapes (see `infra/lambda/api`).
+ * These Zod schemas are the single source of truth for the item shapes stored
+ * in DynamoDB (accessed directly from the browser via Cognito Identity Pool
+ * credentials — see `src/api/adapters/dynamoAdapter.ts`). Everything that
+ * crosses the network boundary is validated here so the rest of the app can
+ * trust its types.
  */
 import { z } from 'zod';
 
-import { type Atmosphere,ATMOSPHERES, DEFAULT_ACCENT } from '~theme/atmosphere';
+import { type Atmosphere, ATMOSPHERES, DEFAULT_ACCENT } from '~theme/atmosphere';
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/;
 
@@ -58,10 +59,10 @@ export const updateMixInputSchema = createMixInputSchema.partial();
 export type UpdateMixInput = z.infer<typeof updateMixInputSchema>;
 
 /* -------------------------------------------------------------------------- */
-/* UserPrefs                                                                   */
+/* UserSettings                                                                */
 /* -------------------------------------------------------------------------- */
 
-export const userPrefsSchema = z.object({
+export const userSettingsSchema = z.object({
   owner: z.string().min(1),
   accent: z.string().regex(HEX_COLOR),
   columns: z.number().int().min(4).max(6),
@@ -70,19 +71,19 @@ export const userPrefsSchema = z.object({
   updatedAt: z.string(),
 });
 
-export type UserPrefs = z.infer<typeof userPrefsSchema>;
+export type UserSettings = z.infer<typeof userSettingsSchema>;
 
-export const updateUserPrefsInputSchema = z.object({
+export const updateUserSettingsInputSchema = z.object({
   accent: z.string().regex(HEX_COLOR).optional(),
   columns: z.number().int().min(4).max(6).optional(),
   cardLabel: cardLabelSchema.optional(),
   spotifyLinked: z.boolean().optional(),
 });
 
-export type UpdateUserPrefsInput = z.infer<typeof updateUserPrefsInputSchema>;
+export type UpdateUserSettingsInput = z.infer<typeof updateUserSettingsInputSchema>;
 
-/** Defaults used when a user has no persisted prefs yet. */
-export const DEFAULT_PREFS: Omit<UserPrefs, 'owner' | 'updatedAt'> = {
+/** Defaults used when a user has no persisted settings yet. */
+export const DEFAULT_SETTINGS: Omit<UserSettings, 'owner' | 'updatedAt'> = {
   accent: DEFAULT_ACCENT,
   columns: 5,
   cardLabel: 'split',

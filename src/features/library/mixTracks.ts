@@ -3,8 +3,8 @@
  * Ported from the prototype's `effectiveTracks` / `pickFrom`, but keyed by URI
  * instead of title. Kept pure (no React, no I/O) so it's trivially testable.
  */
-import { sample, shuffle } from '~utils/formatUtils';
 import type { MusicTrack, ResolvedSource } from '~music/types';
+import { sample, shuffle } from '~utils/formatUtils';
 
 export interface TrackWithOrigin extends MusicTrack {
   /** Human-readable provenance shown in the editor ("Fireside Ambience"). */
@@ -17,7 +17,10 @@ export interface TrackWithOrigin extends MusicTrack {
  * The effective track list for a mix: every source's tracks (deduped, in order)
  * followed by individually-added tracks, deduped by URI across both.
  */
-export const effectiveTracks = (sources: readonly ResolvedSource[], individual: readonly MusicTrack[]): TrackWithOrigin[] => {
+export const effectiveTracks = (
+  sources: readonly ResolvedSource[],
+  individual: readonly MusicTrack[],
+): TrackWithOrigin[] => {
   const seen = new Set<string>();
   const out: TrackWithOrigin[] = [];
 
@@ -36,7 +39,10 @@ export const effectiveTracks = (sources: readonly ResolvedSource[], individual: 
   return out;
 };
 
-export const splitByBanished = <T extends MusicTrack>(tracks: readonly T[], banishedUris: readonly string[]): { active: T[]; banished: T[] } => {
+export const splitByBanished = <T extends MusicTrack>(
+  tracks: readonly T[],
+  banishedUris: readonly string[],
+): { active: T[]; banished: T[] } => {
   const banned = new Set(banishedUris);
   const active: T[] = [];
   const banished: T[] = [];
@@ -45,7 +51,10 @@ export const splitByBanished = <T extends MusicTrack>(tracks: readonly T[], bani
 };
 
 /** A shuffled candidate queue: effective tracks minus the banished set. */
-export const buildQueue = (tracks: readonly MusicTrack[], banishedUris: readonly string[]): MusicTrack[] => {
+export const buildQueue = (
+  tracks: readonly MusicTrack[],
+  banishedUris: readonly string[],
+): MusicTrack[] => {
   const banned = new Set(banishedUris);
   return shuffle(tracks.filter((t) => !banned.has(t.uri)));
 };
@@ -54,7 +63,11 @@ export const buildQueue = (tracks: readonly MusicTrack[], banishedUris: readonly
  * Pick one track at random, honoring the banished set and avoiding an immediate
  * repeat where possible — the prototype's `pickFrom`.
  */
-export const pickFrom = (tracks: readonly MusicTrack[], banishedUris: readonly string[], avoidUri?: string): MusicTrack | undefined => {
+export const pickFrom = (
+  tracks: readonly MusicTrack[],
+  banishedUris: readonly string[],
+  avoidUri?: string,
+): MusicTrack | undefined => {
   const banned = new Set(banishedUris);
   let pool = tracks.filter((t) => !banned.has(t.uri));
   if (avoidUri && pool.length > 1) pool = pool.filter((t) => t.uri !== avoidUri);

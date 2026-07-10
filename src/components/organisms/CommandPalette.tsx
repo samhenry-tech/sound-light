@@ -1,13 +1,13 @@
 import { clsx } from 'clsx';
-import { type KeyboardEvent,useEffect, useMemo, useState } from 'react';
+import { type KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useMixes } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { usePlayerActions } from '~features/player/PlayerContext';
-import { mixName } from '~utils/formatUtils';
 import { useUiStore } from '~stores/uiStore';
+import { mixName } from '~utils/formatUtils';
 
 interface Command {
   id: string;
@@ -115,7 +115,11 @@ export const CommandPalette = () => {
               onMouseEnter={() => setActive(i)}
               onClick={() => run(cmd)}
             >
-              <Icon name={cmd.icon} size={18} className={isActive ? 'text-accent' : 'text-icon-muted'} />
+              <Icon
+                name={cmd.icon}
+                size={18}
+                className={isActive ? 'text-accent' : 'text-icon-muted'}
+              />
               <span className="flex-1 text-[14px] font-medium">{cmd.label}</span>
               {cmd.hint && <span className="text-[11px] text-faint">{cmd.hint}</span>}
             </button>

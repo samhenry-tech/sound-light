@@ -1,9 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { type ReactNode,useCallback, useEffect, useMemo, useRef } from 'react';
+import { type ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useMixes, useUpdateMix } from '~api/hooks';
 import { buildQueue, effectiveTracks } from '~features/library/mixTracks';
-import { mixName } from '~utils/formatUtils';
 import { musicKeys } from '~music/hooks/queryKeys';
 import { useMusicProvider } from '~music/MusicProviderContext';
 import type { MusicPlayer, MusicTrack } from '~music/types';
@@ -12,8 +11,9 @@ import { usePlayerStore } from '~stores/playerStore';
 import { useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
 import { coverFor } from '~theme/atmosphere';
+import { mixName } from '~utils/formatUtils';
 
-import { type PlayerActions,PlayerContext } from './PlayerContext';
+import { type PlayerActions, PlayerContext } from './PlayerContext';
 import { fadeOutAndPause, transitionTo } from './transition';
 
 const HOLD_MS = 700;

@@ -1,22 +1,21 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
-import { useMixes, usePrefs, useUpdatePrefs } from '~api/hooks';
+import { useMixes, useUpdateUserSettings, useUserSettings } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { Select } from '~components/molecules/Select';
 import { usePlayerActions } from '~features/player/PlayerContext';
-import { mixName } from '~utils/formatUtils';
 import { useMusicAuth } from '~music/useMusicAuth';
 import { usePlayerStore } from '~stores/playerStore';
-import { AMBIENT_KINDS, type AmbientKind,useSettingsStore } from '~stores/settingsStore';
+import { AMBIENT_KINDS, type AmbientKind, useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
 import { ACCENT_OPTIONS, capitalize } from '~theme/atmosphere';
+import { mixName } from '~utils/formatUtils';
 
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
-const SEG_BTN =
-  'border-none px-3 py-1.5 text-[13px] font-semibold rounded-[7px] cursor-pointer';
+const SEG_BTN = 'border-none px-3 py-1.5 text-[13px] font-semibold rounded-[7px] cursor-pointer';
 const SEG_ACTIVE = 'bg-accent/18 text-accent';
 const SEG_INACTIVE = 'bg-transparent text-muted';
 const SEGMENT = 'flex gap-1 rounded-sm border border-line-10 bg-surface-control p-[3px]';
@@ -55,8 +54,8 @@ export const SettingsPanel = () => {
   const open = useUiStore((s) => s.settingsOpen);
   const setOpen = useUiStore((s) => s.setSettingsOpen);
 
-  const { data: prefs } = usePrefs();
-  const updatePrefs = useUpdatePrefs();
+  const { data: userSettings } = useUserSettings();
+  const updateUserSettings = useUpdateUserSettings();
   const { data: mixes = [] } = useMixes();
   const auth = useMusicAuth();
   const actions = usePlayerActions();
@@ -65,9 +64,9 @@ export const SettingsPanel = () => {
   const history = usePlayerStore((s) => s.history);
   const sleepEndsAt = usePlayerStore((s) => s.sleepEndsAt);
 
-  const accent = prefs?.accent ?? ACCENT_OPTIONS[0];
-  const columns = prefs?.columns ?? 5;
-  const cardLabel = prefs?.cardLabel ?? 'split';
+  const accent = userSettings?.accent ?? ACCENT_OPTIONS[0];
+  const columns = userSettings?.columns ?? 5;
+  const cardLabel = userSettings?.cardLabel ?? 'split';
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} ariaLabel="Settings" width={620}>
@@ -101,7 +100,7 @@ export const SettingsPanel = () => {
                   style={{ background: c }}
                   aria-label={`Accent ${c}`}
                   aria-pressed={accent === c}
-                  onClick={() => updatePrefs.mutate({ accent: c })}
+                  onClick={() => updateUserSettings.mutate({ accent: c })}
                 />
               ))}
             </div>
@@ -114,7 +113,7 @@ export const SettingsPanel = () => {
                   key={n}
                   type="button"
                   className={clsx(SEG_BTN, columns === n ? SEG_ACTIVE : SEG_INACTIVE)}
-                  onClick={() => updatePrefs.mutate({ columns: n })}
+                  onClick={() => updateUserSettings.mutate({ columns: n })}
                 >
                   {n}
                 </button>
@@ -129,7 +128,7 @@ export const SettingsPanel = () => {
                   key={v}
                   type="button"
                   className={clsx(SEG_BTN, cardLabel === v ? SEG_ACTIVE : SEG_INACTIVE)}
-                  onClick={() => updatePrefs.mutate({ cardLabel: v })}
+                  onClick={() => updateUserSettings.mutate({ cardLabel: v })}
                 >
                   {capitalize(v)}
                 </button>

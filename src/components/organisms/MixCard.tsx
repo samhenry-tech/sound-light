@@ -16,7 +16,10 @@ const CARD =
 export const MixCard = ({ card, onSelect, onTogglePin }: MixCardProps) => {
   return (
     <div
-      className={clsx(CARD, card.isActive ? 'border-line-08' : 'border-line-08 hover:border-line-20')}
+      className={clsx(
+        CARD,
+        card.isActive ? 'border-line-08' : 'border-line-08 hover:border-line-20',
+      )}
       role="button"
       tabIndex={0}
       aria-label={`Play ${card.name}`}

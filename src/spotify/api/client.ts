@@ -11,7 +11,11 @@ export class SpotifyNotLinkedError extends Error {
   }
 }
 
-export const spotifyFetch = async <S extends z.ZodTypeAny>(path: string, schema: S, init?: RequestInit): Promise<z.infer<S>> => {
+export const spotifyFetch = async <S extends z.ZodTypeAny>(
+  path: string,
+  schema: S,
+  init?: RequestInit,
+): Promise<z.infer<S>> => {
   const token = await getValidAccessToken();
   if (!token) throw new SpotifyNotLinkedError();
 

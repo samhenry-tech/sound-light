@@ -23,51 +23,21 @@ variable "region" {
 }
 
 # --------------------------------------------------------------------------- #
-# Cognito                                                                      #
+# Google Sign-In (Cognito Identity Pool federation)                            #
 # --------------------------------------------------------------------------- #
-
-variable "cognito_domain_prefix" {
-  description = <<-EOT
-    Prefix for the Cognito Hosted UI domain. Must be globally unique within the
-    region across all AWS accounts. If 'atmos-auth' is taken, change this.
-  EOT
-  type        = string
-  default     = "atmos-auth"
-}
 
 variable "google_client_id" {
-  description = "Google OAuth 2.0 client ID for Cognito Google federation."
+  description = <<-EOT
+    Google OAuth 2.0 client ID (Web application) registered as the identity
+    pool's accounts.google.com login provider. No client secret is required —
+    the browser sends Google ID tokens straight to Cognito Identity.
+  EOT
   type        = string
-  default     = ""
-}
 
-variable "google_client_secret" {
-  description = "Google OAuth 2.0 client secret for Cognito Google federation."
-  type        = string
-  default     = ""
-  sensitive   = true
-}
-
-variable "callback_urls" {
-  description = "Allowed OAuth callback (redirect) URLs for the SPA app client."
-  type        = list(string)
-  default     = ["http://localhost:3000/auth/callback"]
-}
-
-variable "logout_urls" {
-  description = "Allowed sign-out redirect URLs for the SPA app client."
-  type        = list(string)
-  default     = ["http://localhost:3000"]
-}
-
-# --------------------------------------------------------------------------- #
-# API Gateway CORS                                                             #
-# --------------------------------------------------------------------------- #
-
-variable "allowed_origins" {
-  description = "Origins allowed by the HTTP API CORS configuration."
-  type        = list(string)
-  default     = ["http://localhost:3000"]
+  validation {
+    condition     = length(var.google_client_id) > 0
+    error_message = "google_client_id is required: the identity pool federates Google Sign-In."
+  }
 }
 
 # --------------------------------------------------------------------------- #

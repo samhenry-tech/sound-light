@@ -20,7 +20,7 @@ export const RootLayout = () => {
   useKeyboardShortcuts();
 
   if (session.isLoading) return <Splash title="Loading…" />;
-  if (session.enabled && !session.isAuthenticated) return <LoginPage />;
+  if (!session.isAuthenticated) return <LoginPage />;
 
   const active: Screen = location.pathname.startsWith('/library') ? 'library' : 'live';
 

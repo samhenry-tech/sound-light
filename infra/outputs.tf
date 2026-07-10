@@ -1,29 +1,24 @@
 # Outputs consumed by the frontend .env and the GitHub Actions workflows.
 # The names here are a contract — do not rename without updating both consumers.
 
-output "api_base_url" {
-  description = "Base invoke URL of the HTTP API (no trailing slash). Maps to VITE_API_BASE_URL."
-  value       = aws_apigatewayv2_api.http.api_endpoint
+output "cognito_identity_pool_id" {
+  description = "Cognito Identity Pool id. Maps to VITE_COGNITO_IDENTITY_POOL_ID."
+  value       = aws_cognito_identity_pool.main.id
 }
 
-output "cognito_authority" {
-  description = "Cognito OIDC issuer URL. Maps to VITE_COGNITO_AUTHORITY."
-  value       = "https://cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
+output "mixes_table_name" {
+  description = "DynamoDB mixes table name. Maps to VITE_MIXES_TABLE."
+  value       = aws_dynamodb_table.mixes.name
 }
 
-output "cognito_client_id" {
-  description = "SPA app client id. Maps to VITE_COGNITO_CLIENT_ID."
-  value       = aws_cognito_user_pool_client.spa.id
+output "user_settings_table_name" {
+  description = "DynamoDB user-settings table name. Maps to VITE_SETTINGS_TABLE."
+  value       = aws_dynamodb_table.user_settings.name
 }
 
-output "cognito_hosted_ui_domain" {
-  description = "Full https URL of the Cognito Hosted UI domain. Maps to VITE_COGNITO_HOSTED_UI."
-  value       = "https://${aws_cognito_user_pool_domain.main.domain}.auth.${var.region}.amazoncognito.com"
-}
-
-output "cognito_user_pool_id" {
-  description = "Cognito user pool id."
-  value       = aws_cognito_user_pool.main.id
+output "aws_region" {
+  description = "AWS region the stack is deployed in. Maps to VITE_AWS_REGION."
+  value       = var.region
 }
 
 output "frontend_bucket" {

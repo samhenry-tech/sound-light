@@ -10,9 +10,7 @@ export const Splash = ({ title, error }: { title: string; error?: string }) => {
       <div
         className={clsx(
           'text-[14px]',
-          error
-            ? 'max-w-[360px] px-6 text-center text-danger-text-2'
-            : 'text-muted',
+          error ? 'max-w-[360px] px-6 text-center text-danger-text-2' : 'text-muted',
         )}
       >
         {error ?? title}

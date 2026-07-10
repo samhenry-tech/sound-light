@@ -7,21 +7,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useAuthSession } from '~auth/useAuthSession';
-import type { CreateMixInput, Mix, UpdateMixInput, UpdateUserPrefsInput } from '~shared/contract';
+import type { CreateMixInput, Mix, UpdateMixInput, UpdateUserSettingsInput } from '~shared/contract';
 
 import type { DataContext } from './adapters/types';
 import { dataAdapter } from './dataAdapter';
 import { dataKeys } from './queryKeys';
 
 const useDataContext = (): DataContext & { ready: boolean } => {
-  const { user, accessToken, isAuthenticated } = useAuthSession();
+  const { owner, googleIdToken, isAuthenticated } = useAuthSession();
   return useMemo(
     () => ({
-      token: accessToken,
-      owner: user?.sub ?? '',
-      ready: isAuthenticated && Boolean(user),
+      owner,
+      googleIdToken: googleIdToken ?? '',
+      ready: isAuthenticated && Boolean(owner) && Boolean(googleIdToken),
     }),
-    [accessToken, user, isAuthenticated],
+    [owner, googleIdToken, isAuthenticated],
   );
 };
 
@@ -35,11 +35,11 @@ export const useMixes = () => {
   });
 };
 
-export const usePrefs = () => {
+export const useUserSettings = () => {
   const ctx = useDataContext();
   return useQuery({
-    queryKey: dataKeys.prefs(ctx.owner),
-    queryFn: () => dataAdapter.getPrefs(ctx),
+    queryKey: dataKeys.settings(ctx.owner),
+    queryFn: () => dataAdapter.getSettings(ctx),
     enabled: ctx.ready,
     staleTime: 5 * 60_000,
   });
@@ -99,13 +99,13 @@ export const useDeleteMix = () => {
   });
 };
 
-export const useUpdatePrefs = () => {
+export const useUpdateUserSettings = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
-  const key = dataKeys.prefs(ctx.owner);
+  const key = dataKeys.settings(ctx.owner);
 
   return useMutation({
-    mutationFn: (input: UpdateUserPrefsInput) => dataAdapter.updatePrefs(ctx, input),
+    mutationFn: (input: UpdateUserSettingsInput) => dataAdapter.updateSettings(ctx, input),
     onMutate: async (input) => {
       await qc.cancelQueries({ queryKey: key });
       const previous = qc.getQueryData(key);

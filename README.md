@@ -54,18 +54,21 @@ that's what the Spotify app's redirect URIs are registered against.
 
 ## Configuration
 
-Copy `.env.example` → `.env.local`. Everything is optional — fill in only what
-you want to enable.
+Copy `.env.example` → `.env.local`. The five AWS/Google vars are **required**
+in every environment — the app throws a descriptive error at startup if any is
+missing (there is no offline/localStorage mode).
 
-| Var                                                                            | Purpose                                                            |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `VITE_API_BASE_URL`                                                            | AWS HTTP API URL. Blank → localStorage data adapter.               |
-| `VITE_COGNITO_AUTHORITY` / `VITE_COGNITO_CLIENT_ID` / `VITE_COGNITO_HOSTED_UI` | Cognito OIDC. Blank → local dev session (no sign-in).              |
-| `VITE_COGNITO_REDIRECT_URI` / `VITE_COGNITO_LOGOUT_URI`                        | Hosted-UI callback / logout targets.                               |
-| `VITE_SPOTIFY_CLIENT_ID`                                                       | Spotify app client id (ships with the `atmos` app's id).           |
-| `VITE_SPOTIFY_REDIRECT_URI`                                                    | Must exactly match a registered URI (`…/auth/spotify/`).           |
-| `VITE_SPOTIFY_MOCK`                                                            | `true` (default) uses the mock catalog; `false` uses real Spotify. |
-| `VITE_MUSIC_PROVIDER`                                                          | Active music backend (`spotify`).                                  |
+| Var                             | Purpose                                                            |
+| ------------------------------- | ------------------------------------------------------------------ |
+| `VITE_GOOGLE_CLIENT_ID`         | Google OAuth Web client id (Sign in with Google). Required.        |
+| `VITE_COGNITO_IDENTITY_POOL_ID` | Cognito Identity Pool id (`terraform output`). Required.           |
+| `VITE_AWS_REGION`               | AWS region of the identity pool + tables. Required.                |
+| `VITE_MIXES_TABLE`              | DynamoDB mixes table name (`terraform output`). Required.          |
+| `VITE_SETTINGS_TABLE`           | DynamoDB user-settings table name (`terraform output`). Required.  |
+| `VITE_SPOTIFY_CLIENT_ID`        | Spotify app client id (ships with the `atmos` app's id).           |
+| `VITE_SPOTIFY_REDIRECT_URI`     | Must exactly match a registered URI (`…/auth/spotify/`).           |
+| `VITE_SPOTIFY_MOCK`             | `true` (default) uses the mock catalog; `false` uses real Spotify. |
+| `VITE_MUSIC_PROVIDER`           | Active music backend (`spotify`).                                  |
 
 ## Architecture
 
@@ -74,8 +77,8 @@ src/
   app/            Composition root, router, providers (Query, Theme, Auth, Player)
   music/          ⟵ Provider-agnostic interface (MusicProvider/MusicPlayer) + hooks
   spotify/        ⟵ The Spotify implementation of MusicProvider (its own folder)
-  api/            AWS data layer: HTTP + localStorage adapters, React Query hooks
-  auth/           Cognito OIDC (react-oidc-context) + normalized AuthSession
+  api/            AWS data layer: direct-DynamoDB adapter + React Query hooks
+  auth/           Google Sign-In → Cognito Identity Pool + normalized AuthSession
   features/
     player/       PlayerProvider — owns the imperative player, queue, actions
     library/      effectiveTracks/queue logic + the editor view-model
@@ -85,13 +88,13 @@ src/
   stores/         Zustand: player, ui, settings (persisted)
   shared/         Zod data contract (the network boundary's source of truth)
   theme/          Design tokens (CSS variables) + atmosphere data
-infra/            Terraform (Cognito, DynamoDB, Lambda, API GW, S3+CloudFront) + Lambda API
+infra/            Terraform (Cognito Identity Pool, DynamoDB, S3+CloudFront)
 .github/workflows CI, frontend deploy, terraform
 ```
 
 State split, by design:
 
-- **Server data** (mixes, prefs) → **TanStack Query** with optimistic updates.
+- **Server data** (mixes, user settings) → **TanStack Query** with optimistic updates.
 - **Ephemeral playback/UI** (now-playing, queue, filters, toast) → **Zustand**.
 - **Network boundaries** → validated with **Zod** (`src/shared/contract.ts`).
 
@@ -126,7 +129,7 @@ App: **atmos** · client id `a35ad70cf30442f0a53ba22a95e85c8e` · redirect
 Provisioned with **Terraform** in `infra/`:
 
 - **Cognito** user pool with **Google** federation (Hosted UI) + a public PKCE SPA client.
-- **DynamoDB** on-demand tables (mixes, user-prefs), owner-scoped.
+- **DynamoDB** provisioned tables (mixes, user-settings), owner-scoped.
 - **Lambda** (Node 20, single router) behind an **API Gateway HTTP API** with a
   Cognito **JWT authorizer** — the owner is always the verified `sub` claim.
 - **S3 + CloudFront** (private bucket, OAC, SPA error routing) for hosting.

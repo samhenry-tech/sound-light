@@ -4,7 +4,6 @@ import { Select } from '~components/molecules/Select';
 import { SourceRow } from '~components/molecules/SourceRow';
 import { TrackRow } from '~components/molecules/TrackRow';
 import type { MixEditorModel } from '~features/library/useMixEditor';
-import { mixName } from '~utils/formatUtils';
 import type { Mix } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import {
@@ -15,12 +14,12 @@ import {
   coverFor,
   LOCATIONS,
 } from '~theme/atmosphere';
+import { mixName } from '~utils/formatUtils';
 
 import { BanishedPanel } from './BanishedPanel';
 import { SearchToAdd } from './SearchToAdd';
 
-const SECTION_LABEL =
-  'mb-2.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-faint';
+const SECTION_LABEL = 'mb-2.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-faint';
 
 interface MixEditorProps {
   mix: Mix;

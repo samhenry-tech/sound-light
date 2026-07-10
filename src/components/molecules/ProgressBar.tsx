@@ -10,7 +10,8 @@ interface ProgressBarProps {
 
 const SEEK_STEP_MS = 5000;
 
-const TIME = 'text-[11px] text-muted-2 flex-shrink-0 min-w-[30px] [font-variant-numeric:tabular-nums]';
+const TIME =
+  'text-[11px] text-muted-2 flex-shrink-0 min-w-[30px] [font-variant-numeric:tabular-nums]';
 
 /** Elapsed · seekable track · total, driven by player position. */
 export const ProgressBar = ({ positionMs, durationMs, onSeek }: ProgressBarProps) => {

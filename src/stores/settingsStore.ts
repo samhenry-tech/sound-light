@@ -1,7 +1,7 @@
 /**
  * Device-level player settings, persisted to localStorage. These are tuning
  * preferences (crossfade, ambient bed, keyboard) distinct from the synced
- * UserPrefs (accent / columns / card label) that live in the data layer.
+ * UserSettings (accent / columns / card label) that live in the data layer.
  */
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';

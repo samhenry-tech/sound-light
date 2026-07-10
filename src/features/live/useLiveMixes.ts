@@ -1,8 +1,7 @@
 /** View-model for the Live grid: filter + search + pin-sort the GM's mixes. */
 import { useMemo } from 'react';
 
-import { useMixes, usePrefs } from '~api/hooks';
-import { mixName } from '~utils/formatUtils';
+import { useMixes, useUserSettings } from '~api/hooks';
 import type { Mix } from '~shared/contract';
 import { usePlayerStore } from '~stores/playerStore';
 import { useUiStore } from '~stores/uiStore';
@@ -13,6 +12,7 @@ import {
   coverFor,
   DEFAULT_COLUMNS,
 } from '~theme/atmosphere';
+import { mixName } from '~utils/formatUtils';
 
 export interface LiveCard {
   id: string;
@@ -45,13 +45,13 @@ const toCard = (mix: Mix, combined: boolean, playingMixId: string | null): LiveC
 
 export const useLiveMixes = () => {
   const { data: mixes = [], isLoading } = useMixes();
-  const { data: prefs } = usePrefs();
+  const { data: userSettings } = useUserSettings();
   const liveQuery = useUiStore((s) => s.liveQuery);
   const liveFilter = useUiStore((s) => s.liveFilter);
   const playingMixId = usePlayerStore((s) => s.playingMixId);
 
-  const combined = prefs?.cardLabel === 'combined';
-  const cols = prefs?.columns ?? DEFAULT_COLUMNS;
+  const combined = userSettings?.cardLabel === 'combined';
+  const cols = userSettings?.columns ?? DEFAULT_COLUMNS;
 
   const cards = useMemo(() => {
     const q = liveQuery.trim().toLowerCase();

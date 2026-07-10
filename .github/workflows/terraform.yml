@@ -25,10 +25,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Google federation credentials (sensitive) consumed by Terraform as
-  # TF_VAR_* (see variables.tf: google_client_id / google_client_secret).
+  # Google OAuth client id consumed by Terraform as a TF_VAR_* env var
+  # (see variables.tf: google_client_id). No client secret is needed —
+  # the identity pool verifies Google ID tokens directly.
   TF_VAR_google_client_id: ${{ secrets.TF_VAR_google_client_id }}
-  TF_VAR_google_client_secret: ${{ secrets.TF_VAR_google_client_secret }}
 
 jobs:
   terraform:
@@ -40,21 +40,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: infra/lambda/api/package-lock.json
-
-      # The Lambda bundle (dist/index.js) must exist before `terraform plan`
-      # so archive_file can package it.
-      - name: Build Lambda bundle
-        working-directory: infra/lambda/api
-        run: |
-          npm ci
-          npm run build
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3

@@ -3,41 +3,21 @@
 # Copy to `terraform.tfvars` and edit. `*.tfvars` is gitignored (only the
 # `.example` is tracked), so real values never get committed.
 #
-# In CI, sensitive values are passed via environment variables instead
-# (TF_VAR_google_client_id / TF_VAR_google_client_secret) — see
-# .github/workflows/terraform.yml and infra/IMPLEMENTATION_NOTES.md.
+# In CI the Google client id is passed via the TF_VAR_google_client_id
+# environment variable instead — see .github/workflows/terraform.yml and
+# infra/IMPLEMENTATION_NOTES.md.
 
 # --- Core / naming --------------------------------------------------------- #
 project     = "atmos"
 environment = "dev"
 region      = "us-east-1"
 
-# --- Cognito --------------------------------------------------------------- #
-# Must be globally unique in the region. Change if "atmos-auth" is taken.
-cognito_domain_prefix = "atmos-auth"
-
-# Google OAuth credentials for Cognito federation. Leave blank to deploy
-# without Google sign-in (email/password only). DO NOT commit real values.
-google_client_id     = ""
-google_client_secret = ""
-
-# OAuth redirect URLs for the SPA app client. Add your CloudFront/custom-domain
-# URLs here once known, e.g.:
-#   callback_urls = [
-#     "http://localhost:3000/auth/callback",
-#     "https://d111111abcdef8.cloudfront.net/auth/callback",
-#   ]
-#   logout_urls = [
-#     "http://localhost:3000",
-#     "https://d111111abcdef8.cloudfront.net",
-#   ]
-callback_urls = ["http://localhost:3000/auth/callback"]
-logout_urls   = ["http://localhost:3000"]
-
-# --- API Gateway CORS ------------------------------------------------------ #
-# Origins allowed to call the HTTP API. Add the CloudFront/custom-domain origin
-# once known.
-allowed_origins = ["http://localhost:3000"]
+# --- Google Sign-In -------------------------------------------------------- #
+# Google OAuth 2.0 *Web application* client ID (REQUIRED). No secret is needed:
+# the identity pool verifies Google ID tokens directly. Register your app
+# origins (http://localhost:3000 + the CloudFront URL) as authorised
+# JavaScript origins on this client in the Google Cloud Console.
+google_client_id = "1234567890-example.apps.googleusercontent.com"
 
 # --- GitHub OIDC ----------------------------------------------------------- #
 # Set to false if the GitHub OIDC provider already exists in this AWS account.

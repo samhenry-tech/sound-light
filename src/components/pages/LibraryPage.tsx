@@ -4,10 +4,10 @@ import { useCreateMix, useMixes } from '~api/hooks';
 import { LibraryMaster, type LibraryRowData } from '~components/organisms/LibraryMaster';
 import { MixEditor } from '~components/organisms/MixEditor';
 import { useMixEditor } from '~features/library/useMixEditor';
-import { mixName } from '~utils/formatUtils';
 import type { Mix } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import { coverFor } from '~theme/atmosphere';
+import { mixName } from '~utils/formatUtils';
 
 const summarize = (mix: Mix): string => {
   const parts: string[] = [];

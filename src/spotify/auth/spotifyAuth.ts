@@ -49,7 +49,10 @@ export const beginSpotifyLogin = async (): Promise<void> => {
   window.location.assign(`${SPOTIFY_ENDPOINTS.authorize}?${params.toString()}`);
 };
 
-const persist = (parsed: ReturnType<typeof tokenResponseSchema.parse>, fallbackRefresh?: string): SpotifyTokens => {
+const persist = (
+  parsed: ReturnType<typeof tokenResponseSchema.parse>,
+  fallbackRefresh?: string,
+): SpotifyTokens => {
   const tokens: SpotifyTokens = {
     accessToken: parsed.access_token,
     refreshToken: parsed.refresh_token ?? fallbackRefresh,
