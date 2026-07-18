@@ -14,7 +14,7 @@ interface LibraryRowProps {
 const BASE =
   'flex w-full items-center gap-3 text-left px-[11px] py-[9px] rounded-md cursor-pointer text-primary border';
 
-/** A mix row in the Library master list. */
+/** A playlist row in the Library master list. */
 export const LibraryRow = ({
   name,
   meta,

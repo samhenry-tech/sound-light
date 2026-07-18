@@ -1,7 +1,7 @@
 import { type Atmosphere, capitalize } from '~theme/atmosphere';
 
-/** Display name for a mix: "{location} – {Atmosphere}" (en-dash, per handoff). */
-export const mixName = (location: string, atmosphere: Atmosphere): string => {
+/** Display name for a playlist: "{location} – {Atmosphere}" (en-dash, per handoff). */
+export const playlistName = (location: string, atmosphere: Atmosphere): string => {
   return `${location} – ${capitalize(atmosphere)}`;
 };
 

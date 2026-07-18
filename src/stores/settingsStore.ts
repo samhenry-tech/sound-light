@@ -13,7 +13,7 @@ export type AmbientKind = 'rain' | 'wind' | 'fire' | 'ocean';
 export const AMBIENT_KINDS: AmbientKind[] = ['rain', 'wind', 'fire', 'ocean'];
 
 interface SettingsState {
-  /** Crossfade duration in ms when switching mixes / skipping (0 disables). */
+  /** Crossfade duration in ms when switching playlists / skipping (0 disables). */
   crossfadeMs: number;
   /** Volume of the procedural ambient bed (0..1). */
   ambientVolume: number;
@@ -22,15 +22,15 @@ interface SettingsState {
   keyboardEnabled: boolean;
   /** Default sleep-timer length, in minutes. */
   sleepTimerMinutes: number;
-  /** Mix id used by the Panic button (jump to combat). */
-  panicMixId: string | null;
+  /** Playlist id used by the Panic button (jump to combat). */
+  panicPlaylistId: string | null;
 
   setCrossfadeMs: (ms: number) => void;
   setAmbientVolume: (v: number) => void;
   setAmbientKind: (kind: AmbientKind | null) => void;
   setKeyboardEnabled: (enabled: boolean) => void;
   setSleepTimerMinutes: (minutes: number) => void;
-  setPanicMixId: (id: string | null) => void;
+  setPanicPlaylistId: (id: string | null) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -41,7 +41,7 @@ export const useSettingsStore = create<SettingsState>()(
       ambientKind: null,
       keyboardEnabled: true,
       sleepTimerMinutes: 45,
-      panicMixId: null,
+      panicPlaylistId: null,
 
       setCrossfadeMs: (crossfadeMs) =>
         set({ crossfadeMs: Math.min(8000, Math.max(0, crossfadeMs)) }),
@@ -51,7 +51,7 @@ export const useSettingsStore = create<SettingsState>()(
       setKeyboardEnabled: (keyboardEnabled) => set({ keyboardEnabled }),
       setSleepTimerMinutes: (sleepTimerMinutes) =>
         set({ sleepTimerMinutes: Math.max(1, Math.round(sleepTimerMinutes)) }),
-      setPanicMixId: (panicMixId) => set({ panicMixId }),
+      setPanicPlaylistId: (panicPlaylistId) => set({ panicPlaylistId }),
     }),
     { name: `${APP_NAME}.settings` },
   ),

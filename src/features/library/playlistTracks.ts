@@ -1,5 +1,5 @@
 /**
- * Pure domain logic for turning a mix's sources + tracks into a play queue.
+ * Pure domain logic for turning a playlist's sources + tracks into a play queue.
  * Ported from the prototype's `effectiveTracks` / `pickFrom`, but keyed by URI
  * instead of title. Kept pure (no React, no I/O) so it's trivially testable.
  */
@@ -14,7 +14,7 @@ export interface TrackWithOrigin extends MusicTrack {
 }
 
 /**
- * The effective track list for a mix: every source's tracks (deduped, in order)
+ * The effective track list for a playlist: every source's tracks (deduped, in order)
  * followed by individually-added tracks, deduped by URI across both.
  */
 export const effectiveTracks = (

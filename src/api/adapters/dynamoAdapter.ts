@@ -8,14 +8,14 @@
  */
 import { DeleteCommand, GetCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 
-import { MIXES_TABLE, SETTINGS_TABLE } from '~auth/awsConfig';
+import { PLAYLISTS_TABLE, SETTINGS_TABLE } from '~auth/awsConfig';
 import {
-  createMixInputSchema,
+  createPlaylistInputSchema,
   DEFAULT_SETTINGS,
-  type Mix,
-  mixListSchema,
-  mixSchema,
-  updateMixInputSchema,
+  type Playlist,
+  playlistListSchema,
+  playlistSchema,
+  updatePlaylistInputSchema,
   updateUserSettingsInputSchema,
   type UserSettings,
   userSettingsSchema,
@@ -25,11 +25,11 @@ import { createId } from '~utils/idUtils';
 import { getDynamoClient } from '../dynamoClient';
 import type { DataAdapter, DataContext } from './types';
 
-const fetchMix = async (ctx: DataContext, id: string): Promise<Mix | undefined> => {
+const fetchPlaylist = async (ctx: DataContext, id: string): Promise<Playlist | undefined> => {
   const result = await getDynamoClient(ctx.googleIdToken).send(
-    new GetCommand({ TableName: MIXES_TABLE, Key: { owner: ctx.owner, id } }),
+    new GetCommand({ TableName: PLAYLISTS_TABLE, Key: { owner: ctx.owner, id } }),
   );
-  return result.Item ? mixSchema.parse(result.Item) : undefined;
+  return result.Item ? playlistSchema.parse(result.Item) : undefined;
 };
 
 const fetchSettings = async (ctx: DataContext): Promise<UserSettings | undefined> => {
@@ -40,26 +40,26 @@ const fetchSettings = async (ctx: DataContext): Promise<UserSettings | undefined
 };
 
 export const dynamoAdapter: DataAdapter = {
-  async listMixes(ctx) {
+  async listPlaylists(ctx) {
     const result = await getDynamoClient(ctx.googleIdToken).send(
       new QueryCommand({
-        TableName: MIXES_TABLE,
+        TableName: PLAYLISTS_TABLE,
         KeyConditionExpression: '#owner = :owner',
         ExpressionAttributeNames: { '#owner': 'owner' },
         ExpressionAttributeValues: { ':owner': ctx.owner },
       }),
     );
-    const mixes = mixListSchema.parse(result.Items ?? []);
+    const playlists = playlistListSchema.parse(result.Items ?? []);
     // Stable, predictable order for the client grid.
-    return mixes.sort(
+    return playlists.sort(
       (a, b) => a.sortIndex - b.sortIndex || a.createdAt.localeCompare(b.createdAt),
     );
   },
 
-  async createMix(ctx, input) {
-    const values = createMixInputSchema.parse(input);
+  async createPlaylist(ctx, input) {
+    const values = createPlaylistInputSchema.parse(input);
     const now = new Date().toISOString();
-    const mix = mixSchema.parse({
+    const playlist = playlistSchema.parse({
       ...values,
       id: createId(),
       owner: ctx.owner,
@@ -67,19 +67,19 @@ export const dynamoAdapter: DataAdapter = {
       updatedAt: now,
     });
     await getDynamoClient(ctx.googleIdToken).send(
-      new PutCommand({ TableName: MIXES_TABLE, Item: mix }),
+      new PutCommand({ TableName: PLAYLISTS_TABLE, Item: playlist }),
     );
-    return mix;
+    return playlist;
   },
 
-  async updateMix(ctx, id, input) {
-    const existing = await fetchMix(ctx, id);
-    if (!existing) throw new Error(`Mix ${id} not found`);
+  async updatePlaylist(ctx, id, input) {
+    const existing = await fetchPlaylist(ctx, id);
+    if (!existing) throw new Error(`Playlist ${id} not found`);
 
     // Partial update over the immutable identity fields: id/owner/createdAt
     // are never client-mutable.
-    const patch = updateMixInputSchema.parse(input);
-    const updated: Mix = {
+    const patch = updatePlaylistInputSchema.parse(input);
+    const updated: Playlist = {
       ...existing,
       ...patch,
       id: existing.id,
@@ -88,15 +88,15 @@ export const dynamoAdapter: DataAdapter = {
       updatedAt: new Date().toISOString(),
     };
     await getDynamoClient(ctx.googleIdToken).send(
-      new PutCommand({ TableName: MIXES_TABLE, Item: updated }),
+      new PutCommand({ TableName: PLAYLISTS_TABLE, Item: updated }),
     );
     return updated;
   },
 
-  async deleteMix(ctx, id) {
+  async deletePlaylist(ctx, id) {
     // Idempotent: succeeds whether or not the item existed.
     await getDynamoClient(ctx.googleIdToken).send(
-      new DeleteCommand({ TableName: MIXES_TABLE, Key: { owner: ctx.owner, id } }),
+      new DeleteCommand({ TableName: PLAYLISTS_TABLE, Key: { owner: ctx.owner, id } }),
     );
   },
 

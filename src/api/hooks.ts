@@ -8,10 +8,10 @@ import { useMemo } from 'react';
 
 import { useAuthSession } from '~auth/useAuthSession';
 import type {
-  CreateMixInput,
-  Mix,
+  CreatePlaylistInput,
+  Playlist,
   PublicUserSettings,
-  UpdateMixInput,
+  UpdatePlaylistInput,
   UpdateUserSettingsInput,
 } from '~shared/contract';
 import { publicUserSettingsSchema } from '~shared/contract';
@@ -32,11 +32,11 @@ const useDataContext = (): DataContext & { ready: boolean } => {
   );
 };
 
-export const useMixes = () => {
+export const usePlaylists = () => {
   const ctx = useDataContext();
   return useQuery({
-    queryKey: dataKeys.mixes(ctx.owner),
-    queryFn: () => dataAdapter.listMixes(ctx),
+    queryKey: dataKeys.playlists(ctx.owner),
+    queryFn: () => dataAdapter.listPlaylists(ctx),
     enabled: ctx.ready,
     staleTime: 60_000,
   });
@@ -56,29 +56,32 @@ export const useUserSettings = () => {
   });
 };
 
-export const useCreateMix = () => {
+export const useCreatePlaylist = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateMixInput) => dataAdapter.createMix(ctx, input),
-    onSuccess: (mix) => {
-      qc.setQueryData<Mix[]>(dataKeys.mixes(ctx.owner), (prev) => [...(prev ?? []), mix]);
+    mutationFn: (input: CreatePlaylistInput) => dataAdapter.createPlaylist(ctx, input),
+    onSuccess: (playlist) => {
+      qc.setQueryData<Playlist[]>(dataKeys.playlists(ctx.owner), (prev) => [
+        ...(prev ?? []),
+        playlist,
+      ]);
     },
   });
 };
 
-export const useUpdateMix = () => {
+export const useUpdatePlaylist = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
-  const key = dataKeys.mixes(ctx.owner);
+  const key = dataKeys.playlists(ctx.owner);
 
   return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: UpdateMixInput }) =>
-      dataAdapter.updateMix(ctx, id, input),
+    mutationFn: ({ id, input }: { id: string; input: UpdatePlaylistInput }) =>
+      dataAdapter.updatePlaylist(ctx, id, input),
     onMutate: async ({ id, input }) => {
       await qc.cancelQueries({ queryKey: key });
-      const previous = qc.getQueryData<Mix[]>(key);
-      qc.setQueryData<Mix[]>(key, (prev) =>
+      const previous = qc.getQueryData<Playlist[]>(key);
+      qc.setQueryData<Playlist[]>(key, (prev) =>
         prev?.map((m) => (m.id === id ? { ...m, ...input } : m)),
       );
       return { previous };
@@ -90,17 +93,17 @@ export const useUpdateMix = () => {
   });
 };
 
-export const useDeleteMix = () => {
+export const useDeletePlaylist = () => {
   const ctx = useDataContext();
   const qc = useQueryClient();
-  const key = dataKeys.mixes(ctx.owner);
+  const key = dataKeys.playlists(ctx.owner);
 
   return useMutation({
-    mutationFn: (id: string) => dataAdapter.deleteMix(ctx, id),
+    mutationFn: (id: string) => dataAdapter.deletePlaylist(ctx, id),
     onMutate: async (id) => {
       await qc.cancelQueries({ queryKey: key });
-      const previous = qc.getQueryData<Mix[]>(key);
-      qc.setQueryData<Mix[]>(key, (prev) => prev?.filter((m) => m.id !== id));
+      const previous = qc.getQueryData<Playlist[]>(key);
+      qc.setQueryData<Playlist[]>(key, (prev) => prev?.filter((m) => m.id !== id));
       return { previous };
     },
     onError: (_err, _id, context) => {

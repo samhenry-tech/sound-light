@@ -55,7 +55,7 @@ export const useUiStore = create<UiState>((set) => ({
   setLiveQuery: (liveQuery) => set({ liveQuery }),
   setLiveFilter: (liveFilter) => set({ liveFilter }),
   setLibQuery: (libQuery) => set({ libQuery }),
-  // Selecting a mix resets the editor (matches the prototype's libSelect).
+  // Selecting a playlist resets the editor (matches the prototype's libSelect).
   selectLibrary: (libSelectedId) => set({ libSelectedId, editorQuery: '', showBanished: false }),
   setEditorQuery: (editorQuery) => set({ editorQuery }),
   clearEditorQuery: () => set({ editorQuery: '' }),

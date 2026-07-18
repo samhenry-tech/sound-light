@@ -19,7 +19,7 @@ interface LibraryMasterProps {
   onSelect: (id: string) => void;
 }
 
-/** Library master column: title, New, a filter, and the list of mixes. */
+/** Library master column: title, New, a filter, and the list of playlists. */
 export const LibraryMaster = ({
   rows,
   selectedId,
@@ -40,8 +40,8 @@ export const LibraryMaster = ({
         <SearchInput
           value={query}
           onChange={onQuery}
-          placeholder="Find a mix…"
-          ariaLabel="Filter mixes"
+          placeholder="Find a playlist…"
+          ariaLabel="Filter playlists"
         />
       </div>
       <div className="flex min-h-0 flex-1 flex-col gap-[3px] overflow-y-auto px-3 pb-4">

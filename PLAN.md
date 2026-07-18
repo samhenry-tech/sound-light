@@ -8,10 +8,10 @@
 ## Product
 
 **sound-light** — an iPad-first music companion for tabletop RPG game masters. The GM
-keeps a library of vibe-named mixes (`Location – Atmosphere`, e.g. _Tavern –
+keeps a library of vibe-named playlists (`Location – Atmosphere`, e.g. _Tavern –
 Battle_) and during play taps a card to crossfade into that vibe. Music plays
 shuffled; the GM gives per-track feedback (👍 keep / 👎 fade & skip, hold to
-banish) and the app remembers banished tracks per mix.
+banish) and the app remembers banished tracks per playlist.
 
 ## Architecture principles
 
@@ -35,7 +35,7 @@ banish) and the app remembers banished tracks per mix.
       with PKCE login, token storage + refresh, Web API search/resolve, Web Playback
       SDK wrapper, and a mock provider for offline use.
 - [x] **P2 — AWS auth + data.** Cognito OIDC (Google), HTTP API client, React Query
-      hooks for mixes/prefs with optimistic updates, localStorage fallback + seed.
+      hooks for playlists/prefs with optimistic updates, localStorage fallback + seed.
 - [x] **P3 — Player engine + stores.** Faithful port of prototype logic (effective
       tracks, shuffle, banish, hold-to-banish) plus the music-player feature set.
 - [x] **P4 — Component library.** Pixel-accurate atoms→templates.
@@ -49,10 +49,10 @@ banish) and the app remembers banished tracks per mix.
 
 Faithful to prototype:
 
-- Tap card → crossfade into mix; active card ring + equalizer; toast.
+- Tap card → crossfade into playlist; active card ring + equalizer; toast.
 - Shuffled queue from `sources ∪ tracks − banished`; avoid immediate repeats.
 - 👍 keep · 👎 tap = fade & skip · 👎 hold 700ms = banish (red charging ring).
-- Play/pause, live progress, pin, per-mix banished panel + restore.
+- Play/pause, live progress, pin, per-playlist banished panel + restore.
 
 Best-in-class additions (informed by Syrinscape / Tabletop Audio / Bardify gaps —
 too many clicks, not glanceable, no instant combat switch, distracting UI, no
@@ -61,12 +61,12 @@ curation, ad-driven):
 - **Volume + mute + one-tap "duck"** (lower under narration, restore on release).
 - **Scrub/seek**, **skip next/previous**, manual queue with "up next".
 - **Crossfade** with configurable duration (real fade in mock; volume-duck for SDK).
-- **Panic button** → instantly crossfade to the campaign's designated combat mix.
+- **Panic button** → instantly crossfade to the campaign's designated combat playlist.
 - **Procedural ambient bed** — asset-free rain/wind/fire/ocean noise synthesized
   with the Web Audio API, layered _under_ the music with its own volume.
 - **Sleep timer** with fade-out.
 - **Keyboard shortcuts** (space, →/skip, B/banish, P/panic, ↑↓ volume, / search, ⌘K).
-- **Command palette (⌘K)** — jump to any mix or run any action.
+- **Command palette (⌘K)** — jump to any playlist or run any action.
 - **Table / focus mode** — minimal, dim, glanceable now-playing for the actual table.
 - **Now-playing history.**
 - **Theming** (accent), grid density, split/combined labels — persisted to prefs.

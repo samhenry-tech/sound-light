@@ -4,7 +4,7 @@ import type { MouseEvent } from 'react';
 import { EqBars } from '~components/atoms/EqBars';
 import { GradientCover } from '~components/atoms/GradientCover';
 
-interface MixCoverProps {
+interface PlaylistCoverProps {
   gradient: string;
   artworkUrl?: string;
   pinned: boolean;
@@ -14,14 +14,14 @@ interface MixCoverProps {
 }
 
 /** Card cover: atmosphere gradient with a pin tack and (when active) eq bars. */
-export const MixCover = ({
+export const PlaylistCover = ({
   gradient,
   artworkUrl,
   pinned,
   isActive,
   onTogglePin,
   height = 74,
-}: MixCoverProps) => {
+}: PlaylistCoverProps) => {
   const togglePin = (e: MouseEvent) => {
     e.stopPropagation();
     onTogglePin();
@@ -32,7 +32,7 @@ export const MixCover = ({
         type="button"
         className="absolute top-[7px] right-[7px] flex h-[30px] w-[30px] items-center justify-center rounded-xs border border-line-10 bg-[rgba(8,10,11,0.42)] cursor-pointer"
         title={pinned ? 'Unpin' : 'Pin to top'}
-        aria-label={pinned ? 'Unpin mix' : 'Pin mix to top'}
+        aria-label={pinned ? 'Unpin playlist' : 'Pin playlist to top'}
         aria-pressed={pinned}
         onClick={togglePin}
       >

@@ -3,7 +3,7 @@
  * faithful port of the prototype's `buildPlaylists`, pins, and banished tracks,
  * so a fresh offline session looks exactly like the design reference.
  */
-import type { Mix } from '~shared/contract';
+import type { Playlist } from '~shared/contract';
 import { MOCK_SOURCE_URIS_BY_ATMOSPHERE, mockTrackUri } from '~spotify/mock/catalog';
 import type { Atmosphere } from '~theme/atmosphere';
 
@@ -39,7 +39,7 @@ const BANISHED: Record<string, string[]> = {
   'general-battle': ['Unrelenting'],
 };
 
-export const getSeedMixes = (owner: string): Mix[] => {
+export const getSeedPlaylists = (owner: string): Playlist[] => {
   const now = new Date().toISOString();
   return DEFS.map(([id, location, atmosphere], index) => ({
     id,

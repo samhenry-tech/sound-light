@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatMs, formatTime, mixName, sample, shuffle } from './formatUtils';
+import { formatMs, formatTime, playlistName, sample, shuffle } from './formatUtils';
 
 describe('format helpers', () => {
-  it('builds a mix name with an en-dash', () => {
-    expect(mixName('Tavern', 'battle')).toBe('Tavern – Battle');
+  it('builds a playlist name with an en-dash', () => {
+    expect(playlistName('Tavern', 'battle')).toBe('Tavern – Battle');
   });
 
   it('formats seconds as m:ss', () => {

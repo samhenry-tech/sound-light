@@ -18,10 +18,10 @@ export const atmosphereSchema = z.enum(ATMOSPHERES as unknown as [Atmosphere, ..
 export const cardLabelSchema = z.enum(['split', 'combined']);
 
 /* -------------------------------------------------------------------------- */
-/* Mix                                                                         */
+/* Playlist                                                                         */
 /* -------------------------------------------------------------------------- */
 
-export const mixSchema = z.object({
+export const playlistSchema = z.object({
   id: z.string().min(1),
   owner: z.string().min(1),
   location: z.string().min(1),
@@ -31,19 +31,19 @@ export const mixSchema = z.object({
   sourceUris: z.array(z.string()),
   /** Individually-added Spotify track URIs. */
   trackUris: z.array(z.string()),
-  /** Tracks the GM banished from THIS mix. */
+  /** Tracks the GM banished from THIS playlist. */
   banishedTrackUris: z.array(z.string()),
   sortIndex: z.number().int(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
 
-export type Mix = z.infer<typeof mixSchema>;
+export type Playlist = z.infer<typeof playlistSchema>;
 
-export const mixListSchema = z.array(mixSchema);
+export const playlistListSchema = z.array(playlistSchema);
 
-/** Fields a client may set when creating a mix; server fills id/owner/dates. */
-export const createMixInputSchema = z.object({
+/** Fields a client may set when creating a playlist; server fills id/owner/dates. */
+export const createPlaylistInputSchema = z.object({
   location: z.string().min(1).default('General'),
   atmosphere: atmosphereSchema.default('ambient'),
   pinned: z.boolean().default(false),
@@ -53,10 +53,10 @@ export const createMixInputSchema = z.object({
   sortIndex: z.number().int().default(0),
 });
 
-export type CreateMixInput = z.input<typeof createMixInputSchema>;
+export type CreatePlaylistInput = z.input<typeof createPlaylistInputSchema>;
 
-export const updateMixInputSchema = createMixInputSchema.partial();
-export type UpdateMixInput = z.infer<typeof updateMixInputSchema>;
+export const updatePlaylistInputSchema = createPlaylistInputSchema.partial();
+export type UpdatePlaylistInput = z.infer<typeof updatePlaylistInputSchema>;
 
 /* -------------------------------------------------------------------------- */
 /* UserSettings                                                                */

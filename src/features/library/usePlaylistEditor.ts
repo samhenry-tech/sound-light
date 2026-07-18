@@ -1,15 +1,15 @@
-/** View-model for the Library detail editor of a single mix. */
+/** View-model for the Library detail editor of a single playlist. */
 import { useMemo } from 'react';
 
-import { useDeleteMix, useUpdateMix } from '~api/hooks';
+import { useDeletePlaylist, useUpdatePlaylist } from '~api/hooks';
 import { useMusicSearch } from '~music/hooks/useMusicSearch';
 import { useResolvedSources, useResolvedTracks } from '~music/hooks/useResolvedTracks';
 import type { MusicSource, MusicTrack, ResolvedSource } from '~music/types';
-import type { Mix } from '~shared/contract';
+import type { Playlist } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import type { Atmosphere } from '~theme/atmosphere';
 
-import { effectiveTracks, splitByBanished, type TrackWithOrigin } from './mixTracks';
+import { effectiveTracks, splitByBanished, type TrackWithOrigin } from './playlistTracks';
 
 export interface EditorSearchResult {
   uri: string;
@@ -31,7 +31,7 @@ export interface EditorActions {
   remove: () => void;
 }
 
-export interface MixEditorModel {
+export interface PlaylistEditorModel {
   sources: ResolvedSource[];
   active: TrackWithOrigin[];
   banished: TrackWithOrigin[];
@@ -43,14 +43,14 @@ export interface MixEditorModel {
   actions: EditorActions;
 }
 
-export const useMixEditor = (mix: Mix | undefined): MixEditorModel => {
-  const updateMix = useUpdateMix();
-  const deleteMix = useDeleteMix();
+export const usePlaylistEditor = (playlist: Playlist | undefined): PlaylistEditorModel => {
+  const updatePlaylist = useUpdatePlaylist();
+  const deletePlaylist = useDeletePlaylist();
   const editorQuery = useUiStore((s) => s.editorQuery);
   const showToast = useUiStore((s) => s.showToast);
 
-  const sourcesQuery = useResolvedSources(mix?.sourceUris ?? []);
-  const tracksQuery = useResolvedTracks(mix?.trackUris ?? []);
+  const sourcesQuery = useResolvedSources(playlist?.sourceUris ?? []);
+  const tracksQuery = useResolvedTracks(playlist?.trackUris ?? []);
   const search = useMusicSearch(editorQuery);
 
   const effective = useMemo(
@@ -58,50 +58,50 @@ export const useMixEditor = (mix: Mix | undefined): MixEditorModel => {
     [sourcesQuery.data, tracksQuery.data],
   );
   const { active, banished } = useMemo(
-    () => splitByBanished(effective, mix?.banishedTrackUris ?? []),
-    [effective, mix?.banishedTrackUris],
+    () => splitByBanished(effective, playlist?.banishedTrackUris ?? []),
+    [effective, playlist?.banishedTrackUris],
   );
 
-  const patch = (input: Parameters<typeof updateMix.mutate>[0]['input']) => {
-    if (mix) updateMix.mutate({ id: mix.id, input });
+  const patch = (input: Parameters<typeof updatePlaylist.mutate>[0]['input']) => {
+    if (playlist) updatePlaylist.mutate({ id: playlist.id, input });
   };
 
   const actions: EditorActions = {
     setLocation: (location) => patch({ location }),
     setAtmosphere: (atmosphere) => patch({ atmosphere }),
     addSource: (source) => {
-      if (!mix || mix.sourceUris.includes(source.uri)) return;
-      patch({ sourceUris: [...mix.sourceUris, source.uri] });
+      if (!playlist || playlist.sourceUris.includes(source.uri)) return;
+      patch({ sourceUris: [...playlist.sourceUris, source.uri] });
       showToast(`Added “${source.name}”`);
     },
     removeSource: (uri) => {
-      if (!mix) return;
-      patch({ sourceUris: mix.sourceUris.filter((u) => u !== uri) });
+      if (!playlist) return;
+      patch({ sourceUris: playlist.sourceUris.filter((u) => u !== uri) });
     },
     addTrack: (track) => {
-      if (!mix || effective.some((t) => t.uri === track.uri)) return;
-      patch({ trackUris: [...mix.trackUris, track.uri] });
+      if (!playlist || effective.some((t) => t.uri === track.uri)) return;
+      patch({ trackUris: [...playlist.trackUris, track.uri] });
       showToast(`Added “${track.title}”`);
     },
     removeTrack: (uri) => {
-      if (!mix) return;
-      patch({ trackUris: mix.trackUris.filter((u) => u !== uri) });
+      if (!playlist) return;
+      patch({ trackUris: playlist.trackUris.filter((u) => u !== uri) });
     },
     restoreTrack: (uri) => {
-      if (!mix) return;
-      patch({ banishedTrackUris: mix.banishedTrackUris.filter((u) => u !== uri) });
+      if (!playlist) return;
+      patch({ banishedTrackUris: playlist.banishedTrackUris.filter((u) => u !== uri) });
       const restored = banished.find((t) => t.uri === uri);
       showToast(`Restored “${restored?.title ?? 'track'}”`);
     },
     remove: () => {
-      if (!mix) return;
-      deleteMix.mutate(mix.id);
-      showToast('Mix deleted');
+      if (!playlist) return;
+      deletePlaylist.mutate(playlist.id);
+      showToast('Playlist deleted');
     },
   };
 
   const effectiveUris = new Set(effective.map((t) => t.uri));
-  const sourceUris = new Set(mix?.sourceUris ?? []);
+  const sourceUris = new Set(playlist?.sourceUris ?? []);
 
   // Small list (≤14); computed each render so "added" flags stay in sync.
   const results: EditorSearchResult[] = [

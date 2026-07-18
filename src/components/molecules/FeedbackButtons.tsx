@@ -1,12 +1,12 @@
 import { Icon } from '~components/atoms/Icon';
 
-/** 👍 — mark the current track a good fit for this mix. */
+/** 👍 — mark the current track a good fit for this playlist. */
 export const LikeButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
       type="button"
       className="flex h-[var(--thumb-btn)] w-[var(--thumb-btn)] flex-shrink-0 items-center justify-center rounded-pill border border-line-12 bg-surface-control text-icon-muted cursor-pointer"
-      title="Good fit for this mix"
+      title="Good fit for this playlist"
       aria-label="Good fit — keep this track"
       onClick={onClick}
     >

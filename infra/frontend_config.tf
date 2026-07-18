@@ -9,7 +9,7 @@ resource "local_file" "frontend_config" {
   content = jsonencode({
     cognitoIdentityPoolId = aws_cognito_identity_pool.main.id
     awsRegion             = local.region
-    mixesTable            = aws_dynamodb_table.mixes.name
+    playlistsTable        = aws_dynamodb_table.playlists.name
     settingsTable         = aws_dynamodb_table.user_settings.name
   })
 }

@@ -1,25 +1,25 @@
 import { useMemo } from 'react';
 
-import { useCreateMix, useMixes } from '~api/hooks';
+import { useCreatePlaylist, usePlaylists } from '~api/hooks';
 import { LibraryMaster, type LibraryRowData } from '~components/organisms/LibraryMaster';
-import { MixEditor } from '~components/organisms/MixEditor';
-import { useMixEditor } from '~features/library/useMixEditor';
-import type { Mix } from '~shared/contract';
+import { PlaylistEditor } from '~components/organisms/PlaylistEditor';
+import { usePlaylistEditor } from '~features/library/usePlaylistEditor';
+import type { Playlist } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import { coverFor } from '~theme/atmosphere';
-import { mixName } from '~utils/formatUtils';
+import { playlistName } from '~utils/formatUtils';
 
-const summarize = (mix: Mix): string => {
+const summarize = (playlist: Playlist): string => {
   const parts: string[] = [];
-  if (mix.sourceUris.length) parts.push(`${mix.sourceUris.length} playlists`);
-  if (mix.trackUris.length) parts.push(`${mix.trackUris.length} tracks`);
+  if (playlist.sourceUris.length) parts.push(`${playlist.sourceUris.length} playlists`);
+  if (playlist.trackUris.length) parts.push(`${playlist.trackUris.length} tracks`);
   return parts.join(' · ') || 'Empty';
 };
 
-/** The Library screen — build & edit mixes between sessions. */
+/** The Library screen — build & edit playlists between sessions. */
 export const LibraryPage = () => {
-  const { data: mixes = [] } = useMixes();
-  const createMix = useCreateMix();
+  const { data: playlists = [] } = usePlaylists();
+  const createPlaylist = useCreatePlaylist();
 
   const libQuery = useUiStore((s) => s.libQuery);
   const setLibQuery = useUiStore((s) => s.setLibQuery);
@@ -27,17 +27,20 @@ export const LibraryPage = () => {
   const selectLibrary = useUiStore((s) => s.selectLibrary);
   const showToast = useUiStore((s) => s.showToast);
 
-  const sorted = useMemo(() => [...mixes].sort((a, b) => a.sortIndex - b.sortIndex), [mixes]);
+  const sorted = useMemo(
+    () => [...playlists].sort((a, b) => a.sortIndex - b.sortIndex),
+    [playlists],
+  );
   const selectedId = libSelectedId ?? sorted[0]?.id ?? null;
-  const selectedMix = sorted.find((m) => m.id === selectedId);
-  const model = useMixEditor(selectedMix);
+  const selectedPlaylist = sorted.find((m) => m.id === selectedId);
+  const model = usePlaylistEditor(selectedPlaylist);
 
   const rows: LibraryRowData[] = useMemo(() => {
     const q = libQuery.trim().toLowerCase();
     return sorted
       .map((m) => ({
         id: m.id,
-        name: mixName(m.location, m.atmosphere),
+        name: playlistName(m.location, m.atmosphere),
         meta: summarize(m),
         gradient: coverFor(m.atmosphere),
       }))
@@ -45,12 +48,12 @@ export const LibraryPage = () => {
   }, [sorted, libQuery]);
 
   const onNew = () => {
-    createMix.mutate(
+    createPlaylist.mutate(
       {},
       {
-        onSuccess: (mix) => {
-          selectLibrary(mix.id);
-          showToast('New mix — name it & search to add tracks');
+        onSuccess: (playlist) => {
+          selectLibrary(playlist.id);
+          showToast('New playlist — name it & search to add tracks');
         },
       },
     );
@@ -66,11 +69,11 @@ export const LibraryPage = () => {
         onNew={onNew}
         onSelect={selectLibrary}
       />
-      {selectedMix ? (
-        <MixEditor mix={selectedMix} model={model} />
+      {selectedPlaylist ? (
+        <PlaylistEditor playlist={selectedPlaylist} model={model} />
       ) : (
         <div className="flex flex-1 items-center justify-center p-10 text-center text-[14px] text-muted-2">
-          Create your first mix to start building a vibe.
+          Create your first playlist to start building a vibe.
         </div>
       )}
     </div>

@@ -1,9 +1,9 @@
 # sound-light
 
 An iPad-first **music companion for tabletop RPG game masters**. Keep a library
-of vibe-named mixes (`Location – Atmosphere`, e.g. _Tavern – Battle_), and during
+of vibe-named playlists (`Location – Atmosphere`, e.g. _Tavern – Battle_), and during
 play tap a card to crossfade the room into that vibe. Music plays shuffled; give
-each track a thumbs up/down (hold 👎 to **banish** it from that mix forever).
+each track a thumbs up/down (hold 👎 to **banish** it from that playlist forever).
 
 Built as a production React + Vite rebuild of the **Soundlight** design
 prototype. Runs fully offline out of the box, and scales up to real Spotify
@@ -17,10 +17,10 @@ playback + AWS-synced storage with auth.
 
 ## Highlights
 
-- **Tap-to-crossfade** vibe cards, animated equalizer on the active mix, glanceable now-playing bar.
+- **Tap-to-crossfade** vibe cards, animated equalizer on the active playlist, glanceable now-playing bar.
 - **Smart shuffle** queue: `sources ∪ tracks − banished`, no immediate repeats.
-- **Hold-to-banish** (👎 700ms with a charging ring) — persisted per mix.
-- **Panic button** → instantly crossfade to your combat mix.
+- **Hold-to-banish** (👎 700ms with a charging ring) — persisted per playlist.
+- **Panic button** → instantly crossfade to your combat playlist.
 - **Procedural ambient bed** — rain / wind / fire / ocean synthesized with the Web Audio API (no assets), layered under the music.
 - **Sleep timer**, **volume / mute**, **scrub-to-seek**, **crossfade** control.
 - **Command palette (⌘K)** and **keyboard shortcuts** for hands-free play.
@@ -94,7 +94,7 @@ infra/            Terraform (Cognito Identity Pool, DynamoDB, S3+CloudFront)
 
 State split, by design:
 
-- **Server data** (mixes, user settings) → **TanStack Query** with optimistic updates.
+- **Server data** (playlists, user settings) → **TanStack Query** with optimistic updates.
 - **Ephemeral playback/UI** (now-playing, queue, filters, toast) → **Zustand**.
 - **Network boundaries** → validated with **Zod** (`src/shared/contract.ts`).
 
@@ -119,7 +119,7 @@ Lives entirely under `src/spotify/`:
 - **Crossfade** — the SDK can't overlap two tracks (single stream / one active
   device) and `play({uris})` hard-cuts, so we roll our own single-stream
   crossfade: fade the outgoing track out → swap → fade the incoming in, on every
-  skip / banish / mix switch (configurable duration; 0 = hard cut).
+  skip / banish / playlist switch (configurable duration; 0 = hard cut).
 
 App: **sound-light** · client id `a35ad70cf30442f0a53ba22a95e85c8e` · redirect
 `http://localhost:3000/auth/spotify/`.
@@ -129,7 +129,7 @@ App: **sound-light** · client id `a35ad70cf30442f0a53ba22a95e85c8e` · redirect
 Provisioned with **Terraform** in `infra/`:
 
 - **Cognito** user pool with **Google** federation (Hosted UI) + a public PKCE SPA client.
-- **DynamoDB** provisioned tables (mixes, user-settings), owner-scoped.
+- **DynamoDB** provisioned tables (playlists, user-settings), owner-scoped.
 - **Lambda** (Node 20, single router) behind an **API Gateway HTTP API** with a
   Cognito **JWT authorizer** — the owner is always the verified `sub` claim.
 - **S3 + CloudFront** (private bucket, OAC, SPA error routing) for hosting.

@@ -33,7 +33,7 @@ export const LoginPage = () => {
         </div>
         <h1 className="m-0 text-[26px] font-extrabold tracking-[-0.02em]">{APP_NAME}</h1>
         <p className="mx-0 mt-2 mb-7 text-[14px] leading-[1.5] text-muted">
-          The music companion for your table. Sign in to sync your mixes across devices.
+          The music companion for your table. Sign in to sync your playlists across devices.
         </p>
 
         <div ref={buttonRef} className="flex justify-center" />

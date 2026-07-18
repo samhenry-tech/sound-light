@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
-import { useMixes, useUpdateUserSettings, useUserSettings } from '~api/hooks';
+import { usePlaylists, useUpdateUserSettings, useUserSettings } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { Select } from '~components/molecules/Select';
@@ -11,7 +11,7 @@ import { usePlayerStore } from '~stores/playerStore';
 import { AMBIENT_KINDS, type AmbientKind, useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
 import { ACCENT_OPTIONS, capitalize } from '~theme/atmosphere';
-import { mixName } from '~utils/formatUtils';
+import { playlistName } from '~utils/formatUtils';
 
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
@@ -56,7 +56,7 @@ export const SettingsPanel = () => {
 
   const { data: userSettings } = useUserSettings();
   const updateUserSettings = useUpdateUserSettings();
-  const { data: mixes = [] } = useMixes();
+  const { data: playlists = [] } = usePlaylists();
   const auth = useMusicAuth();
   const actions = usePlayerActions();
 
@@ -156,12 +156,15 @@ export const SettingsPanel = () => {
           <div className={ROW}>
             <span className={LABEL}>Panic target</span>
             <Select
-              ariaLabel="Panic target mix"
-              value={settings.panicMixId ?? ''}
-              onChange={(v) => settings.setPanicMixId(v || null)}
+              ariaLabel="Panic target playlist"
+              value={settings.panicPlaylistId ?? ''}
+              onChange={(v) => settings.setPanicPlaylistId(v || null)}
               options={[
-                { value: '', label: 'Auto (first combat mix)' },
-                ...mixes.map((m) => ({ value: m.id, label: mixName(m.location, m.atmosphere) })),
+                { value: '', label: 'Auto (first combat playlist)' },
+                ...playlists.map((m) => ({
+                  value: m.id,
+                  label: playlistName(m.location, m.atmosphere),
+                })),
               ]}
             />
           </div>
@@ -293,7 +296,7 @@ export const SettingsPanel = () => {
                 <div key={`${h.track.uri}-${i}`} className="flex flex-col gap-px">
                   <span className="text-[13.5px] font-semibold">{h.track.title}</span>
                   <span className="text-[11.5px] text-muted-2">
-                    {h.track.artist} · {h.mixName}
+                    {h.track.artist} · {h.playlistName}
                   </span>
                 </div>
               ))}

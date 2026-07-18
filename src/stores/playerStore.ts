@@ -10,14 +10,14 @@ import type { Atmosphere } from '~theme/atmosphere';
 
 export interface HistoryEntry {
   track: MusicTrack;
-  mixName: string;
+  playlistName: string;
   at: number;
 }
 
 export interface NowPlaying {
-  playingMixId: string | null;
+  playingPlaylistId: string | null;
   current: MusicTrack | null;
-  mixName: string;
+  playlistName: string;
   atmosphere: Atmosphere | null;
   coverBg: string;
 }
@@ -34,8 +34,10 @@ interface PlayerState extends NowPlaying {
   volume: number;
   muted: boolean;
 
-  /** Begin a mix: set now-playing metadata + the shuffled queue. */
-  startMix: (payload: NowPlaying & { queue: MusicTrack[]; current: MusicTrack | null }) => void;
+  /** Begin a playlist: set now-playing metadata + the shuffled queue. */
+  startPlaylist: (
+    payload: NowPlaying & { queue: MusicTrack[]; current: MusicTrack | null },
+  ) => void;
   /** Apply a state snapshot from the player. */
   applyPlayback: (state: PlaybackState) => void;
   setCurrent: (track: MusicTrack) => void;
@@ -53,9 +55,9 @@ interface PlayerState extends NowPlaying {
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
-  playingMixId: null,
+  playingPlaylistId: null,
   current: null,
-  mixName: '',
+  playlistName: '',
   atmosphere: null,
   coverBg: '',
   isPlaying: false,
@@ -68,11 +70,11 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   muted: false,
   sleepEndsAt: null,
 
-  startMix: ({ playingMixId, current, mixName, atmosphere, coverBg, queue }) =>
+  startPlaylist: ({ playingPlaylistId, current, playlistName, atmosphere, coverBg, queue }) =>
     set({
-      playingMixId,
+      playingPlaylistId,
       current,
-      mixName,
+      playlistName,
       atmosphere,
       coverBg,
       queue,
@@ -103,9 +105,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   setSleepEndsAt: (sleepEndsAt) => set({ sleepEndsAt }),
   reset: () =>
     set({
-      playingMixId: null,
+      playingPlaylistId: null,
       current: null,
-      mixName: '',
+      playlistName: '',
       atmosphere: null,
       coverBg: '',
       isPlaying: false,

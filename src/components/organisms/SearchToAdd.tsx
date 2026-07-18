@@ -1,7 +1,7 @@
 import { Spinner } from '~components/atoms/Spinner';
 import { SearchInput } from '~components/molecules/SearchInput';
 import { SearchResultRow } from '~components/molecules/SearchResultRow';
-import type { EditorSearchResult } from '~features/library/useMixEditor';
+import type { EditorSearchResult } from '~features/library/usePlaylistEditor';
 
 interface SearchToAddProps {
   query: string;
