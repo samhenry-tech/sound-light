@@ -28,13 +28,14 @@ describe('googleOAuth', () => {
 
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({
-        access_token: 'access',
-        expires_in: 3600,
-        id_token: 'header.payload.signature',
-        refresh_token: 'refresh-abc',
-        token_type: 'Bearer',
-      }),
+      json: () =>
+        Promise.resolve({
+          access_token: 'access',
+          expires_in: 3600,
+          id_token: 'header.payload.signature',
+          refresh_token: 'refresh-abc',
+          token_type: 'Bearer',
+        }),
     });
     vi.stubGlobal('fetch', fetchMock);
 
@@ -55,12 +56,13 @@ describe('googleOAuth', () => {
 
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({
-        access_token: 'new-access',
-        expires_in: 3600,
-        id_token: 'new-id-token',
-        token_type: 'Bearer',
-      }),
+      json: () =>
+        Promise.resolve({
+          access_token: 'new-access',
+          expires_in: 3600,
+          id_token: 'new-id-token',
+          token_type: 'Bearer',
+        }),
     });
     vi.stubGlobal('fetch', fetchMock);
 
