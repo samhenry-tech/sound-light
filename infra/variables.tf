@@ -7,7 +7,7 @@
 variable "project" {
   description = "Project slug used as the prefix for resource names and the Project tag."
   type        = string
-  default     = "atmos"
+  default     = "sound-light"
 }
 
 variable "environment" {
@@ -19,7 +19,7 @@ variable "environment" {
 variable "region" {
   description = "AWS region to deploy into."
   type        = string
-  default     = "us-east-1"
+  default     = "ap-southeast-2"
 }
 
 # --------------------------------------------------------------------------- #
