@@ -33,8 +33,9 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 | File                       | Purpose                                                                                   |
 | -------------------------- | ----------------------------------------------------------------------------------------- |
 | `versions.tf`              | `required_version >= 1.6`; pins AWS `~> 5.0` + local `~> 2.5`.                            |
-| `providers.tf`             | AWS provider (region from shared JSON, `default_tags`); commented `backend "s3"`.         |
-| `backend.tf.example`       | Drop-in remote-state config + out-of-band bucket/lock-table creation commands.            |
+| `providers.tf`             | AWS provider + S3 backend on `projects.samhenry.tech` (`_terraform/sound-light/…`).       |
+| `scripts/*.sh`             | Import existing AWS resources into empty state; delete orphan Cognito pools.              |
+| `backend.tf.example`       | Notes for the shared-bucket state key (backend is already enabled in `providers.tf`).     |
 | `variables.tf`             | Reserved — public inputs come from `config/shared.json`.                                  |
 | `locals.tf`                | `jsondecode(file("../config/shared.json"))` + `name_prefix` / tags.                       |
 | `cognito.tf`               | Identity pool (Google provider), authenticated role, `LeadingKeys` DynamoDB policy.       |
@@ -52,8 +53,10 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
   (public config from `config/shared.json` + `src/config.generated.json`), then
   `aws s3 sync dist --delete` + a CloudFront invalidation.
 - `terraform.yml` — PR (plan, posts a comment) + push to `main` (apply) +
-  manual. Triggers on `infra/**` and `config/**`. After apply on `main`, commits
-  any refresh of `src/config.generated.json`.
+  manual. Triggers on `infra/**` and `config/**`. State is stored in the shared
+  `projects.samhenry.tech` bucket. Empty state is filled via
+  `import_existing.sh` once; orphan Cognito pools are cleaned each run. After
+  apply on `main`, commits any refresh of `src/config.generated.json`.
 
 ---
 
