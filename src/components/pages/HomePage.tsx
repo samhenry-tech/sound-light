@@ -7,8 +7,7 @@ import { usePlayerActions } from '~features/player/PlayerContext';
 import { useUiStore } from '~stores/uiStore';
 import { playlistName } from '~utils/formatUtils';
 
-/** The Live screen — glance, tap a vibe, give feedback. */
-export const LivePage = () => {
+export const HomePage = () => {
   const { cards, cols, isLoading } = useLivePlaylists();
   const { data: playlists = [] } = usePlaylists();
   const updatePlaylist = useUpdatePlaylist();

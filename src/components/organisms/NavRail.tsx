@@ -4,7 +4,7 @@ import { Icon } from '~components/atoms/Icon';
 import { NavItem } from '~components/molecules/NavItem';
 import { APP_NAME } from '~constants';
 
-export type Screen = 'live' | 'library';
+export type Screen = 'home' | 'library';
 
 interface NavRailProps {
   active: Screen;
@@ -43,9 +43,9 @@ export const NavRail = ({
 
       <NavItem
         icon="graphic_eq"
-        label="Live"
-        active={active === 'live'}
-        onClick={() => onNavigate('live')}
+        label="Home"
+        active={active === 'home'}
+        onClick={() => onNavigate('home')}
       />
       <NavItem
         icon="library_music"

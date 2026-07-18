@@ -4,11 +4,6 @@ import { useAuthSession } from '~auth/useAuthSession';
 import { Icon } from '~components/atoms/Icon';
 import { APP_NAME } from '~constants';
 
-/**
- * Sign-in gate. Renders the official Google Identity Services button, which
- * returns an ID token straight to the browser (no secret, no redirect) that we
- * exchange with the Cognito Identity Pool.
- */
 export const LoginPage = () => {
   const { renderGoogleButton, beginGoogleLogin, error } = useAuthSession();
 

@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { LivePage } from '~components/pages/LivePage';
+import { HomePage } from '~components/pages/HomePage';
 
 import { AppProviders } from './AppProviders';
 
@@ -43,7 +43,7 @@ describe('app integration (mocked auth + local data adapter)', () => {
   it('renders the Live screen with the seeded starter library', async () => {
     render(
       <AppProviders>
-        <LivePage />
+        <HomePage />
       </AppProviders>,
     );
 
