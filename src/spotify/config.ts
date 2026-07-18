@@ -19,13 +19,6 @@ export const SPOTIFY_CLIENT_ID = appConfig.spotifyClientId;
  */
 export const SPOTIFY_REDIRECT_URI = `${window.location.origin}/auth/spotify/`;
 
-/**
- * When mock mode is on, the Library search + playback are served by the bundled
- * catalog instead of the real Spotify Web API / Web Playback SDK (no Premium
- * account required). On in non-production builds; off for `vite build` / deploy.
- */
-export const IS_SPOTIFY_MOCK = appConfig.spotifyMock;
-
 export const SPOTIFY_SCOPES = [
   'streaming',
   'user-read-email',

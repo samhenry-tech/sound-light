@@ -25,15 +25,15 @@ banish) and the app remembers banished tracks per playlist.
 - **Zod** validates every network boundary. **React Query** owns server state.
   **Zustand** owns ephemeral playback/UI state.
 - **Prettier + ESLint (flat) + Vitest** for quality.
-- **Runs offline**: localStorage data adapter + bundled mock catalog + mock player
-  when AWS/Spotify env is absent, so `npm run dev` works with zero setup.
+- **Real Spotify**: the Web API + Web Playback SDK power search and playback
+  (Premium account linked via Authorization Code + PKCE).
 
 ## Phases
 
 - [x] **P0 — Foundation.** Scaffold, tooling, design tokens, shared Zod contract.
 - [x] **P1 — Music provider + Spotify.** Provider-agnostic interface; Spotify impl
-      with PKCE login, token storage + refresh, Web API search/resolve, Web Playback
-      SDK wrapper, and a mock provider for offline use.
+      with PKCE login, token storage + refresh, Web API search/resolve, and the
+      Web Playback SDK wrapper.
 - [x] **P2 — AWS auth + data.** Cognito OIDC (Google), HTTP API client, React Query
       hooks for playlists/prefs with optimistic updates, localStorage fallback + seed.
 - [x] **P3 — Player engine + stores.** Faithful port of prototype logic (effective

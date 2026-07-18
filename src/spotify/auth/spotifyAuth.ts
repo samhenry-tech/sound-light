@@ -1,11 +1,7 @@
 /**
  * Spotify Authorization Code + PKCE flow.
- *
- * In mock mode the account is always considered linked and these calls are
- * no-ops, so the app is fully usable without a Spotify Premium account.
  */
 import {
-  IS_SPOTIFY_MOCK,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_ENDPOINTS,
   SPOTIFY_REDIRECT_URI,
@@ -26,12 +22,10 @@ import {
 const EXPIRY_SKEW_MS = 60_000;
 
 export const isSpotifyLinked = (): boolean => {
-  if (IS_SPOTIFY_MOCK) return true;
   return getStoredTokens() !== null;
 };
 
 export const beginSpotifyLogin = async (): Promise<void> => {
-  if (IS_SPOTIFY_MOCK) return;
   const verifier = generateCodeVerifier();
   const state = randomString(16);
   setPkceState({ verifier, state });
@@ -63,8 +57,6 @@ const persist = (
 };
 
 export const completeSpotifyLogin = async (query: URLSearchParams): Promise<void> => {
-  if (IS_SPOTIFY_MOCK) return;
-
   const error = query.get('error');
   if (error) throw new Error(`Spotify authorization failed: ${error}`);
 
@@ -111,7 +103,6 @@ const refreshAccessToken = async (refreshToken: string): Promise<SpotifyTokens> 
 
 /** Returns a non-expired access token, refreshing if needed, or null if unlinked. */
 export const getValidAccessToken = async (): Promise<string | null> => {
-  if (IS_SPOTIFY_MOCK) return null;
   const tokens = getStoredTokens();
   if (!tokens) return null;
   if (tokens.expiresAt - EXPIRY_SKEW_MS > Date.now()) return tokens.accessToken;
