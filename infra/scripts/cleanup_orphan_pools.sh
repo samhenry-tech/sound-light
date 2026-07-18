@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Delete Cognito identity pools named like this stack that are NOT the pool
 # referenced by src/config.generated.json (left behind by empty-state applies).
+#
+# Soft-fails when the deploy-role lacks cognito-identity:ListIdentityPools.
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -22,14 +24,22 @@ PY
 POOL_NAME="${PREFIX}-identity"
 echo "Keeping Cognito pool ${KEEP_ID}; scanning for orphan '${POOL_NAME}' pools"
 
-aws cognito-identity list-identity-pools --max-results 60 --region "$REGION" \
-  --query "IdentityPools[?IdentityPoolName=='${POOL_NAME}'].[IdentityPoolId,IdentityPoolName]" \
-  --output text | while read -r pool_id pool_name; do
-  [[ -z "$pool_id" ]] && continue
+if ! pools="$(
+  aws cognito-identity list-identity-pools --max-results 60 --region "$REGION" \
+    --query "IdentityPools[?IdentityPoolName=='${POOL_NAME}'].[IdentityPoolId,IdentityPoolName]" \
+    --output text 2>&1
+)"; then
+  echo "Skipping orphan cleanup (ListIdentityPools not permitted for deploy-role):"
+  echo "  ${pools}"
+  exit 0
+fi
+
+while read -r pool_id pool_name; do
+  [[ -z "${pool_id:-}" ]] && continue
   if [[ "$pool_id" == "$KEEP_ID" ]]; then
     echo "  keep  ${pool_id}"
     continue
   fi
   echo "  delete ${pool_id} (${pool_name})"
-  aws cognito-identity delete-identity-pool --identity-pool-id "$pool_id" --region "$REGION"
-done
+  aws cognito-identity delete-identity-pool --identity-pool-id "$pool_id" --region "$REGION" || true
+done <<<"$pools"
