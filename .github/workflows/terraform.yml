@@ -29,6 +29,7 @@ env:
   # (see variables.tf: google_client_id). No client secret is needed —
   # the identity pool verifies Google ID tokens directly.
   TF_VAR_google_client_id: ${{ secrets.TF_VAR_google_client_id }}
+  AWS_REGION: ap-southeast-2
 
 jobs:
   terraform:

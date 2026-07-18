@@ -1,3 +1,4 @@
 ☐ fully remove VITE_SPOTIFY_MOCK=true
 ☐ Move VITE_SPOTIFY_REDIRECT_URI to .env.common and pull .env.common into every .env file. or put it in an environmentsettings and update it to be domain agnostic
 ☐ Remove the "Panic" button feature completely
+☐ Rename Mixes to something else
