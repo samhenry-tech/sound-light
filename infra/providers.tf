@@ -1,10 +1,18 @@
 # Provider configuration and Terraform backend.
 #
-# A LOCAL backend is used on purpose: the shared GitHub OIDC deploy-role cannot
-# create an S3 state bucket. CI therefore starts each job with empty state and
-# re-imports existing AWS resources via infra/scripts/import_existing.sh before
-# plan/apply (see .github/workflows/terraform.yml). Do not switch to a remote
-# backend unless that role (or a dedicated terraform role) can own the bucket.
+# State uses the same shared bucket already configured in the GitHub Actions
+# deploy workflow (`S3_BUCKET: projects.samhenry.tech`). Key is outside the
+# per-repo SPA prefix so `aws s3 sync dist/ … --delete` cannot wipe it.
+
+terraform {
+  backend "s3" {
+    bucket       = "projects.samhenry.tech"
+    key          = "_terraform/sound-light/terraform.tfstate"
+    region       = "ap-southeast-2"
+    encrypt      = true
+    use_lockfile = true
+  }
+}
 
 provider "aws" {
   region = local.region

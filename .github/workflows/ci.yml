@@ -57,11 +57,13 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.11.4"
 
       - name: Terraform fmt
         run: terraform fmt -check -recursive infra
 
-      # Validation does not require AWS credentials or the Lambda bundle.
+      # Validation does not require AWS credentials (backend is skipped).
       - name: Terraform init (no backend)
         run: terraform -chdir=infra init -backend=false
 

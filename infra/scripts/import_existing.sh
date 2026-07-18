@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Import already-provisioned AWS resources into Terraform state when state is
-# empty. CI uses a local backend (deploy-role cannot CreateBucket for remote
-# state), so this runs at the start of every terraform workflow job.
+# Import already-provisioned AWS resources into Terraform state when the remote
+# state object is empty (first run after enabling the shared-bucket backend, or
+# recovery). No-ops once `aws_dynamodb_table.mixes` is already in state.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

@@ -1,10 +1,10 @@
 # Terraform + provider version constraints.
 #
 # Pinned per the project's hard constraints:
-#   - Terraform CLI >= 1.6
+#   - Terraform CLI >= 1.10 (S3 backend use_lockfile)
 #   - AWS provider v5.x
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.10"
 
   required_providers {
     aws = {

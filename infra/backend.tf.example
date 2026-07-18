@@ -1,20 +1,9 @@
-# Optional remote S3 backend (NOT enabled — the deploy-role cannot CreateBucket).
+# Remote backend is enabled in providers.tf.
 #
-# If you later grant a Terraform role permission to manage a state bucket,
-# copy this block into providers.tf inside a `terraform { }` stanza, create the
-# bucket + lock table out of band, then run:
+# State file:
+#   s3://projects.samhenry.tech/_terraform/sound-light/terraform.tfstate
 #
-#   ./infra/scripts/ensure_remote_state.sh
-#   terraform -chdir=infra init -migrate-state
-#
-# Until then, CI uses a local backend and re-imports existing resources every run.
-
-# terraform {
-#   backend "s3" {
-#     bucket         = "sound-light-tfstate-904581404707"
-#     key            = "sound-light/dev/terraform.tfstate"
-#     region         = "ap-southeast-2"
-#     dynamodb_table = "sound-light-tf-locks"
-#     encrypt        = true
-#   }
-# }
+# That is the shared hosting bucket already used by
+# .github/workflows/deploy-frontend.yml — no separate state bucket to create.
+# The key stays outside the `sound-light/` SPA prefix so deploy `--delete`
+# syncs do not remove it.
