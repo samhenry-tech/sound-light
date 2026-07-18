@@ -33,8 +33,8 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 | File                       | Purpose                                                                                   |
 | -------------------------- | ----------------------------------------------------------------------------------------- |
 | `versions.tf`              | `required_version >= 1.6`; pins AWS `~> 5.0` + local `~> 2.5`.                            |
-| `providers.tf`             | AWS provider + **S3 remote backend** (`sound-light-tfstate-904581404707`).                |
-| `scripts/*.sh`             | Bootstrap state bucket, import existing resources, delete orphan Cognito pools.           |
+| `providers.tf`             | AWS provider; local backend (deploy-role cannot create an S3 state bucket).               |
+| `scripts/*.sh`             | Import existing AWS resources into empty state; delete orphan Cognito pools.              |
 | `backend.tf.example`       | Drop-in remote-state config + out-of-band bucket/lock-table creation commands.            |
 | `variables.tf`             | Reserved — public inputs come from `config/shared.json`.                                  |
 | `locals.tf`                | `jsondecode(file("../config/shared.json"))` + `name_prefix` / tags.                       |
@@ -53,8 +53,10 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
   (public config from `config/shared.json` + `src/config.generated.json`), then
   `aws s3 sync dist --delete` + a CloudFront invalidation.
 - `terraform.yml` — PR (plan, posts a comment) + push to `main` (apply) +
-  manual. Triggers on `infra/**` and `config/**`. After apply on `main`, commits
-  any refresh of `src/config.generated.json`.
+  manual. Triggers on `infra/**` and `config/**`. Each run imports existing AWS
+  resources into a fresh local state (deploy-role cannot create an S3 state
+  bucket), cleans orphan Cognito pools, then plans/applies. After apply on
+  `main`, commits any refresh of `src/config.generated.json`.
 
 ---
 

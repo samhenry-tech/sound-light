@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Import already-provisioned AWS resources into Terraform state when the remote
-# state is empty (e.g. after enabling the S3 backend for the first time, or
-# recovering from CI runs that used a discarded local backend).
+# Import already-provisioned AWS resources into Terraform state when state is
+# empty. CI uses a local backend (deploy-role cannot CreateBucket for remote
+# state), so this runs at the start of every terraform workflow job.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

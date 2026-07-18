@@ -55,13 +55,13 @@ jobs:
           role-to-assume: arn:aws:iam::904581404707:role/deploy-role
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Ensure remote state backend
-        run: ./infra/scripts/ensure_remote_state.sh
-
+      # Local backend: each job starts empty, so import existing AWS resources
+      # before plan/apply. (Remote S3 state needs CreateBucket — deploy-role
+      # does not have it.)
       - name: Terraform init
         run: terraform -chdir=infra init
 
-      - name: Import existing resources (empty state only)
+      - name: Import existing resources
         run: ./infra/scripts/import_existing.sh
 
       - name: Remove orphan Cognito identity pools

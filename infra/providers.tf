@@ -1,19 +1,10 @@
 # Provider configuration and Terraform backend.
 #
-# Remote S3 state is required so CI applies share one state (a local backend
-# is discarded after each Actions job and causes recreate/import thrash).
-# The bucket + lock table are created out of band by
-# infra/scripts/ensure_remote_state.sh before `terraform init`.
-
-terraform {
-  backend "s3" {
-    bucket         = "sound-light-tfstate-904581404707"
-    key            = "sound-light/dev/terraform.tfstate"
-    region         = "ap-southeast-2"
-    dynamodb_table = "sound-light-tf-locks"
-    encrypt        = true
-  }
-}
+# A LOCAL backend is used on purpose: the shared GitHub OIDC deploy-role cannot
+# create an S3 state bucket. CI therefore starts each job with empty state and
+# re-imports existing AWS resources via infra/scripts/import_existing.sh before
+# plan/apply (see .github/workflows/terraform.yml). Do not switch to a remote
+# backend unless that role (or a dedicated terraform role) can own the bucket.
 
 provider "aws" {
   region = local.region

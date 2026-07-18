@@ -33,14 +33,15 @@ All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and 
 ```
 infra/
 ├── versions.tf            # Terraform / provider version pins (aws + local)
-├── providers.tf           # AWS provider + (commented) S3 backend
-├── backend.tf.example     # Remote-state setup, copy into providers.tf to enable
+├── providers.tf           # AWS provider (local backend — see note below)
+├── backend.tf.example     # Optional remote-state block (needs CreateBucket)
 ├── variables.tf           # Reserved (inputs come from config/shared.json)
 ├── locals.tf              # Reads ../config/shared.json + name_prefix/tags
 ├── cognito.tf             # Identity pool, authenticated role, DynamoDB row policy
 ├── dynamodb.tf            # mixes + user_settings tables (provisioned 12/12)
 ├── frontend_config.tf     # Writes ../src/config.generated.json from outputs
 ├── outputs.tf             # Outputs also mirrored into the generated JSON
+├── scripts/               # Import existing resources; clean orphan Cognito pools
 └── terraform.tfvars.example
 ```
 
@@ -56,21 +57,19 @@ infra/
 
 ```bash
 # Edit shared inputs if needed
-$EDITOR ../config/shared.json
-
-# From repo root — one-time: create the remote state bucket + lock table (also done by CI)
-./infra/scripts/ensure_remote_state.sh
+$EDITOR config/shared.json
 
 cd infra
 terraform init
-# If state is empty but AWS resources already exist (legacy local-backend CI):
+# Re-import when state is empty (also what CI does every run):
 ../infra/scripts/import_existing.sh
 terraform apply   # also refreshes ../src/config.generated.json
 ```
 
-Remote state lives in `s3://sound-light-tfstate-904581404707` (see `providers.tf`).
-A local backend must not be used in CI — each job would start empty and try to
-recreate every resource.
+> The shared `deploy-role` can manage Cognito/DynamoDB/IAM for this app but
+> **cannot** `s3:CreateBucket`, so remote state is not enabled. CI imports
+> existing resources at the start of every run instead (see
+> `infra/scripts/import_existing.sh`).
 
 ## Shared config ↔ frontend
 
