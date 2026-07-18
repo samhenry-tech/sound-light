@@ -1,0 +1,9 @@
+{
+  "project": "sound-light",
+  "environment": "dev",
+  "region": "ap-southeast-2",
+  "googleClientId": "728917661766-qn9fosl7al289fhga3583sv7n4p3lmdj.apps.googleusercontent.com",
+  "spotifyClientId": "a35ad70cf30442f0a53ba22a95e85c8e",
+  "googleLoginProvider": "accounts.google.com",
+  "musicProvider": "spotify"
+}

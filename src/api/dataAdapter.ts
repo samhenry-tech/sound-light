@@ -4,7 +4,8 @@ import type { DataAdapter } from './adapters/types';
 /**
  * The active data backend: DynamoDB, accessed directly from the browser with
  * Cognito Identity Pool credentials. Always — public identity config lives in
- * `src/config.ts` (see ~auth/awsConfig), so there is no runtime fallback.
+ * `config/shared.json` + `src/config.generated.json` (see ~config / ~auth/awsConfig),
+ * so there is no runtime fallback.
  * Tests mock this module (the localStorage adapter exists for that purpose).
  */
 export const dataAdapter: DataAdapter = dynamoAdapter;

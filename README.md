@@ -53,21 +53,27 @@ that's what the Spotify app's redirect URIs are registered against.
 
 ## Configuration
 
-All public client config lives in [`src/config.ts`](src/config.ts) — Google
-client id, Cognito identity pool id, Spotify client id, AWS region, DynamoDB
-table names, and the active music provider. Nothing secret belongs there (these
-values ship in the SPA bundle). OAuth redirect URIs are derived from the
-browser's origin at runtime.
+Public config is split across two JSON files (nothing secret — these ship in
+the SPA bundle):
 
-After `terraform apply`, update the Cognito / table / region fields from
-`terraform output` in `infra/` if they changed. Spotify mock mode is on for
-non-production Vite builds and off for `vite build` / deploy.
+| File                                                     | Owner           | Contents                                                                            |
+| -------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------- |
+| [`config/shared.json`](config/shared.json)               | Hand-edited     | Inputs both Terraform and Vite read (project, region, Google/Spotify client ids, …) |
+| [`src/config.generated.json`](src/config.generated.json) | Terraform apply | Outputs the SPA needs (Cognito pool id, table names, region)                        |
+
+[`src/config.ts`](src/config.ts) assembles those files and adds SPA-only flags
+(Spotify mock follows Vite `PROD`). OAuth redirect URIs are derived from the
+browser origin at runtime. After `terraform apply`, `src/config.generated.json`
+is refreshed automatically (CI commits it on `main`).
 
 ## Architecture
 
 ```
+config/
+  shared.json     Public inputs shared by Terraform + the Vite SPA
 src/
-  config.ts       Public client config (Google / Cognito / Spotify / AWS ids)
+  config.ts       Assembles shared + generated JSON (+ SPA-only flags)
+  config.generated.json  Terraform outputs for the SPA (do not hand-edit)
   app/            Composition root, router, providers (Query, Theme, Auth, Player)
   music/          ⟵ Provider-agnostic interface (MusicProvider/MusicPlayer) + hooks
   spotify/        ⟵ The Spotify implementation of MusicProvider (its own folder)
@@ -140,8 +146,9 @@ Deploy and operate per **[`infra/IMPLEMENTATION_NOTES.md`](infra/IMPLEMENTATION_
 - **terraform** — plan on PRs (posted as a comment), apply on `main`.
 
 The deploy/terraform workflows authenticate to AWS with the **org-provided
-OIDC deploy role**. Public SPA config is read from `src/config.ts` at build
-time — no GitHub Variables are required for the frontend deploy.
+OIDC deploy role**. Public SPA config comes from `config/shared.json` +
+`src/config.generated.json` — no GitHub Variables are required for the
+frontend deploy.
 
 ## Keyboard shortcuts
 

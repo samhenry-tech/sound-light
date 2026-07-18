@@ -1,35 +1,38 @@
 /**
- * Public client configuration. Everything here is intentionally committed —
- * these values ship in the SPA bundle. Do not put secrets in this file.
+ * Public client configuration assembled from:
+ * - `config/shared.json` — inputs Terraform and the SPA both read
+ * - `src/config.generated.json` — Terraform outputs (refreshed on apply)
  *
- * After `terraform apply`, update the Cognito identity pool id (and table
- * names / region if you changed those Terraform inputs) from
- * `terraform output` in `infra/`.
+ * Nothing secret belongs here; these values ship in the SPA bundle.
+ * OAuth redirect URIs are derived from the browser origin at runtime.
  */
+
+import shared from '../config/shared.json' with { type: 'json' };
+import generated from './config.generated.json' with { type: 'json' };
+
+export type MusicProviderId = 'spotify';
 
 export const appConfig = {
   /** Google OAuth 2.0 Web-application client ID (Sign in with Google). */
-  googleClientId: '728917661766-qn9fosl7al289fhga3583sv7n4p3lmdj.apps.googleusercontent.com',
+  googleClientId: shared.googleClientId,
 
-  /** Cognito Identity Pool id (`terraform output cognito_identity_pool_id`). */
-  cognitoIdentityPoolId: 'ap-southeast-2:bbe6ca47-ba04-42bd-82da-bf9768b48ae9',
+  /** Cognito Identity Pool id (from Terraform output). */
+  cognitoIdentityPoolId: generated.cognitoIdentityPoolId,
 
   /** AWS region hosting the identity pool + DynamoDB tables. */
-  awsRegion: 'ap-southeast-2',
+  awsRegion: generated.awsRegion,
 
-  // DynamoDB table names follow Terraform's "${project}-${environment}-*" naming
-  // (see infra/dynamodb.tf). Update these if the project/environment names change.
-  mixesTable: 'sound-light-dev-mixes',
-  settingsTable: 'sound-light-dev-user-settings',
+  mixesTable: generated.mixesTable,
+  settingsTable: generated.settingsTable,
 
   /** The identity pool login-provider key for Google ID tokens. */
-  googleLoginProvider: 'accounts.google.com',
+  googleLoginProvider: shared.googleLoginProvider,
 
   /**
    * Spotify app client id (app name: "sound-light"). Public identifier; the
    * app uses Authorization Code + PKCE so there is no client secret.
    */
-  spotifyClientId: 'a35ad70cf30442f0a53ba22a95e85c8e',
+  spotifyClientId: shared.spotifyClientId,
 
   /**
    * Use the bundled mock Spotify catalog/player outside production builds
@@ -39,5 +42,5 @@ export const appConfig = {
   spotifyMock: !import.meta.env.PROD,
 
   /** Active music backend implementing the MusicProvider interface. */
-  musicProvider: 'spotify' as const,
+  musicProvider: shared.musicProvider as MusicProviderId,
 } as const;

@@ -4,12 +4,12 @@
  * change and the active provider can be chosen in `src/config.ts` or, later,
  * by user setting.
  */
-import { appConfig } from '~config';
+import { appConfig, type MusicProviderId } from '~config';
 import { createSpotifyMusicProvider } from '~spotify/provider';
 
 import type { MusicProvider } from './types';
 
-export type MusicProviderId = typeof appConfig.musicProvider;
+export type { MusicProviderId };
 
 const factories: Record<MusicProviderId, () => MusicProvider> = {
   spotify: createSpotifyMusicProvider,
