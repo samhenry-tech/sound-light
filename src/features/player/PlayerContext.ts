@@ -24,8 +24,6 @@ export interface PlayerActions {
   seek: (positionMs: number) => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
-  /** Instantly crossfade to the campaign's combat playlist. */
-  panic: () => void;
   /** Start a sleep timer that fades out + pauses after `minutes`. */
   startSleepTimer: (minutes: number) => void;
   cancelSleepTimer: () => void;

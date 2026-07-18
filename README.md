@@ -20,7 +20,6 @@ playback + AWS-synced storage with auth.
 - **Tap-to-crossfade** vibe cards, animated equalizer on the active playlist, glanceable now-playing bar.
 - **Smart shuffle** queue: `sources ∪ tracks − banished`, no immediate repeats.
 - **Hold-to-banish** (👎 700ms with a charging ring) — persisted per playlist.
-- **Panic button** → instantly crossfade to your combat playlist.
 - **Procedural ambient bed** — rain / wind / fire / ocean synthesized with the Web Audio API (no assets), layered under the music.
 - **Sleep timer**, **volume / mute**, **scrub-to-seek**, **crossfade** control.
 - **Command palette (⌘K)** and **keyboard shortcuts** for hands-free play.
@@ -152,7 +151,7 @@ frontend deploy.
 
 ## Keyboard shortcuts
 
-`Space` play/pause · `→`/`N` next · `B` banish · `P` panic · `L` good fit ·
+`Space` play/pause · `→`/`N` next · `B` banish · `L` good fit ·
 `M` mute · `↑`/`↓` volume · `T` table mode · `⌘K` command palette.
 
 ## Design fidelity
