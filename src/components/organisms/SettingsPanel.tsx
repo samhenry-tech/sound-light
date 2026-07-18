@@ -236,7 +236,7 @@ export const SettingsPanel = () => {
               )
             ) : (
               <span className="text-[12.5px] text-muted-2">
-                Demo mode — bundled catalog, no account needed
+                No account needed for {auth.providerName}.
               </span>
             )}
           </div>
