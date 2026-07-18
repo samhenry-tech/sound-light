@@ -6,6 +6,8 @@
  */
 import { z } from 'zod';
 
+import { APP_NAME } from '~constants';
+
 import { GOOGLE_CLIENT_ID } from './awsConfig';
 import { readStoredRefreshToken } from './googleTokenStore';
 import { generateCodeChallenge, generateCodeVerifier, randomString } from './pkce';
@@ -15,7 +17,7 @@ export const GOOGLE_AUTH_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/aut
 export const GOOGLE_REVOKE_ENDPOINT = 'https://oauth2.googleapis.com/revoke';
 export const GOOGLE_REDIRECT_CALLBACK_PATH = '/auth/google/callback';
 
-const PKCE_STATE_KEY = 'atmos.auth.google.pkce';
+const PKCE_STATE_KEY = `${APP_NAME}.auth.google.pkce`;
 
 const tokenResponseSchema = z.object({
   access_token: z.string(),

@@ -1,5 +1,5 @@
 /**
- * Spotify app configuration (app name: "atmos", client id a35ad…).
+ * Spotify app configuration (app name: "sound-light", client id a35ad…).
  *
  * The client id is a public identifier; the app uses the Authorization Code
  * flow with PKCE so there is NO client secret in the browser.

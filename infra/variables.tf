@@ -1,4 +1,4 @@
-# Input variables for the atmos infrastructure.
+# Input variables for the sound-light infrastructure.
 
 # --------------------------------------------------------------------------- #
 # Core / naming                                                               #

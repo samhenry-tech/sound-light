@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { readStoredRefreshToken } from './googleTokenStore';
+import { APP_NAME } from '~constants';
+
 import { completeGoogleLogin, refreshGoogleTokens } from './googleOAuth';
+import { readStoredRefreshToken } from './googleTokenStore';
 
 vi.mock('./awsConfig', () => ({
   GOOGLE_CLIENT_ID: 'test-client-id.apps.googleusercontent.com',
@@ -20,7 +22,7 @@ describe('googleOAuth', () => {
 
   it('exchanges an authorization code for tokens', async () => {
     sessionStorage.setItem(
-      'atmos.auth.google.pkce',
+      `${APP_NAME}.auth.google.pkce`,
       JSON.stringify({ verifier: 'test-verifier', state: 'expected-state' }),
     );
 
@@ -49,7 +51,7 @@ describe('googleOAuth', () => {
   });
 
   it('refreshes an expired session using a stored refresh token', async () => {
-    localStorage.setItem('atmos.auth.googleRefreshToken', 'stored-refresh');
+    localStorage.setItem(`${APP_NAME}.auth.googleRefreshToken`, 'stored-refresh');
 
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
@@ -71,7 +73,7 @@ describe('googleOAuth', () => {
 
   it('rejects callbacks with a state mismatch', async () => {
     sessionStorage.setItem(
-      'atmos.auth.google.pkce',
+      `${APP_NAME}.auth.google.pkce`,
       JSON.stringify({ verifier: 'v', state: 'expected' }),
     );
 

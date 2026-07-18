@@ -1,6 +1,6 @@
-# atmos — AWS infrastructure (Terraform)
+# sound-light — AWS infrastructure (Terraform)
 
-Raw-AWS, free-tier-only infrastructure for the **atmos** TTRPG music companion.
+Raw-AWS, free-tier-only infrastructure for the **sound-light** TTRPG music companion.
 No Amplify; everything is provisioned with the Terraform AWS provider v5.
 
 ## Architecture
@@ -20,8 +20,8 @@ identity id.
 | Auth      | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
 | Data      | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`     |
 
-All resources are tagged with `Project=atmos`, `ManagedBy=Terraform`, and named
-`atmos-dev-*` by default (`${var.project}-${var.environment}`).
+All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and named
+`sound-light-dev-*` by default (`${var.project}-${var.environment}`).
 
 > **Hosting is not managed here.** The SPA is published to the shared
 > `projects.samhenry.tech` S3 bucket + CloudFront distribution by

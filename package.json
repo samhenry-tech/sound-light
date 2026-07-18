@@ -1,9 +1,9 @@
 {
-  "name": "atmos",
+  "name": "sound-light",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "atmos — an iPad-first TTRPG music companion that crossfades Spotify vibes during a session.",
+  "description": "sound-light — an iPad-first TTRPG music companion that crossfades Spotify vibes during a session.",
   "engines": {
     "node": ">=20"
   },

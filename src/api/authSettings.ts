@@ -7,8 +7,8 @@ import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { SETTINGS_TABLE } from '~auth/awsConfig';
 import { DEFAULT_SETTINGS, userSettingsSchema } from '~shared/contract';
 
-import { getDynamoClient } from './dynamoClient';
 import type { DataContext } from './adapters/types';
+import { getDynamoClient } from './dynamoClient';
 
 export const loadGoogleRefreshToken = async (ctx: DataContext): Promise<string | undefined> => {
   const result = await getDynamoClient(ctx.googleIdToken).send(

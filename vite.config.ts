@@ -17,7 +17,7 @@ export default defineConfig({
     ],
   },
   server: {
-    // Spotify only allows the redirect URIs registered for the "atmos" app,
+    // Spotify only allows the redirect URIs registered for the "sound-light" app,
     // which are bound to http://localhost:3000 — keep dev on this port.
     port: 3000,
     strictPort: true,

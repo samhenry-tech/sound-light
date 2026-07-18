@@ -1,4 +1,4 @@
-# atmos
+# sound-light
 
 An iPad-first **music companion for tabletop RPG game masters**. Keep a library
 of vibe-named mixes (`Location – Atmosphere`, e.g. _Tavern – Battle_), and during
@@ -64,7 +64,7 @@ code, not env — see `src/auth/awsConfig.ts` and the `*config.ts` files.
 | ------------------------------- | ------------------------------------------------------------------ |
 | `VITE_GOOGLE_CLIENT_ID`         | Google OAuth Web client id (Sign in with Google). Required.        |
 | `VITE_COGNITO_IDENTITY_POOL_ID` | Cognito Identity Pool id (`terraform output`). Required.           |
-| `VITE_SPOTIFY_CLIENT_ID`        | Spotify app client id (ships with the `atmos` app's id).           |
+| `VITE_SPOTIFY_CLIENT_ID`        | Spotify app client id (ships with the `sound-light` app's id).     |
 | `VITE_SPOTIFY_MOCK`             | `true` (default) uses the mock catalog; `false` uses real Spotify. |
 | `VITE_MUSIC_PROVIDER`           | Active music backend (`spotify`).                                  |
 
@@ -119,7 +119,7 @@ Lives entirely under `src/spotify/`:
   crossfade: fade the outgoing track out → swap → fade the incoming in, on every
   skip / banish / mix switch (configurable duration; 0 = hard cut).
 
-App: **atmos** · client id `a35ad70cf30442f0a53ba22a95e85c8e` · redirect
+App: **sound-light** · client id `a35ad70cf30442f0a53ba22a95e85c8e` · redirect
 `http://localhost:3000/auth/spotify/`.
 
 ### AWS backend (no Amplify, free tier)

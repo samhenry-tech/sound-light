@@ -2,7 +2,7 @@
  * DataAdapter backed by localStorage — used as a test double. Seeds the
  * prototype's starter library on first use and scopes everything by owner.
  */
-import { createId } from '~utils/idUtils';
+import { APP_NAME } from '~constants';
 import {
   createMixInputSchema,
   DEFAULT_SETTINGS,
@@ -11,6 +11,7 @@ import {
   updateUserSettingsInputSchema,
   type UserSettings,
 } from '~shared/contract';
+import { createId } from '~utils/idUtils';
 
 import { getSeedMixes } from '../seed';
 import type { DataAdapter, DataContext } from './types';
@@ -20,7 +21,7 @@ interface LocalStore {
   settings: UserSettings | null;
 }
 
-const storeKey = (owner: string) => `atmos.data.${owner}`;
+const storeKey = (owner: string) => `${APP_NAME}.data.${owner}`;
 
 const write = (owner: string, store: LocalStore): void => {
   localStorage.setItem(storeKey(owner), JSON.stringify(store));

@@ -1,7 +1,7 @@
-# atmos infrastructure — implementation notes & operator runbook
+# sound-light infrastructure — implementation notes & operator runbook
 
 This document covers everything an operator must do **by hand** to stand up the
-atmos backend, plus a reference for every GitHub `vars`/`secrets` name the CI/CD
+sound-light backend, plus a reference for every GitHub `vars`/`secrets` name the CI/CD
 workflows depend on.
 
 ---
@@ -143,8 +143,8 @@ avoids hard-coding environment-specific values.)
 | Output                     | Example                    | Maps to                                         |
 | -------------------------- | -------------------------- | ----------------------------------------------- |
 | `cognito_identity_pool_id` | `ap-southeast-2:1a2b...`   | `VITE_COGNITO_IDENTITY_POOL_ID`                 |
-| `mixes_table_name`         | `soung-light-dev-mixes`    | `MIXES_TABLE` const in `src/auth/awsConfig.ts`  |
-| `user_settings_table_name` | `soung-light-dev-user-settings` | `SETTINGS_TABLE` const in `src/auth/awsConfig.ts` |
+| `mixes_table_name`         | `sound-light-dev-mixes`    | `MIXES_TABLE` const in `src/auth/awsConfig.ts`  |
+| `user_settings_table_name` | `sound-light-dev-user-settings` | `SETTINGS_TABLE` const in `src/auth/awsConfig.ts` |
 | `aws_region`               | `ap-southeast-2`           | `AWS_REGION` const in `src/auth/awsConfig.ts`   |
 
 ---

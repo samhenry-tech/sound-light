@@ -36,8 +36,8 @@ export const AWS_REGION = 'ap-southeast-2';
 
 // DynamoDB table names follow Terraform's "${project}-${environment}-*" naming
 // (see infra/dynamodb.tf). Update these if the project/environment names change.
-export const MIXES_TABLE = 'soung-light-dev-mixes';
-export const SETTINGS_TABLE = 'soung-light-dev-user-settings';
+export const MIXES_TABLE = 'sound-light-dev-mixes';
+export const SETTINGS_TABLE = 'sound-light-dev-user-settings';
 
 /** The identity pool login-provider key for Google ID tokens. */
 export const GOOGLE_LOGIN_PROVIDER = 'accounts.google.com';

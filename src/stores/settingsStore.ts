@@ -6,6 +6,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import { APP_NAME } from '~constants';
+
 export type AmbientKind = 'rain' | 'wind' | 'fire' | 'ocean';
 
 export const AMBIENT_KINDS: AmbientKind[] = ['rain', 'wind', 'fire', 'ocean'];
@@ -51,6 +53,6 @@ export const useSettingsStore = create<SettingsState>()(
         set({ sleepTimerMinutes: Math.max(1, Math.round(sleepTimerMinutes)) }),
       setPanicMixId: (panicMixId) => set({ panicMixId }),
     }),
-    { name: 'atmos.settings' },
+    { name: `${APP_NAME}.settings` },
   ),
 );

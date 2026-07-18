@@ -1,7 +1,8 @@
 /** localStorage keys for Google auth tokens (bootstrap for cold-start silent refresh). */
+import { APP_NAME } from '~constants';
 
-const ID_TOKEN_KEY = 'atmos.auth.googleIdToken';
-const REFRESH_TOKEN_KEY = 'atmos.auth.googleRefreshToken';
+const ID_TOKEN_KEY = `${APP_NAME}.auth.googleIdToken`;
+const REFRESH_TOKEN_KEY = `${APP_NAME}.auth.googleRefreshToken`;
 
 export const readStoredIdToken = (): string | null => localStorage.getItem(ID_TOKEN_KEY);
 

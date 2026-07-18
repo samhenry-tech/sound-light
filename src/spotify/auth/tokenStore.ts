@@ -1,4 +1,5 @@
 /** Persisted Spotify token + transient PKCE state (localStorage). */
+import { APP_NAME } from '~constants';
 
 export interface SpotifyTokens {
   accessToken: string;
@@ -7,8 +8,8 @@ export interface SpotifyTokens {
   expiresAt: number;
 }
 
-const TOKENS_KEY = 'atmos.spotify.tokens';
-const PKCE_KEY = 'atmos.spotify.pkce';
+const TOKENS_KEY = `${APP_NAME}.spotify.tokens`;
+const PKCE_KEY = `${APP_NAME}.spotify.pkce`;
 
 export const getStoredTokens = (): SpotifyTokens | null => {
   try {

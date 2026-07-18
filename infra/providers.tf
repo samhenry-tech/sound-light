@@ -14,10 +14,10 @@ terraform {
   # Terraform S3 backends (use_lockfile), but shown here for broad compatibility.
   # ---------------------------------------------------------------------------
   # backend "s3" {
-  #   bucket         = "atmos-tfstate-<your-account-id>"
-  #   key            = "atmos/dev/terraform.tfstate"
+  #   bucket         = "sound-light-tfstate-<your-account-id>"
+  #   key            = "sound-light/dev/terraform.tfstate"
   #   region         = "us-east-1"
-  #   dynamodb_table = "atmos-tf-locks"
+  #   dynamodb_table = "sound-light-tf-locks"
   #   encrypt        = true
   # }
 }

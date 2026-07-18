@@ -1,5 +1,6 @@
 import { useAuthSession } from '~auth/useAuthSession';
 import { Icon } from '~components/atoms/Icon';
+import { APP_NAME } from '~constants';
 
 /**
  * Sign-in gate. Redirects to Google OAuth (authorization code + PKCE) so a
@@ -20,7 +21,7 @@ export const LoginPage = () => {
         <div className="mx-auto mb-[18px] flex h-[54px] w-[54px] items-center justify-center rounded-2xl bg-accent">
           <Icon name="graphic_eq" size={30} className="text-[#0c0e0f]" />
         </div>
-        <h1 className="m-0 text-[26px] font-extrabold tracking-[-0.02em]">atmos</h1>
+        <h1 className="m-0 text-[26px] font-extrabold tracking-[-0.02em]">{APP_NAME}</h1>
         <p className="mx-0 mt-2 mb-7 text-[14px] leading-[1.5] text-muted">
           The music companion for your table. Sign in to sync your mixes across devices.
         </p>

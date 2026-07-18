@@ -1,5 +1,5 @@
 /* =============================================================================
-   atmos design tokens + Tailwind entry
+   sound-light design tokens + Tailwind entry
    Colors, radii, type and animations are exposed to Tailwind via `@theme`, so
    they generate utilities (bg-surface-card, text-muted, border-line-12,
    rounded-md, animate-eq, …). `--accent` stays a plain runtime variable so

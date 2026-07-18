@@ -3,10 +3,12 @@
  * a Spotify Connect device and drives playback through the Web API.
  * Requires a linked Spotify **Premium** account.
  */
+import { APP_NAME } from '~constants';
+import type { MusicPlayer } from '~music/types';
+
 import { getValidAccessToken } from '../auth/spotifyAuth';
 import { SPOTIFY_ENDPOINTS } from '../config';
 import type { PlaybackState, SpotifyTrack } from '../types';
-import type { AtmosPlayer } from './types';
 
 const SDK_SRC = 'https://sdk.scdn.co/spotify-player.js';
 const NEAR_END_MS = 2000;
@@ -29,7 +31,7 @@ const loadSdk = (): Promise<void> => {
   return sdkPromise;
 };
 
-export const createWebPlaybackPlayer = (): AtmosPlayer => {
+export const createWebPlaybackPlayer = (): MusicPlayer => {
   const stateListeners = new Set<(state: PlaybackState) => void>();
   const endedListeners = new Set<() => void>();
 
@@ -44,7 +46,7 @@ export const createWebPlaybackPlayer = (): AtmosPlayer => {
     if (!Player) throw new Error('Spotify Web Playback SDK unavailable.');
 
     player = new Player({
-      name: 'atmos',
+      name: APP_NAME,
       volume: 0.8,
       getOAuthToken: (cb) => {
         void getValidAccessToken().then((token) => {

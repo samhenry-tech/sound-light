@@ -2,6 +2,7 @@ import { clsx } from 'clsx';
 
 import { Icon } from '~components/atoms/Icon';
 import { NavItem } from '~components/molecules/NavItem';
+import { APP_NAME } from '~constants';
 
 export type Screen = 'live' | 'library';
 
@@ -36,7 +37,7 @@ export const NavRail = ({
           <Icon name="graphic_eq" size={22} className="text-[#0c0e0f]" />
         </div>
         <span className="whitespace-nowrap text-[9.5px] font-bold tracking-[-0.01em] text-quiet">
-          atmos
+          {APP_NAME}
         </span>
       </div>
 

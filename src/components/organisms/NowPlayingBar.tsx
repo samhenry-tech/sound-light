@@ -6,6 +6,7 @@ import { LikeButton, ThumbDownButton } from '~components/molecules/FeedbackButto
 import { PlayButton } from '~components/molecules/PlayButton';
 import { ProgressBar } from '~components/molecules/ProgressBar';
 import { VolumeControl } from '~components/molecules/VolumeControl';
+import { APP_NAME } from '~constants';
 import { usePlayerActions } from '~features/player/PlayerContext';
 import { usePlayerStore } from '~stores/playerStore';
 
@@ -44,7 +45,7 @@ export const NowPlayingBar = () => {
 
       <div className="w-[248px] min-w-0 flex-shrink-0">
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[17px] font-bold tracking-[-0.01em]">
-          {state.mixName || 'atmos'}
+          {state.mixName || APP_NAME}
         </div>
         <div className="mt-px overflow-hidden text-ellipsis whitespace-nowrap text-[12.5px] text-muted">
           {state.current

@@ -1,4 +1,4 @@
-# atmos — build plan
+# sound-light — build plan
 
 > Living plan for turning the **Soundlight** design prototype into a production
 > React + Vite app. Each phase ends with a commit on
@@ -7,7 +7,7 @@
 
 ## Product
 
-**atmos** — an iPad-first music companion for tabletop RPG game masters. The GM
+**sound-light** — an iPad-first music companion for tabletop RPG game masters. The GM
 keeps a library of vibe-named mixes (`Location – Atmosphere`, e.g. _Tavern –
 Battle_) and during play taps a card to crossfade into that vibe. Music plays
 shuffled; the GM gives per-track feedback (👍 keep / 👎 fade & skip, hold to

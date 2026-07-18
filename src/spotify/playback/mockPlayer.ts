@@ -3,10 +3,11 @@
  * ticker. Advances position once per second and fires `onEnded` when a track
  * completes, with no Spotify account or Premium required.
  */
-import type { PlaybackState, SpotifyTrack } from '../types';
-import type { AtmosPlayer } from './types';
+import type { MusicPlayer } from '~music/types';
 
-export const createMockPlayer = (): AtmosPlayer => {
+import type { PlaybackState, SpotifyTrack } from '../types';
+
+export const createMockPlayer = (): MusicPlayer => {
   let track: SpotifyTrack | null = null;
   let positionMs = 0;
   let isPlaying = false;
