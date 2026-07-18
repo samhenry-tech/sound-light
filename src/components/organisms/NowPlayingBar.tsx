@@ -70,14 +70,6 @@ export const NowPlayingBar = () => {
       <div className="h-11 w-px flex-shrink-0 bg-line-08" />
 
       <div className="flex flex-shrink-0 items-center gap-3">
-        <button
-          type="button"
-          className="flex h-[var(--play-btn)] flex-col items-center justify-center rounded-[15px] border border-danger-30 bg-danger-12 px-4 text-[14px] font-extrabold tracking-[0.08em] text-danger-text cursor-pointer transition-colors duration-150 hover:bg-danger-18 hover:text-white"
-          onClick={actions.panic}
-          title="Panic → jump to combat"
-        >
-          PANIC
-        </button>
         <PlayButton isPlaying={state.isPlaying} onClick={actions.togglePlay} disabled={!hasTrack} />
         <div className="mx-0.5 h-[30px] w-px flex-shrink-0 bg-line-08" />
         <LikeButton onClick={actions.like} />

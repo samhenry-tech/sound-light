@@ -22,15 +22,12 @@ interface SettingsState {
   keyboardEnabled: boolean;
   /** Default sleep-timer length, in minutes. */
   sleepTimerMinutes: number;
-  /** Playlist id used by the Panic button (jump to combat). */
-  panicPlaylistId: string | null;
 
   setCrossfadeMs: (ms: number) => void;
   setAmbientVolume: (v: number) => void;
   setAmbientKind: (kind: AmbientKind | null) => void;
   setKeyboardEnabled: (enabled: boolean) => void;
   setSleepTimerMinutes: (minutes: number) => void;
-  setPanicPlaylistId: (id: string | null) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -41,7 +38,6 @@ export const useSettingsStore = create<SettingsState>()(
       ambientKind: null,
       keyboardEnabled: true,
       sleepTimerMinutes: 45,
-      panicPlaylistId: null,
 
       setCrossfadeMs: (crossfadeMs) =>
         set({ crossfadeMs: Math.min(8000, Math.max(0, crossfadeMs)) }),
@@ -51,7 +47,6 @@ export const useSettingsStore = create<SettingsState>()(
       setKeyboardEnabled: (keyboardEnabled) => set({ keyboardEnabled }),
       setSleepTimerMinutes: (sleepTimerMinutes) =>
         set({ sleepTimerMinutes: Math.max(1, Math.round(sleepTimerMinutes)) }),
-      setPanicPlaylistId: (panicPlaylistId) => set({ panicPlaylistId }),
     }),
     { name: `${APP_NAME}.settings` },
   ),

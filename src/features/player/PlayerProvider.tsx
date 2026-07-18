@@ -209,21 +209,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     void playerRef.current?.setVolume(muted ? 0 : volume);
   }, []);
 
-  const panic = useCallback(() => {
-    const { panicPlaylistId } = useSettingsStore.getState();
-    const list = playlistsRef.current;
-    const target =
-      (panicPlaylistId ? list.find((m) => m.id === panicPlaylistId) : undefined) ??
-      list.find((m) => m.atmosphere === 'battle' && m.location === 'General') ??
-      list.find((m) => m.atmosphere === 'battle');
-    if (!target) {
-      useUiStore.getState().showToast('No combat playlist to panic to');
-      return;
-    }
-    void selectPlaylist(target);
-    useUiStore.getState().showToast('⚔️ Combat!');
-  }, [selectPlaylist]);
-
   const banish = useCallback(() => banishCurrent(), [banishCurrent]);
 
   const startSleepTimer = useCallback((minutes: number) => {
@@ -282,7 +267,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       seek,
       setVolume,
       toggleMute,
-      panic,
       startSleepTimer,
       cancelSleepTimer,
     }),
@@ -299,7 +283,6 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       seek,
       setVolume,
       toggleMute,
-      panic,
       startSleepTimer,
       cancelSleepTimer,
     ],

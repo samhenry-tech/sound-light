@@ -47,9 +47,6 @@ export const useKeyboardShortcuts = () => {
         case 'b':
           actions.banish();
           break;
-        case 'p':
-          actions.panic();
-          break;
         case 'l':
           actions.like();
           break;

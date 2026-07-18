@@ -39,7 +39,6 @@ export const CommandPalette = () => {
 
   const items = useMemo<Command[]>(() => {
     const commands: Command[] = [
-      { id: 'panic', label: 'Panic — jump to combat', icon: 'bolt', run: actions.panic },
       { id: 'table', label: 'Toggle table mode', icon: 'crop_free', run: toggleTableMode },
       { id: 'settings', label: 'Open settings', icon: 'tune', run: () => setSettingsOpen(true) },
     ];

@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
-import { usePlaylists, useUpdateUserSettings, useUserSettings } from '~api/hooks';
+import { useUpdateUserSettings, useUserSettings } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { Select } from '~components/molecules/Select';
@@ -11,8 +11,6 @@ import { usePlayerStore } from '~stores/playerStore';
 import { AMBIENT_KINDS, type AmbientKind, useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
 import { ACCENT_OPTIONS, capitalize } from '~theme/atmosphere';
-import { playlistName } from '~utils/formatUtils';
-
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
 const SEG_BTN = 'border-none px-3 py-1.5 text-[13px] font-semibold rounded-[7px] cursor-pointer';
@@ -41,7 +39,6 @@ const SHORTCUTS: [string, string][] = [
   ['Space', 'Play / pause'],
   ['→ / N', 'Next track'],
   ['B', 'Banish current'],
-  ['P', 'Panic → combat'],
   ['L', 'Good fit'],
   ['M', 'Mute'],
   ['↑ / ↓', 'Volume'],
@@ -56,7 +53,6 @@ export const SettingsPanel = () => {
 
   const { data: userSettings } = useUserSettings();
   const updateUserSettings = useUpdateUserSettings();
-  const { data: playlists = [] } = usePlaylists();
   const auth = useMusicAuth();
   const actions = usePlayerActions();
 
@@ -152,21 +148,6 @@ export const SettingsPanel = () => {
               />
               <span className={VALUE}>{(settings.crossfadeMs / 1000).toFixed(1)}s</span>
             </div>
-          </div>
-          <div className={ROW}>
-            <span className={LABEL}>Panic target</span>
-            <Select
-              ariaLabel="Panic target playlist"
-              value={settings.panicPlaylistId ?? ''}
-              onChange={(v) => settings.setPanicPlaylistId(v || null)}
-              options={[
-                { value: '', label: 'Auto (first combat playlist)' },
-                ...playlists.map((m) => ({
-                  value: m.id,
-                  label: playlistName(m.location, m.atmosphere),
-                })),
-              ]}
-            />
           </div>
         </Section>
 

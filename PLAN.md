@@ -61,11 +61,10 @@ curation, ad-driven):
 - **Volume + mute + one-tap "duck"** (lower under narration, restore on release).
 - **Scrub/seek**, **skip next/previous**, manual queue with "up next".
 - **Crossfade** with configurable duration (real fade in mock; volume-duck for SDK).
-- **Panic button** → instantly crossfade to the campaign's designated combat playlist.
 - **Procedural ambient bed** — asset-free rain/wind/fire/ocean noise synthesized
   with the Web Audio API, layered _under_ the music with its own volume.
 - **Sleep timer** with fade-out.
-- **Keyboard shortcuts** (space, →/skip, B/banish, P/panic, ↑↓ volume, / search, ⌘K).
+- **Keyboard shortcuts** (space, →/skip, B/banish, ↑↓ volume, / search, ⌘K).
 - **Command palette (⌘K)** — jump to any playlist or run any action.
 - **Table / focus mode** — minimal, dim, glanceable now-playing for the actual table.
 - **Now-playing history.**
