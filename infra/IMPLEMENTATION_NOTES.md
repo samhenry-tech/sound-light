@@ -10,9 +10,12 @@ workflows depend on.
 
 There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 
-1. The SPA renders the official **Sign in with Google** button
-   (Google Identity Services). Popup mode is the primary UX; a redirect flow to
-   `/auth/google/callback` is offered as a fallback for popup-blocking browsers.
+1. The SPA renders the official **Sign in with Google** button via Google
+   Identity Services (GIS) + FedCM, which returns a Google **ID token** directly
+   in the browser — no authorization-code exchange and no `client_secret` (a
+   static SPA cannot hold one). Sessions slide: the ID token is silently
+   re-minted via FedCM (`navigator.credentials.get`, `mediation: 'silent'`)
+   before it expires, as long as the user's Google session is alive.
 2. The resulting **Google ID token** is sent to a **Cognito Identity Pool**
    (`accounts.google.com` login provider), which vends temporary AWS
    credentials for the authenticated IAM role.
@@ -81,10 +84,9 @@ dynamoAdapter.ts`) validates everything it reads and writes against them.
    OAuth client ID → Web application**.
 2. **Authorised JavaScript origins:** every app origin, e.g.
    `http://localhost:3000` and `https://<dist>.cloudfront.net`. (Required for
-   the GIS popup button.)
-3. **Authorised redirect URIs:** the redirect-fallback callback on every
-   origin, e.g. `http://localhost:3000/auth/google/callback` and
-   `https://<dist>.cloudfront.net/auth/google/callback`.
+   the GIS button / FedCM.)
+3. **Authorised redirect URIs:** none needed — GIS/FedCM returns the ID token to
+   the JavaScript origin, so there is no server-side redirect callback.
 4. No client secret is used anywhere — only the **client ID**, stored once in
    `config/shared.json` (`googleClientId`) for both Terraform and the SPA.
 

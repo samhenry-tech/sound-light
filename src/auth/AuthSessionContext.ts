@@ -21,10 +21,10 @@ export interface AuthSession {
   /** Raw Google ID token (JWT) exchanged with the Cognito Identity Pool. */
   googleIdToken: string | null;
   error?: string;
-  /** Redirect to Google for OAuth code + PKCE sign-in. */
+  /** Trigger the Google One Tap / FedCM sign-in prompt. */
   beginGoogleLogin: () => Promise<void>;
-  /** Complete sign-in from the OAuth callback `?code=` query. */
-  loginWithGoogleCode: (query: URLSearchParams) => Promise<void>;
+  /** Render the official Google sign-in button into the given element. */
+  renderGoogleButton: (parent: HTMLElement) => void;
   logout: () => Promise<void>;
 }
 

@@ -7,6 +7,8 @@ export interface GoogleIdTokenClaims {
   sub: string;
   email?: string;
   name?: string;
+  /** Opaque value bound to the sign-in request; guards against token replay. */
+  nonce?: string;
   /** Expiry, seconds since epoch. */
   exp: number;
 }

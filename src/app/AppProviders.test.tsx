@@ -19,7 +19,7 @@ vi.mock('~auth/AppAuthProvider', async () => {
     owner: 'us-east-1:00000000-0000-0000-0000-000000000000',
     googleIdToken: 'test-google-id-token',
     beginGoogleLogin: async () => {},
-    loginWithGoogleCode: async () => {},
+    renderGoogleButton: () => {},
     logout: async () => {},
   };
   return {
