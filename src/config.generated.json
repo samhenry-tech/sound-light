@@ -1,6 +1,6 @@
 {
-  "cognitoIdentityPoolId": "ap-southeast-2:bbe6ca47-ba04-42bd-82da-bf9768b48ae9",
   "awsRegion": "ap-southeast-2",
+  "cognitoIdentityPoolId": "ap-southeast-2:bbe6ca47-ba04-42bd-82da-bf9768b48ae9",
   "mixesTable": "sound-light-dev-mixes",
   "settingsTable": "sound-light-dev-user-settings"
 }
