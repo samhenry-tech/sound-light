@@ -3,7 +3,7 @@ locals {
   name_prefix = "${var.project}-${var.environment}"
 
   tags = {
-    Project     = "atmos"
+    Project     = "sound-light"
     Environment = var.environment
     ManagedBy   = "Terraform"
   }
