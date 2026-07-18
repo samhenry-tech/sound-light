@@ -54,19 +54,17 @@ that's what the Spotify app's redirect URIs are registered against.
 
 ## Configuration
 
-Copy `.env.example` → `.env.local`. The five AWS/Google vars are **required**
-in every environment — the app throws a descriptive error at startup if any is
-missing (there is no offline/localStorage mode).
+Copy `.env.example` → `.env.local`. Only two identity vars are **required** —
+the app throws a descriptive error at startup if either is missing (there is no
+offline/localStorage mode). Fixed infra values (AWS region, DynamoDB table
+names) and the OAuth redirect URIs (derived from the browser's origin) live in
+code, not env — see `src/auth/awsConfig.ts` and the `*config.ts` files.
 
 | Var                             | Purpose                                                            |
 | ------------------------------- | ------------------------------------------------------------------ |
 | `VITE_GOOGLE_CLIENT_ID`         | Google OAuth Web client id (Sign in with Google). Required.        |
 | `VITE_COGNITO_IDENTITY_POOL_ID` | Cognito Identity Pool id (`terraform output`). Required.           |
-| `VITE_AWS_REGION`               | AWS region of the identity pool + tables. Required.                |
-| `VITE_MIXES_TABLE`              | DynamoDB mixes table name (`terraform output`). Required.          |
-| `VITE_SETTINGS_TABLE`           | DynamoDB user-settings table name (`terraform output`). Required.  |
 | `VITE_SPOTIFY_CLIENT_ID`        | Spotify app client id (ships with the `atmos` app's id).           |
-| `VITE_SPOTIFY_REDIRECT_URI`     | Must exactly match a registered URI (`…/auth/spotify/`).           |
 | `VITE_SPOTIFY_MOCK`             | `true` (default) uses the mock catalog; `false` uses real Spotify. |
 | `VITE_MUSIC_PROVIDER`           | Active music backend (`spotify`).                                  |
 

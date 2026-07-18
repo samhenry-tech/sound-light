@@ -5,7 +5,6 @@ import { Icon } from './Icon';
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: string;
-  /** Box size in px. */
   size?: number;
   iconSize?: number;
   variant?: 'default' | 'danger' | 'ghost';
@@ -22,7 +21,6 @@ const VARIANTS: Record<NonNullable<IconButtonProps['variant']>, string> = {
   ghost: 'border-transparent text-icon-muted hover:border-line-20',
 };
 
-/** A square, hairline-bordered icon button (remove ✕, delete, close). */
 export const IconButton = ({
   icon,
   size = 34,
@@ -31,17 +29,15 @@ export const IconButton = ({
   label,
   className,
   ...props
-}: IconButtonProps) => {
-  return (
-    <button
-      type="button"
-      title={label}
-      aria-label={label}
-      className={clsx(BASE, VARIANTS[variant], className)}
-      style={{ width: size, height: size }}
-      {...props}
-    >
-      <Icon name={icon} size={iconSize} />
-    </button>
-  );
-};
+}: IconButtonProps) => (
+  <button
+    type="button"
+    title={label}
+    aria-label={label}
+    className={clsx(BASE, VARIANTS[variant], className)}
+    style={{ width: size, height: size }}
+    {...props}
+  >
+    <Icon name={icon} size={iconSize} />
+  </button>
+);

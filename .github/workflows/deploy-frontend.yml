@@ -1,7 +1,8 @@
 name: Deploy Frontend
 
-# Build the SPA and publish it to S3 + CloudFront. Runs on pushes to main that
-# touch app code, and on manual dispatch.
+# Build the SPA and publish it to the shared projects.samhenry.tech S3 bucket
+# (served by the shared CloudFront distribution). Deploys into a per-repo
+# subfolder so multiple projects share one bucket + distribution.
 on:
   push:
     branches:
@@ -17,7 +18,14 @@ on:
       - .github/workflows/deploy-frontend.yml
   workflow_dispatch:
 
+env:
+  AWS_REGION: ap-southeast-2
+  S3_BUCKET: projects.samhenry.tech
+  S3_FOLDER: ${{ github.event.repository.name }}
+
+# id-token: write lets the job assume the shared deploy role via GitHub OIDC.
 permissions:
+  id-token: write
   contents: read
 
 concurrency:
@@ -42,31 +50,32 @@ jobs:
         run: npm ci
 
       - name: Build
+        # Served from the root of sound-light.samhenry.tech (the distribution
+        # maps that host to the sound-light/ folder), so the default "/" base
+        # is correct — no --base override needed.
         run: npm run build
         env:
-          # Public (Vite-exposed) build-time config from repository Variables.
           VITE_GOOGLE_CLIENT_ID: ${{ vars.VITE_GOOGLE_CLIENT_ID }}
           VITE_COGNITO_IDENTITY_POOL_ID: ${{ vars.VITE_COGNITO_IDENTITY_POOL_ID }}
-          VITE_AWS_REGION: ${{ vars.VITE_AWS_REGION }}
-          VITE_MIXES_TABLE: ${{ vars.VITE_MIXES_TABLE }}
-          VITE_SETTINGS_TABLE: ${{ vars.VITE_SETTINGS_TABLE }}
           VITE_SPOTIFY_CLIENT_ID: ${{ vars.VITE_SPOTIFY_CLIENT_ID }}
-          VITE_SPOTIFY_REDIRECT_URI: ${{ vars.VITE_SPOTIFY_REDIRECT_URI }}
           VITE_SPOTIFY_MOCK: 'false'
 
-      # AWS credentials provided as org-level secrets for samhenry-tech public repos.
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          role-to-assume: arn:aws:iam::904581404707:role/deploy-role
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Sync to S3
-        run: aws s3 sync dist "s3://${{ vars.FRONTEND_BUCKET }}" --delete
+      - name: Create S3 folder if it doesn't exist
+        run: aws s3api put-object --bucket "${{ env.S3_BUCKET }}" --key "${{ env.S3_FOLDER }}/" || true
+
+      - name: Upload to S3
+        run: aws s3 sync dist/ "s3://${{ env.S3_BUCKET }}/${{ env.S3_FOLDER }}/" --delete --region ${{ env.AWS_REGION }}
 
       - name: Invalidate CloudFront
+        # The distribution serves this app at its own host root, so invalidate
+        # from root.
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --distribution-id ${{ secrets.SAMHENRY_TECH_CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"

@@ -11,7 +11,6 @@ interface IconProps {
   style?: CSSProperties;
 }
 
-/** A Material Symbols Rounded glyph. Decorative by default (aria-hidden). */
 export const Icon = ({ name, size = 20, filled, weight, className, style }: IconProps) => {
   const variation =
     filled || weight ? `'FILL' ${filled ? 1 : 0}, 'wght' ${weight ?? 400}` : undefined;

@@ -9,13 +9,13 @@ export const SPOTIFY_CLIENT_ID =
   import.meta.env.VITE_SPOTIFY_CLIENT_ID ?? 'a35ad70cf30442f0a53ba22a95e85c8e';
 
 /**
- * Must EXACTLY match a redirect URI registered on the Spotify app — the
- * trailing slash is significant. Registered URIs for "atmos":
- *   http://localhost:3000/auth/spotify/
- *   http://localhost:3000
+ * Redirect URI for the Spotify Authorization Code flow, derived from the
+ * running client's origin so it works across environments with no config. Each
+ * origin must be registered on the Spotify app and the trailing slash is
+ * significant, e.g. http://localhost:3000/auth/spotify/ or
+ * https://sound-light.samhenry.tech/auth/spotify/.
  */
-export const SPOTIFY_REDIRECT_URI =
-  import.meta.env.VITE_SPOTIFY_REDIRECT_URI ?? 'http://localhost:3000/auth/spotify/';
+export const SPOTIFY_REDIRECT_URI = `${window.location.origin}/auth/spotify/`;
 
 /**
  * When mock mode is on, the Library search + playback are served by the bundled

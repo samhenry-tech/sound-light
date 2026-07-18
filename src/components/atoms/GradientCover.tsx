@@ -16,7 +16,6 @@ interface GradientCoverProps {
   style?: CSSProperties;
 }
 
-/** A cover tile backed by an atmosphere gradient or real artwork. */
 export const GradientCover = ({
   gradient,
   artworkUrl,

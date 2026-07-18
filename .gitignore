@@ -30,10 +30,9 @@ coverage
 *.sln
 *.sw?
 
-# Env
-.env
-.env.*
-!.env.example
+# Env — commit shared defaults (.env); ignore local/secret overrides only.
+.env.local
+.env.*.local
 
 # Terraform
 **/.terraform/*

@@ -39,23 +39,3 @@ variable "google_client_id" {
     error_message = "google_client_id is required: the identity pool federates Google Sign-In."
   }
 }
-
-# --------------------------------------------------------------------------- #
-# GitHub OIDC / deploy role                                                    #
-# --------------------------------------------------------------------------- #
-
-variable "create_github_oidc_provider" {
-  description = <<-EOT
-    Whether to create the GitHub Actions OIDC provider in this account. Set to
-    false if the provider (token.actions.githubusercontent.com) already exists;
-    a data source will be used to look it up instead.
-  EOT
-  type        = bool
-  default     = true
-}
-
-variable "github_repo" {
-  description = "GitHub repository (owner/name) allowed to assume the deploy roles via OIDC."
-  type        = string
-  default     = "samhenry-tech/sound-light"
-}

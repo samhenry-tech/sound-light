@@ -15,11 +15,6 @@ region      = "us-east-1"
 # --- Google Sign-In -------------------------------------------------------- #
 # Google OAuth 2.0 *Web application* client ID (REQUIRED). No secret is needed:
 # the identity pool verifies Google ID tokens directly. Register your app
-# origins (http://localhost:3000 + the CloudFront URL) as authorised
+# origins (http://localhost:3000 + the production URL) as authorised
 # JavaScript origins on this client in the Google Cloud Console.
 google_client_id = "1234567890-example.apps.googleusercontent.com"
-
-# --- GitHub OIDC ----------------------------------------------------------- #
-# Set to false if the GitHub OIDC provider already exists in this AWS account.
-create_github_oidc_provider = true
-github_repo                 = "samhenry-tech/sound-light"

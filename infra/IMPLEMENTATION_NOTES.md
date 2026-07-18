@@ -104,29 +104,32 @@ go in **Secrets**; everything else in **Variables**.
 
 ### 4.1 Repository **Variables** (`vars.*`)
 
-| Variable                        | Used by               | Value / source                                                                                                                     |
-| ------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `AWS_REGION`                    | deploy, terraform     | e.g. `us-east-1` (match `var.region`). Optional — defaults to `us-east-1`.                                                         |
-| `FRONTEND_BUCKET`               | deploy-frontend       | `terraform output frontend_bucket`.                                                                                                |
-| `CLOUDFRONT_DISTRIBUTION_ID`    | deploy-frontend       | `terraform output cloudfront_distribution_id`.                                                                                     |
-| `VITE_GOOGLE_CLIENT_ID`         | deploy-frontend build | The Google OAuth client ID (same value as `TF_VAR_google_client_id`).                                                              |
-| `VITE_COGNITO_IDENTITY_POOL_ID` | deploy-frontend build | `terraform output cognito_identity_pool_id`.                                                                                       |
-| `VITE_AWS_REGION`               | deploy-frontend build | `terraform output aws_region`.                                                                                                     |
-| `VITE_MIXES_TABLE`              | deploy-frontend build | `terraform output mixes_table_name`.                                                                                               |
-| `VITE_SETTINGS_TABLE`           | deploy-frontend build | `terraform output user_settings_table_name`.                                                                                       |
-| `VITE_SPOTIFY_CLIENT_ID`        | deploy-frontend build | Spotify app client id (the repo's `.env.example` ships one).                                                                       |
-| `VITE_SPOTIFY_REDIRECT_URI`     | deploy-frontend build | Must EXACTLY match a Spotify-registered redirect URI (trailing slash matters), e.g. `https://<dist>.cloudfront.net/auth/spotify/`. |
+| Variable                        | Used by               | Value / source                                                        |
+| ------------------------------- | --------------------- | -------------------------------------------------------------------- |
+| `AWS_REGION`                    | terraform             | e.g. `ap-southeast-2` (match `var.region`). Optional — defaults to `us-east-1`. |
+| `VITE_GOOGLE_CLIENT_ID`         | deploy-frontend build | The Google OAuth client ID (same value as `TF_VAR_google_client_id`). |
+| `VITE_COGNITO_IDENTITY_POOL_ID` | deploy-frontend build | `terraform output cognito_identity_pool_id`.                          |
+| `VITE_SPOTIFY_CLIENT_ID`        | deploy-frontend build | Spotify app client id (the repo's `.env.example` ships one).          |
 
 > `VITE_SPOTIFY_MOCK=false` is hard-coded in `deploy-frontend.yml` (production
 > uses the real Spotify API, not the bundled mock).
+>
+> The AWS region, DynamoDB table names, and OAuth redirect URIs are **not** env
+> vars: region + table names are hardcoded in `src/auth/awsConfig.ts`, and the
+> redirect URIs are derived from the browser origin at runtime.
 
 ### 4.2 Repository **Secrets** (`secrets.*`)
 
-| Secret                    | Used by                    | Value / source                                             |
-| ------------------------- | -------------------------- | ---------------------------------------------------------- |
-| `AWS_ACCESS_KEY_ID`       | deploy-frontend, terraform | Org-provided AWS credentials (samhenry-tech public repos). |
-| `AWS_SECRET_ACCESS_KEY`   | deploy-frontend, terraform | Org-provided AWS credentials (samhenry-tech public repos). |
-| `TF_VAR_google_client_id` | terraform                  | Google OAuth client id (→ `var.google_client_id`).         |
+| Secret                                 | Used by         | Value / source                                             |
+| -------------------------------------- | --------------- | ---------------------------------------------------------- |
+| `AWS_ACCESS_KEY_ID`                    | terraform       | Org-provided AWS credentials (samhenry-tech public repos). |
+| `AWS_SECRET_ACCESS_KEY`                | terraform       | Org-provided AWS credentials (samhenry-tech public repos). |
+| `TF_VAR_google_client_id`              | terraform       | Google OAuth client id (→ `var.google_client_id`).         |
+| `SAMHENRY_TECH_CLOUDFRONT_DISTRIBUTION_ID` | deploy-frontend | Shared CloudFront distribution id for cache invalidation.  |
+
+> `deploy-frontend.yml` publishes to the shared `projects.samhenry.tech` bucket
+> and assumes `arn:aws:iam::904581404707:role/deploy-role` via GitHub OIDC
+> (`id-token: write`), so it needs no static AWS keys.
 
 `TF_VAR_*` env vars are Terraform's native way to set the matching variables,
 so the workflow just exports them; no `-var` flags needed. (The client ID is
@@ -137,16 +140,12 @@ avoids hard-coding environment-specific values.)
 
 ## 5. Terraform outputs (consumed by frontend + workflows)
 
-| Output                       | Example                                            |
-| ---------------------------- | -------------------------------------------------- |
-| `cognito_identity_pool_id`   | `us-east-1:1a2b3c4d-...`                           |
-| `mixes_table_name`           | `atmos-dev-mixes`                                  |
-| `user_settings_table_name`   | `atmos-dev-user-settings`                          |
-| `aws_region`                 | `us-east-1`                                        |
-| `frontend_bucket`            | `atmos-dev-frontend`                               |
-| `cloudfront_distribution_id` | `E1EXAMPLE234`                                     |
-| `cloudfront_domain`          | `d111111abcdef8.cloudfront.net`                    |
-| `github_deploy_role_arn`     | `arn:aws:iam::<acct>:role/atmos-dev-github-deploy` |
+| Output                     | Example                    | Maps to                                         |
+| -------------------------- | -------------------------- | ----------------------------------------------- |
+| `cognito_identity_pool_id` | `ap-southeast-2:1a2b...`   | `VITE_COGNITO_IDENTITY_POOL_ID`                 |
+| `mixes_table_name`         | `soung-light-dev-mixes`    | `MIXES_TABLE` const in `src/auth/awsConfig.ts`  |
+| `user_settings_table_name` | `soung-light-dev-user-settings` | `SETTINGS_TABLE` const in `src/auth/awsConfig.ts` |
+| `aws_region`               | `ap-southeast-2`           | `AWS_REGION` const in `src/auth/awsConfig.ts`   |
 
 ---
 

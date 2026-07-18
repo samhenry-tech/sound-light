@@ -19,11 +19,14 @@ identity id.
 | --------- | ---------------------------------------------------------------------------------------- |
 | Auth      | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
 | Data      | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`     |
-| Hosting   | Private S3 bucket + CloudFront (OAC, SPA error-routing, PriceClass_100)                  |
-| CI/CD IAM | GitHub OIDC provider + a frontend-deploy role                                            |
 
 All resources are tagged with `Project=atmos`, `ManagedBy=Terraform`, and named
 `atmos-dev-*` by default (`${var.project}-${var.environment}`).
+
+> **Hosting is not managed here.** The SPA is published to the shared
+> `projects.samhenry.tech` S3 bucket + CloudFront distribution by
+> `.github/workflows/deploy-frontend.yml` (per-repo subfolder, shared
+> `deploy-role` assumed via GitHub OIDC). This stack owns only Cognito + DynamoDB.
 
 ## Layout
 
@@ -36,9 +39,7 @@ infra/
 ├── locals.tf              # name_prefix + common tags
 ├── cognito.tf             # Identity pool, authenticated role, DynamoDB row policy
 ├── dynamodb.tf            # mixes + user_settings tables (provisioned 12/12)
-├── hosting.tf             # S3 bucket + CloudFront + bucket policy
-├── github_oidc.tf         # GitHub OIDC provider + frontend deploy role
-├── outputs.tf             # Outputs consumed by the frontend + workflows
+├── outputs.tf             # Outputs consumed by the frontend
 └── terraform.tfvars.example
 ```
 
@@ -47,7 +48,7 @@ infra/
 - Terraform >= 1.6, AWS credentials with permission to create the above.
 - A Google OAuth 2.0 **Web application** client ID (`google_client_id`,
   required). No client secret is needed. Register your app origins
-  (`http://localhost:3000` and the CloudFront URL) as **authorised JavaScript
+  (`http://localhost:3000` and the production URL) as **authorised JavaScript
   origins** on that client.
 
 ## Quick start (local)
@@ -68,12 +69,14 @@ After `terraform apply`, wire `terraform output` values into the SPA's env
 | Terraform output           | Frontend env var                |
 | -------------------------- | ------------------------------- |
 | `cognito_identity_pool_id` | `VITE_COGNITO_IDENTITY_POOL_ID` |
-| `mixes_table_name`         | `VITE_MIXES_TABLE`              |
-| `user_settings_table_name` | `VITE_SETTINGS_TABLE`           |
-| `aws_region`               | `VITE_AWS_REGION`               |
 
 `VITE_GOOGLE_CLIENT_ID` is the same Google client ID passed to Terraform as
 `google_client_id`.
+
+The AWS region and DynamoDB table names are **not** env vars — they are
+hardcoded in `src/auth/awsConfig.ts` (they never change between environments).
+If you change `project`/`environment`/`region` in Terraform, update those
+constants to match.
 
 See [`IMPLEMENTATION_NOTES.md`](./IMPLEMENTATION_NOTES.md) for the full operator
 runbook: Google OAuth setup and every GitHub `vars`/`secrets` name the
