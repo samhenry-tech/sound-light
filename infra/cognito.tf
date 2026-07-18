@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "authenticated_dynamodb" {
       "dynamodb:BatchGetItem",
     ]
     resources = [
-      aws_dynamodb_table.mixes.arn,
+      aws_dynamodb_table.playlists.arn,
       aws_dynamodb_table.user_settings.arn,
     ]
 

@@ -26,7 +26,7 @@ const rampVolume = async (
  * Connect device per account) and `play({uris})` hard-cuts, so a true
  * overlapping crossfade is impossible. We instead roll our own **single-stream
  * crossfade**: fade the outgoing track down, swap, then fade the incoming up —
- * a smooth, click-free transition (used for skip / banish / mix switch).
+ * a smooth, click-free transition (used for skip / banish / playlist switch).
  *
  * @param fadeOut when true (something is already playing) the outgoing track is
  *   faded out first; when false (first track of a session) we skip straight to a

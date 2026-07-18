@@ -18,7 +18,7 @@ identity id.
 | Area | Resources                                                                                |
 | ---- | ---------------------------------------------------------------------------------------- |
 | Auth | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
-| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`  |
+| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-playlists` and `*-user-settings`  |
 
 All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and named
 `sound-light-dev-*` by default (`${project}-${environment}` from `config/shared.json`).
@@ -38,7 +38,7 @@ infra/
 ├── variables.tf           # Reserved (inputs come from config/shared.json)
 ├── locals.tf              # Reads ../config/shared.json + name_prefix/tags
 ├── cognito.tf             # Identity pool, authenticated role, DynamoDB row policy
-├── dynamodb.tf            # mixes + user_settings tables (provisioned 12/12)
+├── dynamodb.tf            # playlists + user_settings tables (provisioned 12/12)
 ├── frontend_config.tf     # Writes ../src/config.generated.json from outputs
 ├── outputs.tf             # Outputs also mirrored into the generated JSON
 ├── scripts/               # Import existing resources; clean orphan Cognito pools
@@ -84,7 +84,7 @@ Remote state is stored in the **same bucket the deploy Action uses**:
 | Terraform output           | Field in `src/config.generated.json` |
 | -------------------------- | ------------------------------------ |
 | `cognito_identity_pool_id` | `cognitoIdentityPoolId`              |
-| `mixes_table_name`         | `mixesTable`                         |
+| `playlists_table_name`         | `playlistsTable`                         |
 | `user_settings_table_name` | `settingsTable`                      |
 | `aws_region`               | `awsRegion`                          |
 

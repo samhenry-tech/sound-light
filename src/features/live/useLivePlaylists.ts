@@ -1,8 +1,8 @@
-/** View-model for the Live grid: filter + search + pin-sort the GM's mixes. */
+/** View-model for the Live grid: filter + search + pin-sort the GM's playlists. */
 import { useMemo } from 'react';
 
-import { useMixes, useUserSettings } from '~api/hooks';
-import type { Mix } from '~shared/contract';
+import { usePlaylists, useUserSettings } from '~api/hooks';
+import type { Playlist } from '~shared/contract';
 import { usePlayerStore } from '~stores/playerStore';
 import { useUiStore } from '~stores/uiStore';
 import {
@@ -12,7 +12,7 @@ import {
   coverFor,
   DEFAULT_COLUMNS,
 } from '~theme/atmosphere';
-import { mixName } from '~utils/formatUtils';
+import { playlistName } from '~utils/formatUtils';
 
 export interface LiveCard {
   id: string;
@@ -27,37 +27,37 @@ export interface LiveCard {
   line2: string;
 }
 
-const toCard = (mix: Mix, combined: boolean, playingMixId: string | null): LiveCard => {
-  const name = mixName(mix.location, mix.atmosphere);
+const toCard = (playlist: Playlist, combined: boolean, playingPlaylistId: string | null): LiveCard => {
+  const name = playlistName(playlist.location, playlist.atmosphere);
   return {
-    id: mix.id,
-    location: mix.location,
-    atmosphere: mix.atmosphere,
+    id: playlist.id,
+    location: playlist.location,
+    atmosphere: playlist.atmosphere,
     name,
-    coverBg: coverFor(mix.atmosphere),
-    atmColor: atmosphereColor(mix.atmosphere),
-    pinned: mix.pinned,
-    isActive: mix.id === playingMixId,
-    line1: combined ? name : mix.location,
-    line2: combined ? '' : capitalize(mix.atmosphere),
+    coverBg: coverFor(playlist.atmosphere),
+    atmColor: atmosphereColor(playlist.atmosphere),
+    pinned: playlist.pinned,
+    isActive: playlist.id === playingPlaylistId,
+    line1: combined ? name : playlist.location,
+    line2: combined ? '' : capitalize(playlist.atmosphere),
   };
 };
 
-export const useLiveMixes = () => {
-  const { data: mixes = [], isLoading } = useMixes();
+export const useLivePlaylists = () => {
+  const { data: playlists = [], isLoading } = usePlaylists();
   const { data: userSettings } = useUserSettings();
   const liveQuery = useUiStore((s) => s.liveQuery);
   const liveFilter = useUiStore((s) => s.liveFilter);
-  const playingMixId = usePlayerStore((s) => s.playingMixId);
+  const playingPlaylistId = usePlayerStore((s) => s.playingPlaylistId);
 
   const combined = userSettings?.cardLabel === 'combined';
   const cols = userSettings?.columns ?? DEFAULT_COLUMNS;
 
   const cards = useMemo(() => {
     const q = liveQuery.trim().toLowerCase();
-    let list = [...mixes]
+    let list = [...playlists]
       .sort((a, b) => a.sortIndex - b.sortIndex)
-      .map((mix) => toCard(mix, combined, playingMixId));
+      .map((playlist) => toCard(playlist, combined, playingPlaylistId));
 
     if (q) {
       list = list.filter((c) =>
@@ -67,7 +67,7 @@ export const useLiveMixes = () => {
     if (liveFilter !== 'all') {
       list = list.filter((c) => c.atmosphere === liveFilter);
     }
-    // Pinned mixes float to the top only when not searching (stable sort).
+    // Pinned playlists float to the top only when not searching (stable sort).
     if (!q) {
       list = list
         .map((card, index) => ({ card, index }))
@@ -75,7 +75,7 @@ export const useLiveMixes = () => {
         .map(({ card }) => card);
     }
     return list;
-  }, [mixes, liveQuery, liveFilter, combined, playingMixId]);
+  }, [playlists, liveQuery, liveFilter, combined, playingPlaylistId]);
 
   return { cards, cols, isLoading };
 };

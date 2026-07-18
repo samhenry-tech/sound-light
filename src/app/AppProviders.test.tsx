@@ -49,7 +49,7 @@ describe('app integration (mocked auth + local data adapter)', () => {
     // Header search is present immediately.
     expect(screen.getByPlaceholderText(/search a location or vibe/i)).toBeInTheDocument();
 
-    // The seeded library includes several "Tavern" mixes.
+    // The seeded library includes several "Tavern" playlists.
     await waitFor(() => {
       expect(screen.getAllByText('Tavern').length).toBeGreaterThan(0);
     });

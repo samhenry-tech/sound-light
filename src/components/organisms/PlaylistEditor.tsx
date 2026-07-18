@@ -3,8 +3,8 @@ import { Icon } from '~components/atoms/Icon';
 import { Select } from '~components/molecules/Select';
 import { SourceRow } from '~components/molecules/SourceRow';
 import { TrackRow } from '~components/molecules/TrackRow';
-import type { MixEditorModel } from '~features/library/useMixEditor';
-import type { Mix } from '~shared/contract';
+import type { PlaylistEditorModel } from '~features/library/usePlaylistEditor';
+import type { Playlist } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
 import {
   type Atmosphere,
@@ -14,46 +14,46 @@ import {
   coverFor,
   LOCATIONS,
 } from '~theme/atmosphere';
-import { mixName } from '~utils/formatUtils';
+import { playlistName } from '~utils/formatUtils';
 
 import { BanishedPanel } from './BanishedPanel';
 import { SearchToAdd } from './SearchToAdd';
 
 const SECTION_LABEL = 'mb-2.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-faint';
 
-interface MixEditorProps {
-  mix: Mix;
-  model: MixEditorModel;
+interface PlaylistEditorProps {
+  playlist: Playlist;
+  model: PlaylistEditorModel;
 }
 
-/** The Library detail editor for one mix. */
-export const MixEditor = ({ mix, model }: MixEditorProps) => {
+/** The Library detail editor for one playlist. */
+export const PlaylistEditor = ({ playlist, model }: PlaylistEditorProps) => {
   const editorQuery = useUiStore((s) => s.editorQuery);
   const setEditorQuery = useUiStore((s) => s.setEditorQuery);
   const clearEditorQuery = useUiStore((s) => s.clearEditorQuery);
   const showBanished = useUiStore((s) => s.showBanished);
   const toggleBanished = useUiStore((s) => s.toggleBanished);
 
-  const name = mixName(mix.location, mix.atmosphere);
-  const dotColor = atmosphereColor(mix.atmosphere);
+  const name = playlistName(playlist.location, playlist.atmosphere);
+  const dotColor = atmosphereColor(playlist.atmosphere);
   const count = model.active.length + model.banished.length;
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div className="flex flex-shrink-0 items-center gap-[18px] border-b border-line-07 px-[26px] pb-4 pt-[22px]">
-        <GradientCover gradient={coverFor(mix.atmosphere)} width={64} height={64} radius={15} />
+        <GradientCover gradient={coverFor(playlist.atmosphere)} width={64} height={64} radius={15} />
         <div className="min-w-0 flex-1">
           <div className="mb-[9px] text-[22px] font-extrabold tracking-[-0.02em]">{name}</div>
           <div className="flex items-center gap-[9px]">
             <Select
-              value={mix.location}
+              value={playlist.location}
               options={LOCATIONS.map((l) => ({ value: l, label: l }))}
               onChange={model.actions.setLocation}
               ariaLabel="Location"
             />
             <span className="font-bold text-faint-2">—</span>
             <Select
-              value={mix.atmosphere}
+              value={playlist.atmosphere}
               options={ATMOSPHERES.map((a) => ({ value: a, label: capitalize(a) }))}
               onChange={(v) => model.actions.setAtmosphere(v as Atmosphere)}
               ariaLabel="Atmosphere"

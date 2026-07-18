@@ -8,7 +8,7 @@ no config change. Do not reintroduce the `@/` alias.
 
 ```ts
 import { Icon } from '~components/atoms/Icon';
-import { useMixes } from '~api/hooks';
+import { usePlaylists } from '~api/hooks';
 import { cn } from '~lib/cn';
 ```
 

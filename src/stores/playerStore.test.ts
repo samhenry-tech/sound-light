@@ -17,18 +17,18 @@ describe('playerStore', () => {
     usePlayerStore.getState().reset();
   });
 
-  it('starts a mix and dequeues in order', () => {
+  it('starts a playlist and dequeues in order', () => {
     const store = usePlayerStore.getState();
-    store.startMix({
-      playingMixId: 'mix-1',
-      mixName: 'Tavern – Ambient',
+    store.startPlaylist({
+      playingPlaylistId: 'playlist-1',
+      playlistName: 'Tavern – Ambient',
       atmosphere: 'ambient',
       coverBg: 'grad',
       current: track('t1'),
       queue: [track('t2'), track('t3')],
     });
 
-    expect(usePlayerStore.getState().playingMixId).toBe('mix-1');
+    expect(usePlayerStore.getState().playingPlaylistId).toBe('playlist-1');
     expect(usePlayerStore.getState().isPlaying).toBe(true);
     expect(usePlayerStore.getState().dequeue()?.uri).toBe('t2');
     expect(usePlayerStore.getState().dequeue()?.uri).toBe('t3');
@@ -46,8 +46,8 @@ describe('playerStore', () => {
 
   it('caps history length and prepends newest first', () => {
     const store = usePlayerStore.getState();
-    store.pushHistory({ track: track('a'), mixName: 'M', at: 1 });
-    store.pushHistory({ track: track('b'), mixName: 'M', at: 2 });
+    store.pushHistory({ track: track('a'), playlistName: 'M', at: 1 });
+    store.pushHistory({ track: track('b'), playlistName: 'M', at: 2 });
     expect(usePlayerStore.getState().history[0]?.track.uri).toBe('b');
   });
 });

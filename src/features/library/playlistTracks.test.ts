@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { MusicTrack, ResolvedSource } from '~music/types';
 
-import { buildQueue, effectiveTracks, pickFrom, splitByBanished } from './mixTracks';
+import { buildQueue, effectiveTracks, pickFrom, splitByBanished } from './playlistTracks';
 
 const track = (uri: string, title = uri): MusicTrack => {
   return { id: uri, uri, title, artist: 'Artist', durationMs: 200_000 };

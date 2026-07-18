@@ -2,12 +2,12 @@ import { clsx } from 'clsx';
 import { type KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useMixes } from '~api/hooks';
+import { usePlaylists } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { usePlayerActions } from '~features/player/PlayerContext';
 import { useUiStore } from '~stores/uiStore';
-import { mixName } from '~utils/formatUtils';
+import { playlistName } from '~utils/formatUtils';
 
 interface Command {
   id: string;
@@ -17,13 +17,13 @@ interface Command {
   run: () => void;
 }
 
-/** ⌘K command palette — jump to any mix or run an action. */
+/** ⌘K command palette — jump to any playlist or run an action. */
 export const CommandPalette = () => {
   const open = useUiStore((s) => s.paletteOpen);
   const setOpen = useUiStore((s) => s.setPaletteOpen);
   const setSettingsOpen = useUiStore((s) => s.setSettingsOpen);
   const toggleTableMode = useUiStore((s) => s.toggleTableMode);
-  const { data: mixes = [] } = useMixes();
+  const { data: playlists = [] } = usePlaylists();
   const actions = usePlayerActions();
   const navigate = useNavigate();
 
@@ -43,20 +43,20 @@ export const CommandPalette = () => {
       { id: 'table', label: 'Toggle table mode', icon: 'crop_free', run: toggleTableMode },
       { id: 'settings', label: 'Open settings', icon: 'tune', run: () => setSettingsOpen(true) },
     ];
-    const mixCommands: Command[] = mixes.map((m) => ({
-      id: `mix:${m.id}`,
-      label: mixName(m.location, m.atmosphere),
+    const playlistCommands: Command[] = playlists.map((m) => ({
+      id: `playlist:${m.id}`,
+      label: playlistName(m.location, m.atmosphere),
       hint: 'Play',
       icon: 'play_arrow',
       run: () => {
-        void actions.selectMix(m);
+        void actions.selectPlaylist(m);
         void navigate('/live');
       },
     }));
-    const all = [...commands, ...mixCommands];
+    const all = [...commands, ...playlistCommands];
     const q = query.trim().toLowerCase();
     return q ? all.filter((i) => i.label.toLowerCase().includes(q)) : all;
-  }, [mixes, query, actions, navigate, setSettingsOpen, toggleTableMode]);
+  }, [playlists, query, actions, navigate, setSettingsOpen, toggleTableMode]);
 
   const run = (cmd: Command) => {
     cmd.run();
@@ -89,7 +89,7 @@ export const CommandPalette = () => {
         <input
           autoFocus
           className="flex-1 border-none bg-transparent text-[16px] text-primary outline-none placeholder:text-muted-2"
-          placeholder="Jump to a mix or run a command…"
+          placeholder="Jump to a playlist or run a command…"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

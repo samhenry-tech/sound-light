@@ -18,7 +18,7 @@ export const COGNITO_IDENTITY_POOL_ID: string = appConfig.cognitoIdentityPoolId;
 /** AWS region hosting the identity pool + DynamoDB tables. */
 export const AWS_REGION = appConfig.awsRegion;
 
-export const MIXES_TABLE = appConfig.mixesTable;
+export const PLAYLISTS_TABLE = appConfig.playlistsTable;
 export const SETTINGS_TABLE = appConfig.settingsTable;
 
 /** The identity pool login-provider key for Google ID tokens. */

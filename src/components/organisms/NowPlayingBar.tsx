@@ -20,7 +20,7 @@ export const NowPlayingBar = () => {
       isPlaying: s.isPlaying,
       positionMs: s.positionMs,
       durationMs: s.durationMs,
-      mixName: s.mixName,
+      playlistName: s.playlistName,
       coverBg: s.coverBg,
       holding: s.holding,
       volume: s.volume,
@@ -45,7 +45,7 @@ export const NowPlayingBar = () => {
 
       <div className="w-[248px] min-w-0 flex-shrink-0">
         <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[17px] font-bold tracking-[-0.01em]">
-          {state.mixName || APP_NAME}
+          {state.playlistName || APP_NAME}
         </div>
         <div className="mt-px overflow-hidden text-ellipsis whitespace-nowrap text-[12.5px] text-muted">
           {state.current

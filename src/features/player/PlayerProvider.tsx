@@ -1,17 +1,17 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { type ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { useMixes, useUpdateMix } from '~api/hooks';
-import { buildQueue, effectiveTracks } from '~features/library/mixTracks';
+import { usePlaylists, useUpdatePlaylist } from '~api/hooks';
+import { buildQueue, effectiveTracks } from '~features/library/playlistTracks';
 import { musicKeys } from '~music/hooks/queryKeys';
 import { useMusicProvider } from '~music/MusicProviderContext';
 import type { MusicPlayer, MusicTrack } from '~music/types';
-import type { Mix } from '~shared/contract';
+import type { Playlist } from '~shared/contract';
 import { usePlayerStore } from '~stores/playerStore';
 import { useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
 import { coverFor } from '~theme/atmosphere';
-import { mixName } from '~utils/formatUtils';
+import { playlistName } from '~utils/formatUtils';
 
 import { type PlayerActions, PlayerContext } from './PlayerContext';
 import { fadeOutAndPause, transitionTo } from './transition';
@@ -27,14 +27,14 @@ const FIVE_MIN = 5 * 60_000;
 export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const provider = useMusicProvider();
   const qc = useQueryClient();
-  const updateMix = useUpdateMix();
-  const { data: mixes = [] } = useMixes();
+  const updatePlaylist = useUpdatePlaylist();
+  const { data: playlists = [] } = usePlaylists();
 
   const playerRef = useRef<MusicPlayer | null>(null);
-  /** Latest resolved track list for the playing mix (for queue rebuilds). */
+  /** Latest resolved track list for the playing playlist (for queue rebuilds). */
   const effectiveRef = useRef<MusicTrack[]>([]);
-  const mixesRef = useRef<Mix[]>(mixes);
-  mixesRef.current = mixes;
+  const playlistsRef = useRef<Playlist[]>(playlists);
+  playlistsRef.current = playlists;
   const holdRef = useRef<{ timer?: ReturnType<typeof setTimeout>; held: boolean }>({ held: false });
 
   const targetVolume = () => {
@@ -43,15 +43,15 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const resolveEffective = useCallback(
-    async (mix: Mix): Promise<MusicTrack[]> => {
+    async (playlist: Playlist): Promise<MusicTrack[]> => {
       const sources = await qc.fetchQuery({
-        queryKey: musicKeys.sources(provider.id, mix.sourceUris),
-        queryFn: () => provider.resolveSources(mix.sourceUris),
+        queryKey: musicKeys.sources(provider.id, playlist.sourceUris),
+        queryFn: () => provider.resolveSources(playlist.sourceUris),
         staleTime: FIVE_MIN,
       });
       const tracks = await qc.fetchQuery({
-        queryKey: musicKeys.tracks(provider.id, mix.trackUris),
-        queryFn: () => provider.resolveTracks(mix.trackUris),
+        queryKey: musicKeys.tracks(provider.id, playlist.trackUris),
+        queryFn: () => provider.resolveTracks(playlist.trackUris),
         staleTime: FIVE_MIN,
       });
       return effectiveTracks(sources, tracks);
@@ -59,7 +59,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     [qc, provider],
   );
 
-  const play = useCallback(async (track: MusicTrack, mixLabel: string, fadeOut: boolean) => {
+  const play = useCallback(async (track: MusicTrack, playlistLabel: string, fadeOut: boolean) => {
     const player = playerRef.current;
     if (!player) return;
     await transitionTo(
@@ -72,25 +72,25 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         // Flip the now-playing UI at the swap point (start of the fade-in).
         const store = usePlayerStore.getState();
         store.setCurrent(track);
-        store.pushHistory({ track, mixName: mixLabel, at: Date.now() });
+        store.pushHistory({ track, playlistName: playlistLabel, at: Date.now() });
       },
     );
   }, []);
 
-  const selectMix = useCallback(
-    async (mix: Mix) => {
-      // Crossfade out the previous mix only if something is already playing.
+  const selectPlaylist = useCallback(
+    async (playlist: Playlist) => {
+      // Crossfade out the previous playlist only if something is already playing.
       const wasPlaying = Boolean(usePlayerStore.getState().current);
-      const effective = await resolveEffective(mix);
+      const effective = await resolveEffective(playlist);
       effectiveRef.current = effective;
-      const queue = buildQueue(effective, mix.banishedTrackUris);
+      const queue = buildQueue(effective, playlist.banishedTrackUris);
       const [first, ...rest] = queue;
-      const label = mixName(mix.location, mix.atmosphere);
-      usePlayerStore.getState().startMix({
-        playingMixId: mix.id,
-        mixName: label,
-        atmosphere: mix.atmosphere,
-        coverBg: coverFor(mix.atmosphere),
+      const label = playlistName(playlist.location, playlist.atmosphere);
+      usePlayerStore.getState().startPlaylist({
+        playingPlaylistId: playlist.id,
+        playlistName: label,
+        atmosphere: playlist.atmosphere,
+        coverBg: coverFor(playlist.atmosphere),
         current: first ?? null,
         queue: rest,
       });
@@ -103,10 +103,10 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const advance = useCallback(
     async (opts?: { avoidUri?: string; toast?: string }) => {
       const store = usePlayerStore.getState();
-      const mixId = store.playingMixId;
-      if (!mixId) return;
-      const mix = mixesRef.current.find((m) => m.id === mixId);
-      const banished = mix?.banishedTrackUris ?? [];
+      const playlistId = store.playingPlaylistId;
+      if (!playlistId) return;
+      const playlist = playlistsRef.current.find((m) => m.id === playlistId);
+      const banished = playlist?.banishedTrackUris ?? [];
 
       let next = store.dequeue();
       if (!next) {
@@ -118,11 +118,11 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         usePlayerStore.getState().setQueue(reshuffled);
       }
       if (!next) {
-        useUiStore.getState().showToast('No tracks left in this mix');
+        useUiStore.getState().showToast('No tracks left in this playlist');
         return;
       }
-      // Advancing within a mix (skip / banish / track-ended) always crossfades.
-      await play(next, store.mixName, true);
+      // Advancing within a playlist (skip / banish / track-ended) always crossfades.
+      await play(next, store.playlistName, true);
       if (opts?.toast) useUiStore.getState().showToast(opts.toast);
     },
     [play],
@@ -135,15 +135,15 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   const banishCurrent = useCallback(() => {
     const store = usePlayerStore.getState();
     const current = store.current;
-    const mixId = store.playingMixId;
-    if (!current || !mixId) return;
-    const mix = mixesRef.current.find((m) => m.id === mixId);
-    const banishedTrackUris = [...(mix?.banishedTrackUris ?? []), current.uri];
-    updateMix.mutate({ id: mixId, input: { banishedTrackUris } });
+    const playlistId = store.playingPlaylistId;
+    if (!current || !playlistId) return;
+    const playlist = playlistsRef.current.find((m) => m.id === playlistId);
+    const banishedTrackUris = [...(playlist?.banishedTrackUris ?? []), current.uri];
+    updatePlaylist.mutate({ id: playlistId, input: { banishedTrackUris } });
     store.setQueue(store.queue.filter((t) => t.uri !== current.uri));
-    useUiStore.getState().showToast(`Banished “${current.title}” from ${store.mixName}`);
+    useUiStore.getState().showToast(`Banished “${current.title}” from ${store.playlistName}`);
     void advance({ avoidUri: current.uri });
-  }, [advance, updateMix]);
+  }, [advance, updatePlaylist]);
 
   const skip = useCallback(
     () =>
@@ -183,7 +183,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const like = useCallback(() => {
-    const { current, mixName: label } = usePlayerStore.getState();
+    const { current, playlistName: label } = usePlayerStore.getState();
     if (!current) return;
     useUiStore.getState().showToast(`Good fit — kept “${current.title}” in ${label}`);
   }, []);
@@ -210,19 +210,19 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const panic = useCallback(() => {
-    const { panicMixId } = useSettingsStore.getState();
-    const list = mixesRef.current;
+    const { panicPlaylistId } = useSettingsStore.getState();
+    const list = playlistsRef.current;
     const target =
-      (panicMixId ? list.find((m) => m.id === panicMixId) : undefined) ??
+      (panicPlaylistId ? list.find((m) => m.id === panicPlaylistId) : undefined) ??
       list.find((m) => m.atmosphere === 'battle' && m.location === 'General') ??
       list.find((m) => m.atmosphere === 'battle');
     if (!target) {
-      useUiStore.getState().showToast('No combat mix to panic to');
+      useUiStore.getState().showToast('No combat playlist to panic to');
       return;
     }
-    void selectMix(target);
+    void selectPlaylist(target);
     useUiStore.getState().showToast('⚔️ Combat!');
-  }, [selectMix]);
+  }, [selectPlaylist]);
 
   const banish = useCallback(() => banishCurrent(), [banishCurrent]);
 
@@ -270,7 +270,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
 
   const actions = useMemo<PlayerActions>(
     () => ({
-      selectMix,
+      selectPlaylist,
       togglePlay,
       skip,
       next,
@@ -287,7 +287,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
       cancelSleepTimer,
     }),
     [
-      selectMix,
+      selectPlaylist,
       togglePlay,
       skip,
       next,

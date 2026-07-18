@@ -19,7 +19,7 @@ export interface MusicTrack {
   artworkUrl?: string;
 }
 
-/** A playlist/album/collection added to a mix as a locked unit. */
+/** A playlist/album/collection added to a playlist as a locked unit. */
 export interface MusicSource {
   id: string;
   uri: string;
@@ -34,7 +34,7 @@ export interface ResolvedSource extends MusicSource {
   tracks: MusicTrack[];
 }
 
-/** Mixed search results — tracks and whole sources, as the prototype shows. */
+/** Playlisted search results — tracks and whole sources, as the prototype shows. */
 export interface MusicSearchResults {
   tracks: MusicTrack[];
   sources: MusicSource[];

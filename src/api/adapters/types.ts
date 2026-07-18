@@ -1,7 +1,7 @@
 import type {
-  CreateMixInput,
-  Mix,
-  UpdateMixInput,
+  CreatePlaylistInput,
+  Playlist,
+  UpdatePlaylistInput,
   UpdateUserSettingsInput,
   UserSettings,
 } from '~shared/contract';
@@ -21,10 +21,10 @@ export interface DataContext {
  * `ctx.owner`.
  */
 export interface DataAdapter {
-  listMixes(ctx: DataContext): Promise<Mix[]>;
-  createMix(ctx: DataContext, input: CreateMixInput): Promise<Mix>;
-  updateMix(ctx: DataContext, id: string, input: UpdateMixInput): Promise<Mix>;
-  deleteMix(ctx: DataContext, id: string): Promise<void>;
+  listPlaylists(ctx: DataContext): Promise<Playlist[]>;
+  createPlaylist(ctx: DataContext, input: CreatePlaylistInput): Promise<Playlist>;
+  updatePlaylist(ctx: DataContext, id: string, input: UpdatePlaylistInput): Promise<Playlist>;
+  deletePlaylist(ctx: DataContext, id: string): Promise<void>;
   getSettings(ctx: DataContext): Promise<UserSettings>;
   updateSettings(ctx: DataContext, input: UpdateUserSettingsInput): Promise<UserSettings>;
 }

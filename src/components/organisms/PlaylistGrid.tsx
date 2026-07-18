@@ -1,9 +1,9 @@
 import { Spinner } from '~components/atoms/Spinner';
-import type { LiveCard } from '~features/live/useLiveMixes';
+import type { LiveCard } from '~features/live/useLivePlaylists';
 
-import { MixCard } from './MixCard';
+import { PlaylistCard } from './PlaylistCard';
 
-interface MixGridProps {
+interface PlaylistGridProps {
   cards: LiveCard[];
   cols: number;
   isLoading?: boolean;
@@ -12,7 +12,7 @@ interface MixGridProps {
 }
 
 /** The scrolling grid of Live vibe cards. */
-export const MixGrid = ({ cards, cols, isLoading, onSelect, onTogglePin }: MixGridProps) => {
+export const PlaylistGrid = ({ cards, cols, isLoading, onSelect, onTogglePin }: PlaylistGridProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center p-[60px]">
@@ -23,7 +23,7 @@ export const MixGrid = ({ cards, cols, isLoading, onSelect, onTogglePin }: MixGr
   if (cards.length === 0) {
     return (
       <div className="p-10 text-center text-[13.5px] text-muted-2">
-        No mixes match — try another vibe or clear the search.
+        No playlists match — try another vibe or clear the search.
       </div>
     );
   }
@@ -33,7 +33,7 @@ export const MixGrid = ({ cards, cols, isLoading, onSelect, onTogglePin }: MixGr
       style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
     >
       {cards.map((card) => (
-        <MixCard
+        <PlaylistCard
           key={card.id}
           card={card}
           onSelect={() => onSelect(card.id)}

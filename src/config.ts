@@ -22,7 +22,7 @@ export const appConfig = {
   /** AWS region hosting the identity pool + DynamoDB tables. */
   awsRegion: generated.awsRegion,
 
-  mixesTable: generated.mixesTable,
+  playlistsTable: generated.playlistsTable,
   settingsTable: generated.settingsTable,
 
   /** The identity pool login-provider key for Google ID tokens. */

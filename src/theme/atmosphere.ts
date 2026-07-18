@@ -1,7 +1,7 @@
 /**
  * Atmosphere + accent design data.
  *
- * These values are data-driven (chosen per-mix / per-user at runtime) so they
+ * These values are data-driven (chosen per-playlist / per-user at runtime) so they
  * live as TypeScript constants rather than static CSS variables. Sourced
  * verbatim from the Soundlight design handoff.
  */
@@ -37,7 +37,7 @@ export const ATMOSPHERE_COVERS: Record<Atmosphere, string> = {
   loss: 'linear-gradient(150deg,#272340,#14111f)',
 };
 
-/** GM-facing locations used to name a mix ("{location} – {Atmosphere}"). */
+/** GM-facing locations used to name a playlist ("{location} – {Atmosphere}"). */
 export const LOCATIONS = [
   'General',
   'Tavern',

@@ -1,5 +1,5 @@
 /** Generate a stable unique id. Uses the platform crypto UUID where available. */
-export const createId = (prefix = 'mix'): string => {
+export const createId = (prefix = 'playlist'): string => {
   const uuid =
     typeof crypto !== 'undefined' && 'randomUUID' in crypto
       ? crypto.randomUUID()

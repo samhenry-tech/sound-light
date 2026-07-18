@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Import already-provisioned AWS resources into Terraform state when the remote
 # state object is empty (first run after enabling the shared-bucket backend, or
-# recovery). No-ops once `aws_dynamodb_table.mixes` is already in state.
+# recovery). No-ops whenever state already has ANY resources, so it stays safe
+# across resource renames (e.g. mixes -> playlists) where the plan handles the
+# create/destroy itself.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -22,7 +24,7 @@ print(
 PY
 )
 
-if terraform state list 2>/dev/null | grep -q '^aws_dynamodb_table\.mixes$'; then
+if [ -n "$(terraform state list 2>/dev/null)" ]; then
   echo "Terraform state already contains resources — skipping import"
   exit 0
 fi
@@ -46,7 +48,7 @@ if ! aws cognito-identity describe-identity-pool \
   echo "  Using pool: ${POOL_ID}"
 fi
 
-terraform import -input=false aws_dynamodb_table.mixes "${PREFIX}-mixes"
+terraform import -input=false aws_dynamodb_table.playlists "${PREFIX}-playlists"
 terraform import -input=false aws_dynamodb_table.user_settings "${PREFIX}-user-settings"
 terraform import -input=false aws_cognito_identity_pool.main "$POOL_ID"
 terraform import -input=false aws_iam_role.authenticated "${PREFIX}-authenticated"

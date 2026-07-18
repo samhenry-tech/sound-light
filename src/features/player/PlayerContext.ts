@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import type { Mix } from '~shared/contract';
+import type { Playlist } from '~shared/contract';
 
 /** Imperative player actions exposed to the UI. State is read from the stores. */
 export interface PlayerActions {
-  /** Crossfade into a mix: resolve tracks, build a shuffled queue, play. */
-  selectMix: (mix: Mix) => Promise<void>;
+  /** Crossfade into a playlist: resolve tracks, build a shuffled queue, play. */
+  selectPlaylist: (playlist: Playlist) => Promise<void>;
   togglePlay: () => void;
   /** 👎 tap — fade out and skip to the next track. */
   skip: () => void;
@@ -13,7 +13,7 @@ export interface PlayerActions {
   next: () => void;
   /** 👍 — mark the current track a good fit. */
   like: () => void;
-  /** Banish the current track from this mix (keyboard / palette equivalent of hold). */
+  /** Banish the current track from this playlist (keyboard / palette equivalent of hold). */
   banish: () => void;
   /** Pointer-down on 👎 — begins the hold-to-banish timer. */
   startHold: () => void;
@@ -24,7 +24,7 @@ export interface PlayerActions {
   seek: (positionMs: number) => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
-  /** Instantly crossfade to the campaign's combat mix. */
+  /** Instantly crossfade to the campaign's combat playlist. */
   panic: () => void;
   /** Start a sleep timer that fades out + pauses after `minutes`. */
   startSleepTimer: (minutes: number) => void;

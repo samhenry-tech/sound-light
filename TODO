@@ -1,4 +1,4 @@
 ☐ fully remove VITE_SPOTIFY_MOCK=true
 ☐ update all settings titles to be domain agnostic where it makes sense
 ☐ Remove the "Panic" button feature completely
-☐ Rename Mixes to something else
+☒ Rename Mixes to Playlists

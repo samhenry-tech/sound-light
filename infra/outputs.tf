@@ -10,9 +10,9 @@ output "cognito_identity_pool_id" {
   value       = aws_cognito_identity_pool.main.id
 }
 
-output "mixes_table_name" {
-  description = "DynamoDB mixes table name. Written to src/config.generated.json."
-  value       = aws_dynamodb_table.mixes.name
+output "playlists_table_name" {
+  description = "DynamoDB playlists table name. Written to src/config.generated.json."
+  value       = aws_dynamodb_table.playlists.name
 }
 
 output "user_settings_table_name" {

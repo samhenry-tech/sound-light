@@ -4,20 +4,20 @@
  */
 import { APP_NAME } from '~constants';
 import {
-  createMixInputSchema,
+  createPlaylistInputSchema,
   DEFAULT_SETTINGS,
-  type Mix,
-  updateMixInputSchema,
+  type Playlist,
+  updatePlaylistInputSchema,
   updateUserSettingsInputSchema,
   type UserSettings,
 } from '~shared/contract';
 import { createId } from '~utils/idUtils';
 
-import { getSeedMixes } from '../seed';
+import { getSeedPlaylists } from '../seed';
 import type { DataAdapter, DataContext } from './types';
 
 interface LocalStore {
-  mixes: Mix[];
+  playlists: Playlist[];
   settings: UserSettings | null;
 }
 
@@ -34,7 +34,7 @@ const read = (owner: string): LocalStore => {
   } catch {
     // fall through to seed
   }
-  const seeded: LocalStore = { mixes: getSeedMixes(owner), settings: null };
+  const seeded: LocalStore = { playlists: getSeedPlaylists(owner), settings: null };
   write(owner, seeded);
   return seeded;
 };
@@ -44,45 +44,45 @@ const defaultSettings = (owner: string): UserSettings => {
 };
 
 export const localAdapter: DataAdapter = {
-  listMixes({ owner }: DataContext) {
+  listPlaylists({ owner }: DataContext) {
     return Promise.resolve(
       read(owner)
-        .mixes.slice()
+        .playlists.slice()
         .sort((a, b) => a.sortIndex - b.sortIndex),
     );
   },
 
-  createMix({ owner }: DataContext, input) {
+  createPlaylist({ owner }: DataContext, input) {
     const store = read(owner);
-    const values = createMixInputSchema.parse(input);
+    const values = createPlaylistInputSchema.parse(input);
     const now = new Date().toISOString();
-    const mix: Mix = {
+    const playlist: Playlist = {
       ...values,
       id: createId(),
       owner,
-      sortIndex: store.mixes.length,
+      sortIndex: store.playlists.length,
       createdAt: now,
       updatedAt: now,
     };
-    store.mixes.push(mix);
+    store.playlists.push(playlist);
     write(owner, store);
-    return Promise.resolve(mix);
+    return Promise.resolve(playlist);
   },
 
-  updateMix({ owner }: DataContext, id, input) {
+  updatePlaylist({ owner }: DataContext, id, input) {
     const store = read(owner);
-    const patch = updateMixInputSchema.parse(input);
-    const index = store.mixes.findIndex((m) => m.id === id);
-    if (index === -1) return Promise.reject(new Error(`Mix ${id} not found`));
-    const updated: Mix = { ...store.mixes[index]!, ...patch, updatedAt: new Date().toISOString() };
-    store.mixes[index] = updated;
+    const patch = updatePlaylistInputSchema.parse(input);
+    const index = store.playlists.findIndex((m) => m.id === id);
+    if (index === -1) return Promise.reject(new Error(`Playlist ${id} not found`));
+    const updated: Playlist = { ...store.playlists[index]!, ...patch, updatedAt: new Date().toISOString() };
+    store.playlists[index] = updated;
     write(owner, store);
     return Promise.resolve(updated);
   },
 
-  deleteMix({ owner }: DataContext, id) {
+  deletePlaylist({ owner }: DataContext, id) {
     const store = read(owner);
-    store.mixes = store.mixes.filter((m) => m.id !== id);
+    store.playlists = store.playlists.filter((m) => m.id !== id);
     write(owner, store);
     return Promise.resolve();
   },
