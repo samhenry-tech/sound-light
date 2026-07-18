@@ -15,13 +15,13 @@ identity id.
 
 ## What this provisions
 
-| Area      | Resources                                                                                |
-| --------- | ---------------------------------------------------------------------------------------- |
-| Auth      | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
-| Data      | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`     |
+| Area | Resources                                                                                |
+| ---- | ---------------------------------------------------------------------------------------- |
+| Auth | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
+| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`  |
 
 All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and named
-`sound-light-dev-*` by default (`${var.project}-${var.environment}`).
+`sound-light-dev-*` by default (`${project}-${environment}` from `config/shared.json`).
 
 > **Hosting is not managed here.** The SPA is published to the shared
 > `projects.samhenry.tech` S3 bucket + CloudFront distribution by
@@ -32,52 +32,51 @@ All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and 
 
 ```
 infra/
-├── versions.tf            # Terraform / provider version pins
+├── versions.tf            # Terraform / provider version pins (aws + local)
 ├── providers.tf           # AWS provider + (commented) S3 backend
 ├── backend.tf.example     # Remote-state setup, copy into providers.tf to enable
-├── variables.tf           # All input variables
-├── locals.tf              # name_prefix + common tags
+├── variables.tf           # Reserved (inputs come from config/shared.json)
+├── locals.tf              # Reads ../config/shared.json + name_prefix/tags
 ├── cognito.tf             # Identity pool, authenticated role, DynamoDB row policy
 ├── dynamodb.tf            # mixes + user_settings tables (provisioned 12/12)
-├── outputs.tf             # Outputs consumed by the frontend
+├── frontend_config.tf     # Writes ../src/config.generated.json from outputs
+├── outputs.tf             # Outputs also mirrored into the generated JSON
 └── terraform.tfvars.example
 ```
 
 ## Prerequisites
 
 - Terraform >= 1.6, AWS credentials with permission to create the above.
-- A Google OAuth 2.0 **Web application** client ID (`google_client_id`,
-  required). No client secret is needed. Register your app origins
-  (`http://localhost:3000` and the production URL) as **authorised JavaScript
-  origins** on that client.
+- Public inputs in [`config/shared.json`](../config/shared.json) (Google OAuth
+  Web client id, region, project/environment naming). No client secret is
+  needed. Register your app origins (`http://localhost:3000` and the
+  production URL) as **authorised JavaScript origins** on that Google client.
 
 ## Quick start (local)
 
 ```bash
-cd infra
-cp terraform.tfvars.example terraform.tfvars   # edit values
+# Edit shared inputs if needed
+$EDITOR ../config/shared.json
 
+cd infra
 terraform init
-terraform apply
+terraform apply   # also refreshes ../src/config.generated.json
 ```
 
-## Feeding the outputs back to the frontend
+## Shared config ↔ frontend
 
-After `terraform apply`, wire `terraform output` values into the SPA's env
-(`.env.local` for dev, GitHub **Variables** for the deploy workflow):
+| Source                      | Read by                        | Purpose                                 |
+| --------------------------- | ------------------------------ | --------------------------------------- |
+| `config/shared.json`        | Terraform (`locals.tf`) + Vite | Hand-edited public inputs               |
+| `src/config.generated.json` | Vite (`src/config.ts`)         | Written by Terraform apply from outputs |
 
-| Terraform output           | Frontend env var                |
-| -------------------------- | ------------------------------- |
-| `cognito_identity_pool_id` | `VITE_COGNITO_IDENTITY_POOL_ID` |
-
-`VITE_GOOGLE_CLIENT_ID` is the same Google client ID passed to Terraform as
-`google_client_id`.
-
-The AWS region and DynamoDB table names are **not** env vars — they are
-hardcoded in `src/auth/awsConfig.ts` (they never change between environments).
-If you change `project`/`environment`/`region` in Terraform, update those
-constants to match.
+| Terraform output           | Field in `src/config.generated.json` |
+| -------------------------- | ------------------------------------ |
+| `cognito_identity_pool_id` | `cognitoIdentityPoolId`              |
+| `mixes_table_name`         | `mixesTable`                         |
+| `user_settings_table_name` | `settingsTable`                      |
+| `aws_region`               | `awsRegion`                          |
 
 See [`IMPLEMENTATION_NOTES.md`](./IMPLEMENTATION_NOTES.md) for the full operator
-runbook: Google OAuth setup and every GitHub `vars`/`secrets` name the
-workflows reference.
+runbook: Google OAuth setup and every GitHub `secrets` name the workflows
+reference.

@@ -9,11 +9,7 @@ import {
 import { destroyDynamoClientCache } from '~api/dynamoClient';
 
 import { type AuthSession, AuthSessionContext, type AuthUser } from './AuthSessionContext';
-import {
-  AWS_REGION,
-  COGNITO_IDENTITY_POOL_ID,
-  GOOGLE_LOGIN_PROVIDER,
-} from './awsConfig';
+import { AWS_REGION, COGNITO_IDENTITY_POOL_ID, GOOGLE_LOGIN_PROVIDER } from './awsConfig';
 import { decodeGoogleIdToken, isGoogleIdTokenExpired } from './googleIdentity';
 import {
   beginGoogleLogin,
@@ -246,7 +242,5 @@ export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
     [state, loginWithGoogleCode, logout],
   );
 
-  return (
-    <AuthSessionContext.Provider value={session}>{children}</AuthSessionContext.Provider>
-  );
+  return <AuthSessionContext.Provider value={session}>{children}</AuthSessionContext.Provider>;
 };

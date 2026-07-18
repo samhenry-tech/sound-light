@@ -1,12 +1,14 @@
 /**
- * Spotify app configuration (app name: "sound-light", client id a35ad…).
+ * Spotify app configuration (app name: "sound-light").
  *
  * The client id is a public identifier; the app uses the Authorization Code
- * flow with PKCE so there is NO client secret in the browser.
+ * flow with PKCE so there is NO client secret in the browser. Values come
+ * from {@link appConfig} (`src/config.ts`).
  */
 
-export const SPOTIFY_CLIENT_ID =
-  import.meta.env.VITE_SPOTIFY_CLIENT_ID ?? 'a35ad70cf30442f0a53ba22a95e85c8e';
+import { appConfig } from '~config';
+
+export const SPOTIFY_CLIENT_ID = appConfig.spotifyClientId;
 
 /**
  * Redirect URI for the Spotify Authorization Code flow, derived from the
@@ -20,9 +22,9 @@ export const SPOTIFY_REDIRECT_URI = `${window.location.origin}/auth/spotify/`;
 /**
  * When mock mode is on, the Library search + playback are served by the bundled
  * catalog instead of the real Spotify Web API / Web Playback SDK (no Premium
- * account required). Default ON unless explicitly set to "false".
+ * account required). On in non-production builds; off for `vite build` / deploy.
  */
-export const IS_SPOTIFY_MOCK = (import.meta.env.VITE_SPOTIFY_MOCK ?? 'true') !== 'false';
+export const IS_SPOTIFY_MOCK = appConfig.spotifyMock;
 
 export const SPOTIFY_SCOPES = [
   'streaming',

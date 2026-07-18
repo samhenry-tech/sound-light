@@ -1,7 +1,7 @@
 /**
  * A bundled mock Spotify catalog, ported verbatim from the design prototype's
  * `spotifySources` / `extraTracks`. Powers offline development and demos when
- * `VITE_SPOTIFY_MOCK` is on. Real URIs are synthesized deterministically so the
+ * Spotify mock mode is on. Real URIs are synthesized deterministically so the
  * same seed data round-trips through the data layer.
  */
 import type { Atmosphere } from '~theme/atmosphere';

@@ -34,8 +34,7 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-With no `.env`, the app runs **offline**: a localStorage data store seeded with
-the prototype's starter library, and a bundled mock Spotify catalog + player (no
+In development the app uses the bundled mock Spotify catalog + player (no
 account or Premium needed). The dev server is pinned to **port 3000** because
 that's what the Spotify app's redirect URIs are registered against.
 
@@ -54,24 +53,27 @@ that's what the Spotify app's redirect URIs are registered against.
 
 ## Configuration
 
-Copy `.env.example` → `.env.local`. Only two identity vars are **required** —
-the app throws a descriptive error at startup if either is missing (there is no
-offline/localStorage mode). Fixed infra values (AWS region, DynamoDB table
-names) and the OAuth redirect URIs (derived from the browser's origin) live in
-code, not env — see `src/auth/awsConfig.ts` and the `*config.ts` files.
+Public config is split across two JSON files (nothing secret — these ship in
+the SPA bundle):
 
-| Var                             | Purpose                                                            |
-| ------------------------------- | ------------------------------------------------------------------ |
-| `VITE_GOOGLE_CLIENT_ID`         | Google OAuth Web client id (Sign in with Google). Required.        |
-| `VITE_COGNITO_IDENTITY_POOL_ID` | Cognito Identity Pool id (`terraform output`). Required.           |
-| `VITE_SPOTIFY_CLIENT_ID`        | Spotify app client id (ships with the `sound-light` app's id).     |
-| `VITE_SPOTIFY_MOCK`             | `true` (default) uses the mock catalog; `false` uses real Spotify. |
-| `VITE_MUSIC_PROVIDER`           | Active music backend (`spotify`).                                  |
+| File                                                     | Owner           | Contents                                                                            |
+| -------------------------------------------------------- | --------------- | ----------------------------------------------------------------------------------- |
+| [`config/shared.json`](config/shared.json)               | Hand-edited     | Inputs both Terraform and Vite read (project, region, Google/Spotify client ids, …) |
+| [`src/config.generated.json`](src/config.generated.json) | Terraform apply | Outputs the SPA needs (Cognito pool id, table names, region)                        |
+
+[`src/config.ts`](src/config.ts) assembles those files and adds SPA-only flags
+(Spotify mock follows Vite `PROD`). OAuth redirect URIs are derived from the
+browser origin at runtime. After `terraform apply`, `src/config.generated.json`
+is refreshed automatically (CI commits it on `main`).
 
 ## Architecture
 
 ```
+config/
+  shared.json     Public inputs shared by Terraform + the Vite SPA
 src/
+  config.ts       Assembles shared + generated JSON (+ SPA-only flags)
+  config.generated.json  Terraform outputs for the SPA (do not hand-edit)
   app/            Composition root, router, providers (Query, Theme, Auth, Player)
   music/          ⟵ Provider-agnostic interface (MusicProvider/MusicPlayer) + hooks
   spotify/        ⟵ The Spotify implementation of MusicProvider (its own folder)
@@ -144,11 +146,9 @@ Deploy and operate per **[`infra/IMPLEMENTATION_NOTES.md`](infra/IMPLEMENTATION_
 - **terraform** — plan on PRs (posted as a comment), apply on `main`.
 
 The deploy/terraform workflows authenticate to AWS with the **org-provided
-credentials** (`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` org secrets for
-`samhenry-tech` public repos). Build-time `VITE_*` values come from repo
-Variables. _(Other `samhenry-tech` repos couldn't be read from this environment,
-so the workflows follow current best practices rather than copying an existing
-one — adjust to match your conventions if needed.)_
+OIDC deploy role**. Public SPA config comes from `config/shared.json` +
+`src/config.generated.json` — no GitHub Variables are required for the
+frontend deploy.
 
 ## Keyboard shortcuts
 

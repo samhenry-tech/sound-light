@@ -1,24 +1,27 @@
 name: Terraform
 
-# Plan on pull requests, apply on push to main. Only triggers on infra changes
-# (and manual dispatch).
+# Plan on pull requests, apply on push to main. Only triggers on infra / shared
+# config changes (and manual dispatch).
 on:
   pull_request:
     paths:
       - infra/**
+      - config/**
       - .github/workflows/terraform.yml
   push:
     branches:
       - main
     paths:
       - infra/**
+      - config/**
       - .github/workflows/terraform.yml
   workflow_dispatch:
 
 # id-token:write is required for OIDC auth when assuming the AWS deploy role.
 # pull-requests:write so plan output can be posted as a comment.
+# contents:write so apply can commit the refreshed src/config.generated.json.
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   id-token: write
 
@@ -27,10 +30,6 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Google OAuth client id consumed by Terraform as a TF_VAR_* env var
-  # (see variables.tf: google_client_id). No client secret is needed —
-  # the identity pool verifies Google ID tokens directly.
-  TF_VAR_google_client_id: ${{ secrets.TF_VAR_google_client_id }}
   AWS_REGION: ap-southeast-2
 
 jobs:
@@ -109,3 +108,19 @@ jobs:
       - name: Terraform apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform -chdir=infra apply -auto-approve -input=false tfplan
+
+      # Keep the SPA's generated config in sync with Terraform outputs.
+      - name: Commit generated frontend config
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # local_file writes compact JSON; normalize to pretty form for stable diffs.
+          python3 -c 'import json, pathlib; p = pathlib.Path("src/config.generated.json"); p.write_text(json.dumps(json.loads(p.read_text()), indent=2) + "\n")'
+          git add src/config.generated.json
+          if git diff --staged --quiet; then
+            echo "src/config.generated.json unchanged"
+          else
+            git commit -m "chore: sync src/config.generated.json from terraform"
+            git push
+          fi

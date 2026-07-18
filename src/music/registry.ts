@@ -1,13 +1,15 @@
 /**
  * Provider registry. Today the only backend is Spotify, but selection is
  * centralized here so adding Apple Music / YouTube / local files is a one-line
- * change and the active provider can be chosen by env or, later, user setting.
+ * change and the active provider can be chosen in `src/config.ts` or, later,
+ * by user setting.
  */
+import { appConfig, type MusicProviderId } from '~config';
 import { createSpotifyMusicProvider } from '~spotify/provider';
 
 import type { MusicProvider } from './types';
 
-export type MusicProviderId = 'spotify';
+export type { MusicProviderId };
 
 const factories: Record<MusicProviderId, () => MusicProvider> = {
   spotify: createSpotifyMusicProvider,
@@ -15,7 +17,6 @@ const factories: Record<MusicProviderId, () => MusicProvider> = {
 
 /** Build the active music provider for this session. */
 export const createActiveMusicProvider = (): MusicProvider => {
-  const id = (import.meta.env.VITE_MUSIC_PROVIDER as MusicProviderId | undefined) ?? 'spotify';
-  const factory = factories[id] ?? factories.spotify;
+  const factory = factories[appConfig.musicProvider] ?? factories.spotify;
   return factory();
 };

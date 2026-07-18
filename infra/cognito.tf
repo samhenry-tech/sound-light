@@ -14,7 +14,7 @@ resource "aws_cognito_identity_pool" "main" {
   # Google is the only login provider. The value is the Google OAuth client id;
   # no client secret is needed for identity-pool federation.
   supported_login_providers = {
-    "accounts.google.com" = var.google_client_id
+    "accounts.google.com" = local.google_client_id
   }
 
   tags = local.tags

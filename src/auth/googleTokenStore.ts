@@ -6,8 +6,7 @@ const REFRESH_TOKEN_KEY = `${APP_NAME}.auth.googleRefreshToken`;
 
 export const readStoredIdToken = (): string | null => localStorage.getItem(ID_TOKEN_KEY);
 
-export const readStoredRefreshToken = (): string | null =>
-  localStorage.getItem(REFRESH_TOKEN_KEY);
+export const readStoredRefreshToken = (): string | null => localStorage.getItem(REFRESH_TOKEN_KEY);
 
 export const persistAuthTokens = (idToken: string, refreshToken?: string): void => {
   localStorage.setItem(ID_TOKEN_KEY, idToken);
