@@ -58,10 +58,19 @@ infra/
 # Edit shared inputs if needed
 $EDITOR ../config/shared.json
 
+# From repo root — one-time: create the remote state bucket + lock table (also done by CI)
+./infra/scripts/ensure_remote_state.sh
+
 cd infra
 terraform init
+# If state is empty but AWS resources already exist (legacy local-backend CI):
+../infra/scripts/import_existing.sh
 terraform apply   # also refreshes ../src/config.generated.json
 ```
+
+Remote state lives in `s3://sound-light-tfstate-904581404707` (see `providers.tf`).
+A local backend must not be used in CI — each job would start empty and try to
+recreate every resource.
 
 ## Shared config ↔ frontend
 

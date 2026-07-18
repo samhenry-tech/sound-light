@@ -69,6 +69,26 @@ jobs:
       - name: Upload to S3
         run: aws s3 sync dist/ "s3://${{ env.S3_BUCKET }}/${{ env.S3_FOLDER }}/" --delete --region ${{ env.AWS_REGION }}
 
+      - name: Verify deployed SPA
+        # CloudFront may geo-restrict this runner, so validate the bucket
+        # contents directly (index + Cognito pool id baked into the JS bundle).
+        run: |
+          set -euo pipefail
+          aws s3api head-object \
+            --bucket "${{ env.S3_BUCKET }}" \
+            --key "${{ env.S3_FOLDER }}/index.html" >/dev/null
+          POOL_ID="$(python3 -c 'import json; print(json.load(open("src/config.generated.json"))["cognitoIdentityPoolId"])')"
+          JS_KEY="$(
+            aws s3api list-objects-v2 \
+              --bucket "${{ env.S3_BUCKET }}" \
+              --prefix "${{ env.S3_FOLDER }}/assets/" \
+              --query "reverse(sort_by(Contents[?ends_with(Key, '.js') && !ends_with(Key, '.map') && contains(Key, '/index-')], &LastModified))[0].Key" \
+              --output text
+          )"
+          echo "Checking s3://${{ env.S3_BUCKET }}/${JS_KEY} for Cognito pool ${POOL_ID}"
+          aws s3 cp "s3://${{ env.S3_BUCKET }}/${JS_KEY}" - | grep -F -q "$POOL_ID"
+          echo "Deploy verification OK"
+
       - name: Invalidate CloudFront
         # The distribution serves this app at its own host root, so invalidate
         # from root.

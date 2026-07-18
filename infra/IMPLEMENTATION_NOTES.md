@@ -33,7 +33,8 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 | File                       | Purpose                                                                                   |
 | -------------------------- | ----------------------------------------------------------------------------------------- |
 | `versions.tf`              | `required_version >= 1.6`; pins AWS `~> 5.0` + local `~> 2.5`.                            |
-| `providers.tf`             | AWS provider (region from shared JSON, `default_tags`); commented `backend "s3"`.         |
+| `providers.tf`             | AWS provider + **S3 remote backend** (`sound-light-tfstate-904581404707`).                |
+| `scripts/*.sh`             | Bootstrap state bucket, import existing resources, delete orphan Cognito pools.           |
 | `backend.tf.example`       | Drop-in remote-state config + out-of-band bucket/lock-table creation commands.            |
 | `variables.tf`             | Reserved — public inputs come from `config/shared.json`.                                  |
 | `locals.tf`                | `jsondecode(file("../config/shared.json"))` + `name_prefix` / tags.                       |
