@@ -9,7 +9,8 @@ import { AppProviders } from './AppProviders';
 // Auth always requires Google + Cognito now, so the provider is replaced with
 // a pre-authenticated session; the DynamoDB adapter is swapped for the
 // localStorage adapter (which seeds the starter library). Everything else —
-// query client, theme, player, mock music provider — runs for real.
+// query client, theme, player, Spotify provider — runs for real (no network is
+// hit rendering the Live grid).
 vi.mock('~auth/AppAuthProvider', async () => {
   const { AuthSessionContext } = await import('~auth/AuthSessionContext');
   const session = {

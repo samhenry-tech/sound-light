@@ -1,4 +1,4 @@
-/** Real Spotify Web API operations (used when mock mode is off). */
+/** Real Spotify Web API operations. */
 import {
   mapResolvedSource,
   mapSearchResults,

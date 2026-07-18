@@ -34,13 +34,6 @@ export const appConfig = {
    */
   spotifyClientId: shared.spotifyClientId,
 
-  /**
-   * Use the bundled mock Spotify catalog/player outside production builds
-   * (no Premium account required). `vite build` sets PROD=true so deploys
-   * hit the real Spotify API.
-   */
-  spotifyMock: !import.meta.env.PROD,
-
   /** Active music backend implementing the MusicProvider interface. */
   musicProvider: shared.musicProvider as MusicProviderId,
 } as const;

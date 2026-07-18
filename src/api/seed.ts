@@ -1,10 +1,9 @@
 /**
- * Starter library used by the local (offline) data adapter on first run — a
- * faithful port of the prototype's `buildPlaylists`, pins, and banished tracks,
- * so a fresh offline session looks exactly like the design reference.
+ * Starter library used by the local data adapter (test double) on first run.
+ * Ports the prototype's location/atmosphere cards and pins; tracks start empty
+ * and are populated by the GM from real Spotify.
  */
 import type { Playlist } from '~shared/contract';
-import { MOCK_SOURCE_URIS_BY_ATMOSPHERE, mockTrackUri } from '~spotify/mock/catalog';
 import type { Atmosphere } from '~theme/atmosphere';
 
 type Def = [id: string, location: string, atmosphere: Atmosphere];
@@ -34,11 +33,6 @@ const DEFS: Def[] = [
 
 const PINNED = new Set(['general-ambient', 'general-battle', 'tavern-ambient']);
 
-const BANISHED: Record<string, string[]> = {
-  'tavern-ambient': ['Rain on the Tent'],
-  'general-battle': ['Unrelenting'],
-};
-
 export const getSeedPlaylists = (owner: string): Playlist[] => {
   const now = new Date().toISOString();
   return DEFS.map(([id, location, atmosphere], index) => ({
@@ -47,9 +41,9 @@ export const getSeedPlaylists = (owner: string): Playlist[] => {
     location,
     atmosphere,
     pinned: PINNED.has(id),
-    sourceUris: [...(MOCK_SOURCE_URIS_BY_ATMOSPHERE[atmosphere] ?? [])],
-    trackUris: id === 'general-battle' ? [mockTrackUri('Thunder Over the Keep')] : [],
-    banishedTrackUris: (BANISHED[id] ?? []).map(mockTrackUri),
+    sourceUris: [],
+    trackUris: [],
+    banishedTrackUris: [],
     sortIndex: index,
     createdAt: now,
     updatedAt: now,

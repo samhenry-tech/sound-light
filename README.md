@@ -6,8 +6,8 @@ play tap a card to crossfade the room into that vibe. Music plays shuffled; give
 each track a thumbs up/down (hold 👎 to **banish** it from that playlist forever).
 
 Built as a production React + Vite rebuild of the **Soundlight** design
-prototype. Runs fully offline out of the box, and scales up to real Spotify
-playback + AWS-synced storage with auth.
+prototype, with real Spotify playback and AWS-synced storage behind Google
+sign-in.
 
 > Built with the latest stack and industry practices: **React 19 · Vite 6 ·
 > TypeScript (strict) · TanStack Query · Zustand · Zod · React Router 7 · ESLint
@@ -33,9 +33,10 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-In development the app uses the bundled mock Spotify catalog + player (no
-account or Premium needed). The dev server is pinned to **port 3000** because
-that's what the Spotify app's redirect URIs are registered against.
+Playback uses the real Spotify Web API + Web Playback SDK, so you link a
+Spotify **Premium** account to search and play. The dev server is pinned to
+**port 3000** because that's what the Spotify app's redirect URIs are
+registered against.
 
 ### Scripts
 
@@ -114,7 +115,7 @@ Lives entirely under `src/spotify/`:
   with token storage and refresh.
 - **Web API** — `search` and playlist/track resolution, Zod-validated.
 - **Web Playback SDK** — registers the browser as a Connect device (requires
-  Premium). A mock player mirrors the prototype's ticker for offline use.
+  Premium).
 - **Crossfade** — the SDK can't overlap two tracks (single stream / one active
   device) and `play({uris})` hard-cuts, so we roll our own single-stream
   crossfade: fade the outgoing track out → swap → fade the incoming in, on every

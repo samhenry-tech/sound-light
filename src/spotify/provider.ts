@@ -8,7 +8,7 @@ import {
   isSpotifyLinked,
   logoutSpotify,
 } from './auth/spotifyAuth';
-import { IS_SPOTIFY_MOCK, SPOTIFY_REDIRECT_URI } from './config';
+import { SPOTIFY_REDIRECT_URI } from './config';
 import { createPlayer } from './playback/createPlayer';
 
 /** Path Spotify redirects back to — derived from the registered redirect URI. */
@@ -26,9 +26,9 @@ export const createSpotifyMusicProvider = (): MusicProvider => {
     name: 'Spotify',
     capabilities: {
       playback: true,
-      requiresPremium: !IS_SPOTIFY_MOCK,
+      requiresPremium: true,
       canSeek: true,
-      needsAccountLink: !IS_SPOTIFY_MOCK,
+      needsAccountLink: true,
     },
     auth: {
       isLinked: isSpotifyLinked,
