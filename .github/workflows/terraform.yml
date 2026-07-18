@@ -15,10 +15,12 @@ on:
       - .github/workflows/terraform.yml
   workflow_dispatch:
 
+# id-token:write is required for OIDC auth when assuming the AWS deploy role.
 # pull-requests:write so plan output can be posted as a comment.
 permissions:
   contents: read
   pull-requests: write
+  id-token: write
 
 concurrency:
   group: terraform-${{ github.ref }}
