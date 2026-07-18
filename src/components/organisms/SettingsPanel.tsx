@@ -161,7 +161,10 @@ export const SettingsPanel = () => {
               onChange={(v) => settings.setPanicPlaylistId(v || null)}
               options={[
                 { value: '', label: 'Auto (first combat playlist)' },
-                ...playlists.map((m) => ({ value: m.id, label: playlistName(m.location, m.atmosphere) })),
+                ...playlists.map((m) => ({
+                  value: m.id,
+                  label: playlistName(m.location, m.atmosphere),
+                })),
               ]}
             />
           </div>

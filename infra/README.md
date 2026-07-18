@@ -15,10 +15,10 @@ identity id.
 
 ## What this provisions
 
-| Area | Resources                                                                                |
-| ---- | ---------------------------------------------------------------------------------------- |
-| Auth | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
-| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-playlists` and `*-user-settings`  |
+| Area | Resources                                                                                   |
+| ---- | ------------------------------------------------------------------------------------------- |
+| Auth | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy    |
+| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-playlists` and `*-user-settings` |
 
 All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and named
 `sound-light-dev-*` by default (`${project}-${environment}` from `config/shared.json`).
@@ -84,7 +84,7 @@ Remote state is stored in the **same bucket the deploy Action uses**:
 | Terraform output           | Field in `src/config.generated.json` |
 | -------------------------- | ------------------------------------ |
 | `cognito_identity_pool_id` | `cognitoIdentityPoolId`              |
-| `playlists_table_name`         | `playlistsTable`                         |
+| `playlists_table_name`     | `playlistsTable`                     |
 | `user_settings_table_name` | `settingsTable`                      |
 | `aws_region`               | `awsRegion`                          |
 

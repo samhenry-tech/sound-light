@@ -12,7 +12,13 @@ interface PlaylistGridProps {
 }
 
 /** The scrolling grid of Live vibe cards. */
-export const PlaylistGrid = ({ cards, cols, isLoading, onSelect, onTogglePin }: PlaylistGridProps) => {
+export const PlaylistGrid = ({
+  cards,
+  cols,
+  isLoading,
+  onSelect,
+  onTogglePin,
+}: PlaylistGridProps) => {
   if (isLoading) {
     return (
       <div className="flex justify-center p-[60px]">

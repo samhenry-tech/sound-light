@@ -35,7 +35,9 @@ interface PlayerState extends NowPlaying {
   muted: boolean;
 
   /** Begin a playlist: set now-playing metadata + the shuffled queue. */
-  startPlaylist: (payload: NowPlaying & { queue: MusicTrack[]; current: MusicTrack | null }) => void;
+  startPlaylist: (
+    payload: NowPlaying & { queue: MusicTrack[]; current: MusicTrack | null },
+  ) => void;
   /** Apply a state snapshot from the player. */
   applyPlayback: (state: PlaybackState) => void;
   setCurrent: (track: MusicTrack) => void;

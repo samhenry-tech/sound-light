@@ -27,7 +27,11 @@ export interface LiveCard {
   line2: string;
 }
 
-const toCard = (playlist: Playlist, combined: boolean, playingPlaylistId: string | null): LiveCard => {
+const toCard = (
+  playlist: Playlist,
+  combined: boolean,
+  playingPlaylistId: string | null,
+): LiveCard => {
   const name = playlistName(playlist.location, playlist.atmosphere);
   return {
     id: playlist.id,

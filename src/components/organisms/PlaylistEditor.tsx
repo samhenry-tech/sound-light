@@ -41,7 +41,12 @@ export const PlaylistEditor = ({ playlist, model }: PlaylistEditorProps) => {
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div className="flex flex-shrink-0 items-center gap-[18px] border-b border-line-07 px-[26px] pb-4 pt-[22px]">
-        <GradientCover gradient={coverFor(playlist.atmosphere)} width={64} height={64} radius={15} />
+        <GradientCover
+          gradient={coverFor(playlist.atmosphere)}
+          width={64}
+          height={64}
+          radius={15}
+        />
         <div className="min-w-0 flex-1">
           <div className="mb-[9px] text-[22px] font-extrabold tracking-[-0.02em]">{name}</div>
           <div className="flex items-center gap-[9px]">

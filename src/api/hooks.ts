@@ -62,7 +62,10 @@ export const useCreatePlaylist = () => {
   return useMutation({
     mutationFn: (input: CreatePlaylistInput) => dataAdapter.createPlaylist(ctx, input),
     onSuccess: (playlist) => {
-      qc.setQueryData<Playlist[]>(dataKeys.playlists(ctx.owner), (prev) => [...(prev ?? []), playlist]);
+      qc.setQueryData<Playlist[]>(dataKeys.playlists(ctx.owner), (prev) => [
+        ...(prev ?? []),
+        playlist,
+      ]);
     },
   });
 };

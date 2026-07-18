@@ -74,7 +74,11 @@ export const localAdapter: DataAdapter = {
     const patch = updatePlaylistInputSchema.parse(input);
     const index = store.playlists.findIndex((m) => m.id === id);
     if (index === -1) return Promise.reject(new Error(`Playlist ${id} not found`));
-    const updated: Playlist = { ...store.playlists[index]!, ...patch, updatedAt: new Date().toISOString() };
+    const updated: Playlist = {
+      ...store.playlists[index]!,
+      ...patch,
+      updatedAt: new Date().toISOString(),
+    };
     store.playlists[index] = updated;
     write(owner, store);
     return Promise.resolve(updated);

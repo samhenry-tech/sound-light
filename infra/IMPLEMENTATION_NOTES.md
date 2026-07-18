@@ -33,19 +33,19 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 
 ### Terraform (`infra/`)
 
-| File                       | Purpose                                                                                   |
-| -------------------------- | ----------------------------------------------------------------------------------------- |
-| `versions.tf`              | `required_version >= 1.6`; pins AWS `~> 5.0` + local `~> 2.5`.                            |
-| `providers.tf`             | AWS provider + S3 backend on `projects.samhenry.tech` (`_terraform/sound-light/…`).       |
-| `scripts/*.sh`             | Import existing AWS resources into empty state; delete orphan Cognito pools.              |
-| `backend.tf.example`       | Notes for the shared-bucket state key (backend is already enabled in `providers.tf`).     |
-| `variables.tf`             | Reserved — public inputs come from `config/shared.json`.                                  |
-| `locals.tf`                | `jsondecode(file("../config/shared.json"))` + `name_prefix` / tags.                       |
-| `cognito.tf`               | Identity pool (Google provider), authenticated role, `LeadingKeys` DynamoDB policy.       |
+| File                       | Purpose                                                                                       |
+| -------------------------- | --------------------------------------------------------------------------------------------- |
+| `versions.tf`              | `required_version >= 1.6`; pins AWS `~> 5.0` + local `~> 2.5`.                                |
+| `providers.tf`             | AWS provider + S3 backend on `projects.samhenry.tech` (`_terraform/sound-light/…`).           |
+| `scripts/*.sh`             | Import existing AWS resources into empty state; delete orphan Cognito pools.                  |
+| `backend.tf.example`       | Notes for the shared-bucket state key (backend is already enabled in `providers.tf`).         |
+| `variables.tf`             | Reserved — public inputs come from `config/shared.json`.                                      |
+| `locals.tf`                | `jsondecode(file("../config/shared.json"))` + `name_prefix` / tags.                           |
+| `cognito.tf`               | Identity pool (Google provider), authenticated role, `LeadingKeys` DynamoDB policy.           |
 | `dynamodb.tf`              | `*-playlists` (owner+id) and `*-user-settings` (owner) — both PROVISIONED at 12 RCU / 12 WCU. |
-| `frontend_config.tf`       | `local_file` writing `src/config.generated.json` from Terraform outputs.                  |
-| `outputs.tf`               | Cognito / table / region outputs (mirrored into the generated JSON).                      |
-| `terraform.tfvars.example` | Notes that tfvars are unused; edit `config/shared.json` instead.                          |
+| `frontend_config.tf`       | `local_file` writing `src/config.generated.json` from Terraform outputs.                      |
+| `outputs.tf`               | Cognito / table / region outputs (mirrored into the generated JSON).                          |
+| `terraform.tfvars.example` | Notes that tfvars are unused; edit `config/shared.json` instead.                              |
 
 ### GitHub Actions (`.github/workflows/`)
 
@@ -69,10 +69,10 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 `src/shared/contract.ts`; the DynamoDB adapter (`src/api/adapters/
 dynamoAdapter.ts`) validates everything it reads and writes against them.
 
-| Table             | Keys                         | Contents                                       |
-| ----------------- | ---------------------------- | ---------------------------------------------- |
-| `*-playlists`         | `owner` (HASH), `id` (RANGE) | One item per playlist; listed via Query on `owner`. |
-| `*-user-settings` | `owner` (HASH)               | One item per user (accent, columns, …).        |
+| Table             | Keys                         | Contents                                            |
+| ----------------- | ---------------------------- | --------------------------------------------------- |
+| `*-playlists`     | `owner` (HASH), `id` (RANGE) | One item per playlist; listed via Query on `owner`. |
+| `*-user-settings` | `owner` (HASH)               | One item per user (accent, columns, …).             |
 
 ---
 
@@ -134,7 +134,7 @@ Written to `src/config.generated.json` by `local_file.frontend_config` on apply
 | Output                     | Example                         | Field in `src/config.generated.json` |
 | -------------------------- | ------------------------------- | ------------------------------------ |
 | `cognito_identity_pool_id` | `ap-southeast-2:1a2b...`        | `cognitoIdentityPoolId`              |
-| `playlists_table_name`         | `sound-light-dev-playlists`         | `playlistsTable`                         |
+| `playlists_table_name`     | `sound-light-dev-playlists`     | `playlistsTable`                     |
 | `user_settings_table_name` | `sound-light-dev-user-settings` | `settingsTable`                      |
 | `aws_region`               | `ap-southeast-2`                | `awsRegion`                          |
 

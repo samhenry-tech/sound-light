@@ -27,7 +27,10 @@ export const LibraryPage = () => {
   const selectLibrary = useUiStore((s) => s.selectLibrary);
   const showToast = useUiStore((s) => s.showToast);
 
-  const sorted = useMemo(() => [...playlists].sort((a, b) => a.sortIndex - b.sortIndex), [playlists]);
+  const sorted = useMemo(
+    () => [...playlists].sort((a, b) => a.sortIndex - b.sortIndex),
+    [playlists],
+  );
   const selectedId = libSelectedId ?? sorted[0]?.id ?? null;
   const selectedPlaylist = sorted.find((m) => m.id === selectedId);
   const model = usePlaylistEditor(selectedPlaylist);
