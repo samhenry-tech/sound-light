@@ -15,10 +15,10 @@ identity id.
 
 ## What this provisions
 
-| Area      | Resources                                                                                |
-| --------- | ---------------------------------------------------------------------------------------- |
-| Auth      | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
-| Data      | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`     |
+| Area | Resources                                                                                |
+| ---- | ---------------------------------------------------------------------------------------- |
+| Auth | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy |
+| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-mixes` and `*-user-settings`  |
 
 All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and named
 `sound-light-dev-*` by default (`${var.project}-${var.environment}`).
@@ -63,20 +63,18 @@ terraform apply
 
 ## Feeding the outputs back to the frontend
 
-After `terraform apply`, wire `terraform output` values into the SPA's env
-(`.env.local` for dev, GitHub **Variables** for the deploy workflow):
+After `terraform apply`, wire `terraform output` values into
+[`src/config.ts`](../src/config.ts):
 
-| Terraform output           | Frontend env var                |
-| -------------------------- | ------------------------------- |
-| `cognito_identity_pool_id` | `VITE_COGNITO_IDENTITY_POOL_ID` |
+| Terraform output           | `src/config.ts` field   |
+| -------------------------- | ----------------------- |
+| `cognito_identity_pool_id` | `cognitoIdentityPoolId` |
+| `mixes_table_name`         | `mixesTable`            |
+| `user_settings_table_name` | `settingsTable`         |
+| `aws_region`               | `awsRegion`             |
 
-`VITE_GOOGLE_CLIENT_ID` is the same Google client ID passed to Terraform as
-`google_client_id`.
-
-The AWS region and DynamoDB table names are **not** env vars — they are
-hardcoded in `src/auth/awsConfig.ts` (they never change between environments).
-If you change `project`/`environment`/`region` in Terraform, update those
-constants to match.
+`googleClientId` in that file is the same Google client ID passed to Terraform
+as `google_client_id` (CI: secret `TF_VAR_google_client_id`).
 
 See [`IMPLEMENTATION_NOTES.md`](./IMPLEMENTATION_NOTES.md) for the full operator
 runbook: Google OAuth setup and every GitHub `vars`/`secrets` name the
