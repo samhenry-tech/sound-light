@@ -7,7 +7,7 @@
 ☒ Remove full screen mode/feature (the "Table mode" full-canvas toggle)
 ☒ Always use combined labels; remove the ability to change that
 ☒ Remove the keyboard shortcuts toggle; keyboard shortcuts always on
-☐ When adding a Spotify playlist to an in-app playlist, add all of the playlist's tracks to the in-app playlist
+☒ When adding a Spotify playlist to an in-app playlist, add all of the playlist's tracks to the in-app playlist
 ☒ Remove the ambient bed feature (we'll change it and move it around later)
 ☒ Change settings to a cog icon
 ☒ Add a logout button in the sidebar
