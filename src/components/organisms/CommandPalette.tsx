@@ -38,7 +38,12 @@ export const CommandPalette = () => {
 
   const items = useMemo<Command[]>(() => {
     const commands: Command[] = [
-      { id: 'settings', label: 'Open settings', icon: 'tune', run: () => setSettingsOpen(true) },
+      {
+        id: 'settings',
+        label: 'Open settings',
+        icon: 'settings',
+        run: () => setSettingsOpen(true),
+      },
     ];
     const playlistCommands: Command[] = playlists.map((m) => ({
       id: `playlist:${m.id}`,
