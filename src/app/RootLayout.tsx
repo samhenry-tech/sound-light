@@ -15,7 +15,6 @@ export const RootLayout = () => {
   const setSettingsOpen = useUiStore((s) => s.setSettingsOpen);
   useKeyboardShortcuts();
 
-
   const active: Screen = location.pathname.startsWith('/library') ? 'library' : 'home';
 
   return (
