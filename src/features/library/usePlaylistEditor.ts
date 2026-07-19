@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useDeletePlaylist, useUpdatePlaylist } from '~api/hooks';
 import { useMusicSearch } from '~music/hooks/useMusicSearch';
 import { useResolvedSources, useResolvedTracks } from '~music/hooks/useResolvedTracks';
+import { useMusicProvider } from '~music/MusicProviderContext';
 import type { MusicSource, MusicTrack, ResolvedSource } from '~music/types';
 import type { Playlist } from '~shared/contract';
 import { useUiStore } from '~stores/uiStore';
@@ -23,7 +24,7 @@ export interface EditorSearchResult {
 export interface EditorActions {
   setLocation: (location: string) => void;
   setAtmosphere: (atmosphere: Atmosphere) => void;
-  addSource: (source: MusicSource) => void;
+  addSource: (source: MusicSource) => Promise<void>;
   removeSource: (uri: string) => void;
   addTrack: (track: MusicTrack) => void;
   removeTrack: (uri: string) => void;
@@ -46,6 +47,7 @@ export interface PlaylistEditorModel {
 export const usePlaylistEditor = (playlist: Playlist | undefined): PlaylistEditorModel => {
   const updatePlaylist = useUpdatePlaylist();
   const deletePlaylist = useDeletePlaylist();
+  const provider = useMusicProvider();
   const editorQuery = useUiStore((s) => s.editorQuery);
   const showToast = useUiStore((s) => s.showToast);
 
@@ -69,10 +71,22 @@ export const usePlaylistEditor = (playlist: Playlist | undefined): PlaylistEdito
   const actions: EditorActions = {
     setLocation: (location) => patch({ location }),
     setAtmosphere: (atmosphere) => patch({ atmosphere }),
-    addSource: (source) => {
-      if (!playlist || playlist.sourceUris.includes(source.uri)) return;
-      patch({ sourceUris: [...playlist.sourceUris, source.uri] });
-      showToast(`Added “${source.name}”`);
+    addSource: async (source) => {
+      if (!playlist) return;
+      // Adding a Spotify playlist/album drops ALL of its tracks into this
+      // in-app playlist (rather than linking it as a locked source unit).
+      const [resolved] = await provider.resolveSources([source.uri]);
+      const incoming = resolved?.tracks.map((t) => t.uri) ?? [];
+      const existing = new Set(playlist.trackUris);
+      const added = incoming.filter((uri) => !existing.has(uri));
+      if (added.length === 0) {
+        showToast(`No new tracks from “${source.name}”`);
+        return;
+      }
+      patch({ trackUris: [...playlist.trackUris, ...added] });
+      showToast(
+        `Added ${added.length} track${added.length === 1 ? '' : 's'} from “${source.name}”`,
+      );
     },
     removeSource: (uri) => {
       if (!playlist) return;
@@ -111,7 +125,7 @@ export const usePlaylistEditor = (playlist: Playlist | undefined): PlaylistEdito
       title: s.name,
       sub: `${s.owner} · ${s.trackCount} tracks`,
       added: sourceUris.has(s.uri),
-      onAdd: () => actions.addSource(s),
+      onAdd: () => void actions.addSource(s),
     })),
     ...search.results.tracks.map<EditorSearchResult>((t) => ({
       uri: t.uri,
