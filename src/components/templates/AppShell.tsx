@@ -1,4 +1,3 @@
-import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
 import { Toast } from '~components/atoms/Toast';
@@ -27,28 +26,19 @@ export const AppShell = ({
   onOpenSettings,
   children,
 }: AppShellProps) => {
-  const tableMode = useUiStore((s) => s.tableMode);
-  const toggleTableMode = useUiStore((s) => s.toggleTableMode);
   const toast = useUiStore((s) => s.toast);
-  const scale = useCanvasScale(tableMode ? 0 : 24);
+  const scale = useCanvasScale(24);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-app">
       <div
-        className={clsx(
-          'relative flex w-[var(--canvas-w)] h-[var(--canvas-h)] flex-shrink-0 flex-col overflow-hidden bg-screen text-primary',
-          tableMode
-            ? 'rounded-none shadow-none'
-            : 'rounded-screen shadow-[0_40px_90px_rgba(0,0,0,0.55)]',
-        )}
+        className="relative flex h-[var(--canvas-h)] w-[var(--canvas-w)] flex-shrink-0 flex-col overflow-hidden rounded-screen bg-screen text-primary shadow-[0_40px_90px_rgba(0,0,0,0.55)]"
         style={{ transform: `scale(${scale})`, transformOrigin: 'center center' }}
       >
         <div className="flex min-h-0 flex-1">
           <NavRail
             active={active}
             onNavigate={onNavigate}
-            tableMode={tableMode}
-            onToggleTable={toggleTableMode}
             onOpenPalette={onOpenPalette}
             onOpenSettings={onOpenSettings}
           />

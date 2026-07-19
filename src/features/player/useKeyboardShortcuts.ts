@@ -51,9 +51,6 @@ export const useKeyboardShortcuts = () => {
         case 'm':
           actions.toggleMute();
           break;
-        case 't':
-          ui.toggleTableMode();
-          break;
         case 'ArrowUp':
           e.preventDefault();
           actions.setVolume(Math.min(1, usePlayerStore.getState().volume + VOLUME_STEP));

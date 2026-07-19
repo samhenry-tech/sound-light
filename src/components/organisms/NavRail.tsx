@@ -1,5 +1,3 @@
-import { clsx } from 'clsx';
-
 import { Icon } from '~components/atoms/Icon';
 import { NavItem } from '~components/molecules/NavItem';
 import { APP_NAME } from '~constants';
@@ -9,8 +7,6 @@ export type Screen = 'home' | 'library';
 interface NavRailProps {
   active: Screen;
   onNavigate: (screen: Screen) => void;
-  tableMode: boolean;
-  onToggleTable: () => void;
   onOpenPalette: () => void;
   onOpenSettings: () => void;
 }
@@ -19,14 +15,7 @@ const TOOL =
   'flex h-11 w-11 items-center justify-center rounded-[13px] border-none bg-transparent text-muted-2 cursor-pointer transition-colors duration-150 hover:text-quiet';
 
 /** Left rail: app mark, primary navigation, and quick tools. */
-export const NavRail = ({
-  active,
-  onNavigate,
-  tableMode,
-  onToggleTable,
-  onOpenPalette,
-  onOpenSettings,
-}: NavRailProps) => {
+export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: NavRailProps) => {
   return (
     <nav
       className="flex w-[var(--rail-w)] flex-shrink-0 flex-col items-center gap-2 border-r border-line-07 bg-rail py-4"
@@ -65,16 +54,6 @@ export const NavRail = ({
           onClick={onOpenPalette}
         >
           <Icon name="search" size={22} />
-        </button>
-        <button
-          type="button"
-          className={clsx(TOOL, tableMode && 'bg-accent/15 text-accent hover:text-accent')}
-          title="Table mode"
-          aria-label="Toggle table mode"
-          aria-pressed={tableMode}
-          onClick={onToggleTable}
-        >
-          <Icon name="crop_free" size={22} />
         </button>
         <button
           type="button"
