@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { CommandPalette } from '~components/organisms/CommandPalette';
 import type { Screen } from '~components/organisms/NavRail';
 import { SettingsPanel } from '~components/organisms/SettingsPanel';
+import { SpotifyLinkGate } from '~components/organisms/SpotifyLinkGate';
 import { AppShell } from '~components/templates/AppShell';
 import { TabletShell } from '~components/templates/TabletShell';
 import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
@@ -35,6 +36,7 @@ export const RootLayout = () => {
       </Shell>
       <CommandPalette />
       <SettingsPanel />
+      <SpotifyLinkGate />
     </>
   );
 };
