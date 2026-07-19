@@ -8,3 +8,9 @@
 ☐ Always use combined labels; remove the ability to change that
 ☐ Remove the keyboard shortcuts toggle; keyboard shortcuts always on
 ☐ When adding a Spotify playlist to an in-app playlist, add all of the playlist's tracks to the in-app playlist
+☐ Remove the ambient bed feature (we'll change it and move it around later)
+☐ Change settings to a cog icon
+☐ Add a logout button in the sidebar
+☐ Put the tablet mode toggle button in the sidebar
+☐ Add a forced popup when not signed into Spotify — force sign-in on arrival at the app
+☐ Remove the session title; just have the search box on the left at the top with the chips next to it
