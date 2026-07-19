@@ -1,6 +1,10 @@
+import { clsx } from 'clsx';
+
+import { useAuthSession } from '~auth/useAuthSession';
 import { Icon } from '~components/atoms/Icon';
 import { NavItem } from '~components/molecules/NavItem';
 import { APP_NAME } from '~constants';
+import { useUiStore } from '~stores/uiStore';
 
 export type Screen = 'home' | 'library';
 
@@ -16,6 +20,10 @@ const TOOL =
 
 /** Left rail: app mark, primary navigation, and quick tools. */
 export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: NavRailProps) => {
+  const { logout } = useAuthSession();
+  const tabletMode = useUiStore((s) => s.tabletMode);
+  const toggleTabletMode = useUiStore((s) => s.toggleTabletMode);
+
   return (
     <nav
       className="flex w-[var(--rail-w)] flex-shrink-0 flex-col items-center gap-2 border-r border-line-07 bg-rail py-4"
@@ -55,6 +63,18 @@ export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: N
         >
           <Icon name="search" size={22} />
         </button>
+        {import.meta.env.DEV && (
+          <button
+            type="button"
+            className={clsx(TOOL, tabletMode && 'bg-accent/15 text-accent hover:text-accent')}
+            title="Tablet mode (dev)"
+            aria-label="Toggle tablet mode"
+            aria-pressed={tabletMode}
+            onClick={toggleTabletMode}
+          >
+            <Icon name="tablet_mac" size={22} />
+          </button>
+        )}
         <button
           type="button"
           className={TOOL}
@@ -62,7 +82,16 @@ export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: N
           aria-label="Open settings"
           onClick={onOpenSettings}
         >
-          <Icon name="tune" size={22} />
+          <Icon name="settings" size={22} />
+        </button>
+        <button
+          type="button"
+          className={TOOL}
+          title="Log out"
+          aria-label="Log out"
+          onClick={() => void logout()}
+        >
+          <Icon name="logout" size={22} />
         </button>
       </div>
     </nav>

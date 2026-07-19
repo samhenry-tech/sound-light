@@ -19,6 +19,8 @@ interface UiState {
   showBanished: boolean;
 
   /** App modes */
+  /** Dev-only: bypass the fixed iPad app-shell and render a simple layout. */
+  tabletMode: boolean;
   paletteOpen: boolean;
   settingsOpen: boolean;
 
@@ -31,6 +33,7 @@ interface UiState {
   setEditorQuery: (q: string) => void;
   clearEditorQuery: () => void;
   toggleBanished: () => void;
+  toggleTabletMode: () => void;
   setPaletteOpen: (open: boolean) => void;
   togglePalette: () => void;
   setSettingsOpen: (open: boolean) => void;
@@ -44,6 +47,7 @@ export const useUiStore = create<UiState>((set) => ({
   libSelectedId: null,
   editorQuery: '',
   showBanished: false,
+  tabletMode: false,
   paletteOpen: false,
   settingsOpen: false,
   toast: null,
@@ -56,6 +60,7 @@ export const useUiStore = create<UiState>((set) => ({
   setEditorQuery: (editorQuery) => set({ editorQuery }),
   clearEditorQuery: () => set({ editorQuery: '' }),
   toggleBanished: () => set((s) => ({ showBanished: !s.showBanished })),
+  toggleTabletMode: () => set((s) => ({ tabletMode: !s.tabletMode })),
   setPaletteOpen: (paletteOpen) => set({ paletteOpen }),
   togglePalette: () => set((s) => ({ paletteOpen: !s.paletteOpen })),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),
