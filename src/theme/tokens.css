@@ -114,7 +114,7 @@
 
 :root {
   /* Themeable accent — retinted at runtime by <ThemeProvider>. */
-  --accent: #3ecf8e;
+  --accent: #f5a04a;
 
   /* Icon font (used by the .material-symbol helper). */
   --font-icons: 'Material Symbols Rounded';

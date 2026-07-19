@@ -52,14 +52,12 @@ export const LOCATIONS = [
 
 export type Location = (typeof LOCATIONS)[number];
 
-/** Themeable accent options shipped with the app (default emerald first). */
-export const ACCENT_OPTIONS = ['#3ecf8e', '#f5a04a', '#9a8bff', '#4cc5e6'] as const;
-export const DEFAULT_ACCENT = ACCENT_OPTIONS[0];
+/** The single app accent — orange. The theme is fixed (no per-user accent). */
+export const DEFAULT_ACCENT = '#f5a04a';
 
 export type CardLabel = 'split' | 'combined';
 
-export const COLUMN_MIN = 4;
-export const COLUMN_MAX = 6;
+/** Fixed grid width (columns) for the playlist grid. */
 export const DEFAULT_COLUMNS = 5;
 
 /** Capitalize an atmosphere for display. */
