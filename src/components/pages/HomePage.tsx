@@ -34,10 +34,7 @@ export const HomePage = () => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-shrink-0 items-center justify-between gap-4 px-6 pt-[18px]">
-        <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[13px] text-muted-2">
-          Curse of the Hollow King <span className="text-faint-2">· Session 14</span>
-        </div>
+      <div className="flex flex-shrink-0 items-center gap-4 px-6 pb-3 pt-[18px]">
         <SearchInput
           className="w-[300px] flex-shrink-0"
           value={liveQuery}
@@ -45,9 +42,9 @@ export const HomePage = () => {
           placeholder="Search a location or vibe…"
           ariaLabel="Search playlists"
         />
-      </div>
-      <div className="flex-shrink-0 px-6 pt-3.5 pb-3">
-        <FilterChips value={liveFilter} onChange={setLiveFilter} />
+        <div className="min-w-0 flex-1">
+          <FilterChips value={liveFilter} onChange={setLiveFilter} />
+        </div>
       </div>
       <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-6 pt-1 pb-[18px]">
         <PlaylistGrid
