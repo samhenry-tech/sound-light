@@ -2,7 +2,7 @@
 ☒ Remove react query debugging on local
 ☐ Add a button on local (development) to toggle tablet mode; aside from that don't use the app shell — do it normally with a simple tailwind treatment when tablet mode is on. Put the button in the sidebar
 ☒ Make it always orange theme, remove the other theme options
-☐ Remove sleep timer completely
+☒ Remove sleep timer completely
 ☒ Make the grid 5 across and always fixed at that
 ☐ Remove full screen mode/feature
 ☒ Always use combined labels; remove the ability to change that
