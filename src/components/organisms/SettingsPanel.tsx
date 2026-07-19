@@ -3,8 +3,6 @@ import type { ReactNode } from 'react';
 
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
-import { Select } from '~components/molecules/Select';
-import { usePlayerActions } from '~features/player/PlayerContext';
 import { useMusicAuth } from '~music/useMusicAuth';
 import { usePlayerStore } from '~stores/playerStore';
 import { AMBIENT_KINDS, type AmbientKind, useSettingsStore } from '~stores/settingsStore';
@@ -51,11 +49,9 @@ export const SettingsPanel = () => {
   const setOpen = useUiStore((s) => s.setSettingsOpen);
 
   const auth = useMusicAuth();
-  const actions = usePlayerActions();
 
   const settings = useSettingsStore();
   const history = usePlayerStore((s) => s.history);
-  const sleepEndsAt = usePlayerStore((s) => s.sleepEndsAt);
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} ariaLabel="Settings" width={620}>
@@ -127,36 +123,6 @@ export const SettingsPanel = () => {
               />
               <span className={VALUE}>{Math.round(settings.ambientVolume * 100)}%</span>
             </div>
-          </div>
-        </Section>
-
-        <Section title="Sleep timer">
-          <div className={ROW}>
-            <span className={LABEL}>Fade out after</span>
-            {sleepEndsAt ? (
-              <button type="button" className={DANGER_BTN} onClick={actions.cancelSleepTimer}>
-                Cancel timer
-              </button>
-            ) : (
-              <div className={SLIDER_ROW}>
-                <Select
-                  ariaLabel="Sleep timer minutes"
-                  value={String(settings.sleepTimerMinutes)}
-                  onChange={(v) => settings.setSleepTimerMinutes(Number(v))}
-                  options={[15, 30, 45, 60, 90, 120].map((n) => ({
-                    value: String(n),
-                    label: `${n} min`,
-                  }))}
-                />
-                <button
-                  type="button"
-                  className={PRIMARY_BTN}
-                  onClick={() => actions.startSleepTimer(settings.sleepTimerMinutes)}
-                >
-                  Start
-                </button>
-              </div>
-            )}
           </div>
         </Section>
 

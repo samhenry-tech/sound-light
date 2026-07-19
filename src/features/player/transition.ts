@@ -63,14 +63,3 @@ export const transitionTo = async (
   onSwap?.();
   await rampVolume(player, 0, target, crossfadeMs);
 };
-
-/** Gently fade out, pause, then restore volume so the next resume isn't silent. */
-export const fadeOutAndPause = async (
-  player: MusicPlayer,
-  fromVolume: number,
-  fadeMs: number,
-): Promise<void> => {
-  await rampVolume(player, fromVolume, 0, fadeMs);
-  await player.pause();
-  await player.setVolume(fromVolume);
-};

@@ -24,9 +24,6 @@ export interface PlayerActions {
   seek: (positionMs: number) => void;
   setVolume: (volume: number) => void;
   toggleMute: () => void;
-  /** Start a sleep timer that fades out + pauses after `minutes`. */
-  startSleepTimer: (minutes: number) => void;
-  cancelSleepTimer: () => void;
 }
 
 export const PlayerContext = createContext<PlayerActions | null>(null);
