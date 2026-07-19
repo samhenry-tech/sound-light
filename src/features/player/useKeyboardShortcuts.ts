@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 
 import { usePlayerStore } from '~stores/playerStore';
-import { useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
 
 import { usePlayerActions } from './PlayerContext';
@@ -22,7 +21,6 @@ const VOLUME_STEP = 0.05;
 /** Global keyboard shortcuts for hands-on play. Mounted once inside the gate. */
 export const useKeyboardShortcuts = () => {
   const actions = usePlayerActions();
-  const enabled = useSettingsStore((s) => s.keyboardEnabled);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -33,7 +31,7 @@ export const useKeyboardShortcuts = () => {
         ui.togglePalette();
         return;
       }
-      if (!enabled || isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
 
       switch (e.key) {
         case ' ':
@@ -70,5 +68,5 @@ export const useKeyboardShortcuts = () => {
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [actions, enabled]);
+  }, [actions]);
 };
