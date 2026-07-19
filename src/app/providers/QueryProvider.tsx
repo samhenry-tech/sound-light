@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { type ReactNode, useState } from 'react';
 
 export const QueryProvider = ({ children }: { children: ReactNode }) => {
@@ -16,12 +15,5 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
       }),
   );
 
-  return (
-    <QueryClientProvider client={client}>
-      {children}
-      {import.meta.env.DEV && import.meta.env.MODE !== 'test' && (
-        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
-      )}
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 };
