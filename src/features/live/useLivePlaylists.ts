@@ -1,7 +1,7 @@
 /** View-model for the Live grid: filter + search + pin-sort the GM's playlists. */
 import { useMemo } from 'react';
 
-import { usePlaylists, useUserSettings } from '~api/hooks';
+import { usePlaylists } from '~api/hooks';
 import type { Playlist } from '~shared/contract';
 import { usePlayerStore } from '~stores/playerStore';
 import { useUiStore } from '~stores/uiStore';
@@ -49,13 +49,13 @@ const toCard = (
 
 export const useLivePlaylists = () => {
   const { data: playlists = [], isLoading } = usePlaylists();
-  const { data: userSettings } = useUserSettings();
   const liveQuery = useUiStore((s) => s.liveQuery);
   const liveFilter = useUiStore((s) => s.liveFilter);
   const playingPlaylistId = usePlayerStore((s) => s.playingPlaylistId);
 
-  const combined = userSettings?.cardLabel === 'combined';
-  const cols = userSettings?.columns ?? DEFAULT_COLUMNS;
+  // Labels are always combined and the grid is always fixed-width.
+  const combined = true;
+  const cols = DEFAULT_COLUMNS;
 
   const cards = useMemo(() => {
     const q = liveQuery.trim().toLowerCase();

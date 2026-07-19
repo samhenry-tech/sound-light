@@ -50,9 +50,10 @@ describe('app integration (mocked auth + local data adapter)', () => {
     // Header search is present immediately.
     expect(screen.getByPlaceholderText(/search a location or vibe/i)).toBeInTheDocument();
 
-    // The seeded library includes several "Tavern" playlists.
+    // The seeded library includes several "Tavern" playlists (combined labels,
+    // e.g. "Tavern – Ambient").
     await waitFor(() => {
-      expect(screen.getAllByText('Tavern').length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Tavern/).length).toBeGreaterThan(0);
     });
 
     // Atmosphere filter chips render.

@@ -1,11 +1,11 @@
-☐ Set color to the orange theme and all other themes and the abilityt to set one
+☒ Set color to the orange theme (removed other themes / the ability to set one)
 ☒ Remove react query debugging on local
 ☐ Add a button on local (development) to toggle tablet mode; aside from that don't use the app shell — do it normally with a simple tailwind treatment when tablet mode is on. Put the button in the sidebar
-☐ Make it always orange theme, remove the other theme options
+☒ Make it always orange theme, remove the other theme options
 ☐ Remove sleep timer completely
-☐ Make the grid 5 across and always fixed at that
+☒ Make the grid 5 across and always fixed at that
 ☐ Remove full screen mode/feature
-☐ Always use combined labels; remove the ability to change that
+☒ Always use combined labels; remove the ability to change that
 ☐ Remove the keyboard shortcuts toggle; keyboard shortcuts always on
 ☐ When adding a Spotify playlist to an in-app playlist, add all of the playlist's tracks to the in-app playlist
 ☐ Remove the ambient bed feature (we'll change it and move it around later)

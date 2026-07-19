@@ -1,7 +1,6 @@
 import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
-import { useUpdateUserSettings, useUserSettings } from '~api/hooks';
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { Select } from '~components/molecules/Select';
@@ -10,7 +9,7 @@ import { useMusicAuth } from '~music/useMusicAuth';
 import { usePlayerStore } from '~stores/playerStore';
 import { AMBIENT_KINDS, type AmbientKind, useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
-import { ACCENT_OPTIONS, capitalize } from '~theme/atmosphere';
+import { capitalize } from '~theme/atmosphere';
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
 const SEG_BTN = 'border-none px-3 py-1.5 text-[13px] font-semibold rounded-[7px] cursor-pointer';
@@ -51,18 +50,12 @@ export const SettingsPanel = () => {
   const open = useUiStore((s) => s.settingsOpen);
   const setOpen = useUiStore((s) => s.setSettingsOpen);
 
-  const { data: userSettings } = useUserSettings();
-  const updateUserSettings = useUpdateUserSettings();
   const auth = useMusicAuth();
   const actions = usePlayerActions();
 
   const settings = useSettingsStore();
   const history = usePlayerStore((s) => s.history);
   const sleepEndsAt = usePlayerStore((s) => s.sleepEndsAt);
-
-  const accent = userSettings?.accent ?? ACCENT_OPTIONS[0];
-  const columns = userSettings?.columns ?? 5;
-  const cardLabel = userSettings?.cardLabel ?? 'split';
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} ariaLabel="Settings" width={620}>
@@ -79,60 +72,6 @@ export const SettingsPanel = () => {
       </div>
 
       <div className="px-[22px] pb-[22px] pt-2">
-        <Section title="Appearance">
-          <div className={ROW}>
-            <span className={LABEL}>Accent</span>
-            <div className="flex gap-2.5">
-              {ACCENT_OPTIONS.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  className={clsx(
-                    'h-[26px] w-[26px] rounded-full border-2 cursor-pointer',
-                    accent === c
-                      ? 'border-primary shadow-[0_0_0_2px_var(--color-screen)]'
-                      : 'border-transparent',
-                  )}
-                  style={{ background: c }}
-                  aria-label={`Accent ${c}`}
-                  aria-pressed={accent === c}
-                  onClick={() => updateUserSettings.mutate({ accent: c })}
-                />
-              ))}
-            </div>
-          </div>
-          <div className={ROW}>
-            <span className={LABEL}>Grid density</span>
-            <div className={SEGMENT}>
-              {[4, 5, 6].map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  className={clsx(SEG_BTN, columns === n ? SEG_ACTIVE : SEG_INACTIVE)}
-                  onClick={() => updateUserSettings.mutate({ columns: n })}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className={ROW}>
-            <span className={LABEL}>Card label</span>
-            <div className={SEGMENT}>
-              {(['split', 'combined'] as const).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  className={clsx(SEG_BTN, cardLabel === v ? SEG_ACTIVE : SEG_INACTIVE)}
-                  onClick={() => updateUserSettings.mutate({ cardLabel: v })}
-                >
-                  {capitalize(v)}
-                </button>
-              ))}
-            </div>
-          </div>
-        </Section>
-
         <Section title="Playback">
           <div className={ROW}>
             <span className={LABEL}>Crossfade</span>
