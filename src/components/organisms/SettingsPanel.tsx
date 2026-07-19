@@ -187,17 +187,7 @@ export const SettingsPanel = () => {
         </Section>
 
         <Section title="Keyboard">
-          <div className={ROW}>
-            <span className={LABEL}>Shortcuts</span>
-            <button
-              type="button"
-              className={clsx(SEG_BTN, settings.keyboardEnabled ? SEG_ACTIVE : SEG_INACTIVE)}
-              onClick={() => settings.setKeyboardEnabled(!settings.keyboardEnabled)}
-            >
-              {settings.keyboardEnabled ? 'On' : 'Off'}
-            </button>
-          </div>
-          <div className="mt-2.5 grid grid-cols-2 gap-x-[18px] gap-y-2">
+          <div className="grid grid-cols-2 gap-x-[18px] gap-y-2">
             {SHORTCUTS.map(([key, desc]) => (
               <div key={key} className="flex items-center gap-2.5 text-[12.5px] text-muted">
                 <kbd className="min-w-[28px] rounded-[5px] border border-line-12 px-[7px] py-0.5 text-center text-[10.5px] font-bold text-quiet">

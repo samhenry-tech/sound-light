@@ -19,14 +19,12 @@ interface SettingsState {
   ambientVolume: number;
   /** Currently selected ambient bed, or null when off. */
   ambientKind: AmbientKind | null;
-  keyboardEnabled: boolean;
   /** Default sleep-timer length, in minutes. */
   sleepTimerMinutes: number;
 
   setCrossfadeMs: (ms: number) => void;
   setAmbientVolume: (v: number) => void;
   setAmbientKind: (kind: AmbientKind | null) => void;
-  setKeyboardEnabled: (enabled: boolean) => void;
   setSleepTimerMinutes: (minutes: number) => void;
 }
 
@@ -36,7 +34,6 @@ export const useSettingsStore = create<SettingsState>()(
       crossfadeMs: 2000,
       ambientVolume: 0.4,
       ambientKind: null,
-      keyboardEnabled: true,
       sleepTimerMinutes: 45,
 
       setCrossfadeMs: (crossfadeMs) =>
@@ -44,7 +41,6 @@ export const useSettingsStore = create<SettingsState>()(
       setAmbientVolume: (ambientVolume) =>
         set({ ambientVolume: Math.min(1, Math.max(0, ambientVolume)) }),
       setAmbientKind: (ambientKind) => set({ ambientKind }),
-      setKeyboardEnabled: (keyboardEnabled) => set({ keyboardEnabled }),
       setSleepTimerMinutes: (sleepTimerMinutes) =>
         set({ sleepTimerMinutes: Math.max(1, Math.round(sleepTimerMinutes)) }),
     }),
