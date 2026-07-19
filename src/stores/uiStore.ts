@@ -19,7 +19,6 @@ interface UiState {
   showBanished: boolean;
 
   /** App modes */
-  tableMode: boolean;
   paletteOpen: boolean;
   settingsOpen: boolean;
 
@@ -32,8 +31,6 @@ interface UiState {
   setEditorQuery: (q: string) => void;
   clearEditorQuery: () => void;
   toggleBanished: () => void;
-  setTableMode: (on: boolean) => void;
-  toggleTableMode: () => void;
   setPaletteOpen: (open: boolean) => void;
   togglePalette: () => void;
   setSettingsOpen: (open: boolean) => void;
@@ -47,7 +44,6 @@ export const useUiStore = create<UiState>((set) => ({
   libSelectedId: null,
   editorQuery: '',
   showBanished: false,
-  tableMode: false,
   paletteOpen: false,
   settingsOpen: false,
   toast: null,
@@ -60,8 +56,6 @@ export const useUiStore = create<UiState>((set) => ({
   setEditorQuery: (editorQuery) => set({ editorQuery }),
   clearEditorQuery: () => set({ editorQuery: '' }),
   toggleBanished: () => set((s) => ({ showBanished: !s.showBanished })),
-  setTableMode: (tableMode) => set({ tableMode }),
-  toggleTableMode: () => set((s) => ({ tableMode: !s.tableMode })),
   setPaletteOpen: (paletteOpen) => set({ paletteOpen }),
   togglePalette: () => set((s) => ({ paletteOpen: !s.paletteOpen })),
   setSettingsOpen: (settingsOpen) => set({ settingsOpen }),

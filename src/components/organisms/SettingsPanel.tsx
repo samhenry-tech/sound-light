@@ -33,7 +33,6 @@ const SHORTCUTS: [string, string][] = [
   ['L', 'Good fit'],
   ['M', 'Mute'],
   ['↑ / ↓', 'Volume'],
-  ['T', 'Table mode'],
   ['⌘K', 'Command palette'],
 ];
 

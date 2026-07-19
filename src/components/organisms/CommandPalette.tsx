@@ -22,7 +22,6 @@ export const CommandPalette = () => {
   const open = useUiStore((s) => s.paletteOpen);
   const setOpen = useUiStore((s) => s.setPaletteOpen);
   const setSettingsOpen = useUiStore((s) => s.setSettingsOpen);
-  const toggleTableMode = useUiStore((s) => s.toggleTableMode);
   const { data: playlists = [] } = usePlaylists();
   const actions = usePlayerActions();
   const navigate = useNavigate();
@@ -39,7 +38,6 @@ export const CommandPalette = () => {
 
   const items = useMemo<Command[]>(() => {
     const commands: Command[] = [
-      { id: 'table', label: 'Toggle table mode', icon: 'crop_free', run: toggleTableMode },
       { id: 'settings', label: 'Open settings', icon: 'tune', run: () => setSettingsOpen(true) },
     ];
     const playlistCommands: Command[] = playlists.map((m) => ({
@@ -55,7 +53,7 @@ export const CommandPalette = () => {
     const all = [...commands, ...playlistCommands];
     const q = query.trim().toLowerCase();
     return q ? all.filter((i) => i.label.toLowerCase().includes(q)) : all;
-  }, [playlists, query, actions, navigate, setSettingsOpen, toggleTableMode]);
+  }, [playlists, query, actions, navigate, setSettingsOpen]);
 
   const run = (cmd: Command) => {
     cmd.run();
