@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 
 import { AppAuthProvider } from '~auth/AppAuthProvider';
-import { AmbientController } from '~features/ambient/AmbientController';
 import { PlayerProvider } from '~features/player/PlayerProvider';
 import { MusicProviderProvider } from '~music/MusicProviderContext';
 
@@ -18,10 +17,7 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
       <QueryProvider>
         <MusicProviderProvider>
           <ThemeProvider>
-            <PlayerProvider>
-              <AmbientController />
-              {children}
-            </PlayerProvider>
+            <PlayerProvider>{children}</PlayerProvider>
           </ThemeProvider>
         </MusicProviderProvider>
       </QueryProvider>

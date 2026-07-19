@@ -1,19 +1,13 @@
-import { clsx } from 'clsx';
 import type { ReactNode } from 'react';
 
 import { Icon } from '~components/atoms/Icon';
 import { Modal } from '~components/molecules/Modal';
 import { useMusicAuth } from '~music/useMusicAuth';
 import { usePlayerStore } from '~stores/playerStore';
-import { AMBIENT_KINDS, type AmbientKind, useSettingsStore } from '~stores/settingsStore';
+import { useSettingsStore } from '~stores/settingsStore';
 import { useUiStore } from '~stores/uiStore';
-import { capitalize } from '~theme/atmosphere';
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
-const SEG_BTN = 'border-none px-3 py-1.5 text-[13px] font-semibold rounded-[7px] cursor-pointer';
-const SEG_ACTIVE = 'bg-accent/18 text-accent';
-const SEG_INACTIVE = 'bg-transparent text-muted';
-const SEGMENT = 'flex gap-1 rounded-sm border border-line-10 bg-surface-control p-[3px]';
 const SLIDER_ROW = 'flex items-center gap-3';
 const VALUE = 'min-w-[36px] text-right text-[13px] tabular-nums text-muted';
 const PRIMARY_BTN =
@@ -82,46 +76,6 @@ export const SettingsPanel = () => {
                 onChange={(e) => settings.setCrossfadeMs(Number(e.target.value))}
               />
               <span className={VALUE}>{(settings.crossfadeMs / 1000).toFixed(1)}s</span>
-            </div>
-          </div>
-        </Section>
-
-        <Section title="Ambient bed">
-          <div className={ROW}>
-            <span className={LABEL}>Sound</span>
-            <div className={SEGMENT}>
-              <button
-                type="button"
-                className={clsx(SEG_BTN, settings.ambientKind === null ? SEG_ACTIVE : SEG_INACTIVE)}
-                onClick={() => settings.setAmbientKind(null)}
-              >
-                Off
-              </button>
-              {AMBIENT_KINDS.map((k: AmbientKind) => (
-                <button
-                  key={k}
-                  type="button"
-                  className={clsx(SEG_BTN, settings.ambientKind === k ? SEG_ACTIVE : SEG_INACTIVE)}
-                  onClick={() => settings.setAmbientKind(k)}
-                >
-                  {capitalize(k)}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className={ROW}>
-            <span className={LABEL}>Ambient volume</span>
-            <div className={SLIDER_ROW}>
-              <input
-                type="range"
-                className="w-[160px] accent-accent"
-                min={0}
-                max={1}
-                step={0.05}
-                value={settings.ambientVolume}
-                onChange={(e) => settings.setAmbientVolume(Number(e.target.value))}
-              />
-              <span className={VALUE}>{Math.round(settings.ambientVolume * 100)}%</span>
             </div>
           </div>
         </Section>
