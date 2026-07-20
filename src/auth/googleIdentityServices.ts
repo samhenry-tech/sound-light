@@ -12,6 +12,10 @@
  * (`mediation: 'silent'`) before the current one expires, as long as the user's
  * Google session is still alive. Browsers enforce a ~10-minute quiet period
  * between silent re-auths, which is well within our ~1-hour renewal cadence.
+ *
+ * There is no Google refresh token in this browser-only GIS path. "Stay signed
+ * in" is local intent (~60 days) + FedCM silent renew while Google allows it —
+ * not a multi-month JWT. Terraform / Cognito Identity Pool config is unchanged.
  */
 import { GOOGLE_CLIENT_ID } from './awsConfig';
 
