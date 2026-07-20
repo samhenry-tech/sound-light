@@ -5,13 +5,7 @@ import { usePlaylists } from '~api/hooks';
 import type { Playlist } from '~shared/contract';
 import { usePlayerStore } from '~stores/playerStore';
 import { useUiStore } from '~stores/uiStore';
-import {
-  type Atmosphere,
-  atmosphereColor,
-  capitalize,
-  coverFor,
-  DEFAULT_COLUMNS,
-} from '~theme/atmosphere';
+import { type Atmosphere, atmosphereColor, capitalize, coverFor } from '~theme/atmosphere';
 import { playlistName } from '~utils/formatUtils';
 
 export interface LiveCard {
@@ -53,9 +47,8 @@ export const useLivePlaylists = () => {
   const liveFilter = useUiStore((s) => s.liveFilter);
   const playingPlaylistId = usePlayerStore((s) => s.playingPlaylistId);
 
-  // Labels are always combined and the grid is always fixed-width.
+  // Labels are always combined; column count is CSS-driven in PlaylistGrid.
   const combined = true;
-  const cols = DEFAULT_COLUMNS;
 
   const cards = useMemo(() => {
     const q = liveQuery.trim().toLowerCase();
@@ -81,5 +74,5 @@ export const useLivePlaylists = () => {
     return list;
   }, [playlists, liveQuery, liveFilter, combined, playingPlaylistId]);
 
-  return { cards, cols, isLoading };
+  return { cards, isLoading };
 };

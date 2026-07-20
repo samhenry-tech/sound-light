@@ -24,7 +24,7 @@ export const SearchToAdd = ({
   noResults,
 }: SearchToAddProps) => {
   return (
-    <div className="relative z-[6] flex-shrink-0 px-[26px] pb-1 pt-4">
+    <div className="relative z-[6] flex-shrink-0 px-4 pb-1 pt-4 sm:px-[26px]">
       <SearchInput
         value={query}
         onChange={onQuery}
@@ -36,7 +36,7 @@ export const SearchToAdd = ({
         ariaLabel="Search Spotify"
       />
       {active && (
-        <div className="absolute left-[26px] right-[26px] top-[62px] z-[8] max-h-[368px] overflow-y-auto rounded-[14px] border border-line-14 bg-[#161a1b] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.6)] animate-[risein_0.16s_ease-out]">
+        <div className="absolute inset-x-4 top-[62px] z-[8] max-h-[min(368px,50vh)] overflow-y-auto rounded-[14px] border border-line-14 bg-[#161a1b] p-2 shadow-[0_24px_60px_rgba(0,0,0,0.6)] animate-[risein_0.16s_ease-out] sm:inset-x-[26px]">
           {results.map((r) => (
             <SearchResultRow
               key={`${r.kind}:${r.uri}`}
