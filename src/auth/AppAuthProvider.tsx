@@ -13,7 +13,15 @@ import {
   renewGoogleIdTokenSilently,
   signOutGoogle,
 } from './googleIdentityServices';
-import { clearAuthTokens, persistIdToken, readStoredIdToken } from './googleTokenStore';
+import {
+  clearAuthSession,
+  clearAuthTokens,
+  clearStoredIdToken,
+  hasValidSessionIntent,
+  persistIdToken,
+  persistSessionIntent,
+  readStoredIdToken,
+} from './googleTokenStore';
 
 interface AuthState {
   isLoading: boolean;
@@ -35,16 +43,26 @@ const SIGNED_OUT: AuthState = {
 /** Renew this many ms before the Google ID token expires. */
 const RENEW_SKEW_MS = 60_000;
 
-const canResumeSession = (): boolean => Boolean(readStoredIdToken());
+/** Retry silent renew this many ms after a transient failure. */
+const RENEW_RETRY_MS = 5 * 60_000;
+
+/** Consider a token "due soon" this far before expiry (focus/visibility renew). */
+const FOCUS_RENEW_SKEW_MS = 5 * 60_000;
+
+const canResumeSession = (): boolean => Boolean(readStoredIdToken()) || hasValidSessionIntent();
 
 /**
  * Google Identity Services (GIS) → Cognito Identity Pool auth provider.
  *
  * Sign-in yields a Google ID token (via GIS/FedCM), which is exchanged with the
  * Cognito Identity Pool for the caller's Identity ID (`owner`) and the AWS
- * credentials used to talk to DynamoDB. Sessions slide: a background timer
- * silently re-mints the ID token via FedCM before it expires, so DynamoDB
- * access keeps working as long as the user's Google session is alive.
+ * credentials used to talk to DynamoDB.
+ *
+ * Sessions slide for up to ~60 days of local "stay signed in" intent: a
+ * background timer (and focus/visibility hooks) silently re-mints the ID token
+ * via FedCM before it expires. That only works while the user's Google session
+ * is alive and the browser allows FedCM — there is no Google refresh token in
+ * this SPA path, and Terraform/Cognito session length is unchanged.
  */
 export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<AuthState>(() =>
@@ -66,6 +84,7 @@ export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
       if (!IdentityId) throw new Error('Cognito did not return an identity id.');
 
       persistIdToken(idToken);
+      persistSessionIntent(true);
 
       setState({
         isLoading: false,
@@ -101,7 +120,7 @@ export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const logout = useCallback(async (): Promise<void> => {
-    clearAuthTokens();
+    clearAuthSession();
     destroyDynamoClientCache();
     await signOutGoogle();
     setState(SIGNED_OUT);
@@ -118,7 +137,7 @@ export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   // Resume on cold start: use a still-valid stored token, otherwise try a
-  // silent FedCM re-auth before giving up.
+  // silent FedCM re-auth while the local stay-signed-in intent is valid.
   const resumedRef = useRef(false);
   useEffect(() => {
     if (resumedRef.current) return;
@@ -131,48 +150,121 @@ export const AppAuthProvider = ({ children }: { children: ReactNode }) => {
           await establishSessionRef.current(stored);
           return;
         } catch {
-          clearAuthTokens();
+          clearStoredIdToken();
+        }
+      } else if (stored) {
+        clearStoredIdToken();
+      }
+
+      if (hasValidSessionIntent()) {
+        try {
+          const idToken = await renewGoogleIdTokenSilently();
+          await establishSessionRef.current(idToken);
+          return;
+        } catch {
+          // Keep the intent so a later focus/One Tap can still recover; show
+          // the login screen without treating this as a hard logout.
+          clearStoredIdToken();
+          setState(SIGNED_OUT);
+          void promptGoogleSignIn().catch(() => {
+            // Prompt is best-effort; the rendered Google button remains.
+          });
+          return;
         }
       }
 
-      try {
-        const idToken = await renewGoogleIdTokenSilently();
-        await establishSessionRef.current(idToken);
-        return;
-      } catch {
-        clearAuthTokens();
-        setState(SIGNED_OUT);
-      }
+      clearAuthSession();
+      setState(SIGNED_OUT);
     })();
   }, []);
 
-  // Sliding renewal: silently re-mint the ID token shortly before it expires so
-  // Cognito credentials (and DynamoDB access) keep flowing. If silent re-auth
-  // is not possible, end the session so the user can sign in again.
+  const renewInFlightRef = useRef(false);
+
+  const renewSessionSilently = useCallback(async (): Promise<boolean> => {
+    if (!hasValidSessionIntent() || renewInFlightRef.current) return false;
+    renewInFlightRef.current = true;
+    try {
+      const idToken = await renewGoogleIdTokenSilently();
+      await establishSessionRef.current(idToken);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      renewInFlightRef.current = false;
+    }
+  }, []);
+
+  // Sliding renewal: silently re-mint the ID token shortly before it expires.
+  // Transient FedCM failures do not clear the stay-signed-in intent; we retry
+  // after a short delay and again when the tab becomes visible.
   useEffect(() => {
     if (!state.isAuthenticated || !state.googleIdToken) return;
 
     const claims = decodeGoogleIdToken(state.googleIdToken);
     const delay = Math.max(claims.exp * 1000 - Date.now() - RENEW_SKEW_MS, 0);
+    let retryTimer: number | undefined;
 
     const timer = window.setTimeout(() => {
       void (async () => {
-        try {
-          const idToken = await renewGoogleIdTokenSilently();
-          await establishSessionRef.current(idToken);
-        } catch {
-          clearAuthTokens();
-          destroyDynamoClientCache();
+        const ok = await renewSessionSilently();
+        if (ok) return;
+
+        // Token may still be valid for a bit — keep the session and retry.
+        if (!isGoogleIdTokenExpired(state.googleIdToken!)) {
+          retryTimer = window.setTimeout(() => {
+            void renewSessionSilently();
+          }, RENEW_RETRY_MS);
+          return;
+        }
+
+        // Token is gone and silent renew failed. Keep intent for later resume
+        // but drop the live session so DynamoDB calls stop using a dead token.
+        clearStoredIdToken();
+        destroyDynamoClientCache();
+        if (!hasValidSessionIntent()) {
+          clearAuthSession();
           setState({
             ...SIGNED_OUT,
             error: 'Your session expired. Please sign in again.',
           });
+          return;
         }
+        setState({
+          ...SIGNED_OUT,
+          error: 'Your session expired. Please sign in again.',
+        });
       })();
     }, delay);
 
-    return () => clearTimeout(timer);
-  }, [state.isAuthenticated, state.googleIdToken]);
+    return () => {
+      clearTimeout(timer);
+      if (retryTimer !== undefined) clearTimeout(retryTimer);
+    };
+  }, [state.isAuthenticated, state.googleIdToken, renewSessionSilently]);
+
+  // When the tab wakes up, renew if the token is missing or near expiry.
+  useEffect(() => {
+    const maybeRenew = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (!hasValidSessionIntent()) return;
+
+      const token = readStoredIdToken();
+      if (token && !isGoogleIdTokenExpired(token, FOCUS_RENEW_SKEW_MS)) return;
+
+      void renewSessionSilently().then((ok) => {
+        if (ok || state.isAuthenticated) return;
+        // Signed-out but intent remains — offer One Tap quietly.
+        void promptGoogleSignIn().catch(() => {});
+      });
+    };
+
+    window.addEventListener('focus', maybeRenew);
+    document.addEventListener('visibilitychange', maybeRenew);
+    return () => {
+      window.removeEventListener('focus', maybeRenew);
+      document.removeEventListener('visibilitychange', maybeRenew);
+    };
+  }, [renewSessionSilently, state.isAuthenticated]);
 
   const session = useMemo<AuthSession>(
     () => ({
