@@ -1,3 +1,5 @@
+import { clsx } from 'clsx';
+
 import { AccentButton } from '~components/atoms/AccentButton';
 import { LibraryRow } from '~components/molecules/LibraryRow';
 import { SearchInput } from '~components/molecules/SearchInput';
@@ -17,6 +19,7 @@ interface LibraryMasterProps {
   onQuery: (q: string) => void;
   onNew: () => void;
   onSelect: (id: string) => void;
+  className?: string;
 }
 
 /** Library master column: title, New, a filter, and the list of playlists. */
@@ -27,9 +30,15 @@ export const LibraryMaster = ({
   onQuery,
   onNew,
   onSelect,
+  className,
 }: LibraryMasterProps) => {
   return (
-    <div className="flex w-[var(--master-w)] min-h-0 flex-shrink-0 flex-col border-r border-line-07">
+    <div
+      className={clsx(
+        'flex w-[var(--master-w)] min-h-0 flex-shrink-0 flex-col border-r border-line-07 max-md:w-full max-md:border-r-0',
+        className,
+      )}
+    >
       <div className="flex-shrink-0 px-[18px] pb-3 pt-5">
         <div className="mb-3.5 flex items-center justify-between">
           <span className="text-[21px] font-extrabold tracking-[-0.02em]">Library</span>

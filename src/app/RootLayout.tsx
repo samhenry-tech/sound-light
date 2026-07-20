@@ -20,8 +20,8 @@ export const RootLayout = () => {
 
   const active: Screen = location.pathname.startsWith('/library') ? 'library' : 'home';
 
-  // Dev-only tablet mode swaps the fixed iPad canvas for a plain full-viewport
-  // layout; production always uses the app shell.
+  // Responsive full-viewport shell by default. Dev-only tablet mode previews
+  // the fixed 1194×834 iPad canvas.
   const Shell = import.meta.env.DEV && tabletMode ? TabletShell : AppShell;
 
   return (

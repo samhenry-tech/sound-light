@@ -5,23 +5,19 @@ import { PlaylistCard } from './PlaylistCard';
 
 interface PlaylistGridProps {
   cards: LiveCard[];
-  cols: number;
   isLoading?: boolean;
   onSelect: (id: string) => void;
   onTogglePin: (id: string) => void;
 }
 
-/** The scrolling grid of Live vibe cards. */
-export const PlaylistGrid = ({
-  cards,
-  cols,
-  isLoading,
-  onSelect,
-  onTogglePin,
-}: PlaylistGridProps) => {
+/**
+ * The scrolling grid of Live vibe cards. Column count is CSS-driven so it
+ * adapts from phones (~2) through tablets to desktop (~5).
+ */
+export const PlaylistGrid = ({ cards, isLoading, onSelect, onTogglePin }: PlaylistGridProps) => {
   if (isLoading) {
     return (
-      <div className="flex justify-center p-[60px]">
+      <div className="flex justify-center p-10 sm:p-[60px]">
         <Spinner size={22} />
       </div>
     );
@@ -34,10 +30,7 @@ export const PlaylistGrid = ({
     );
   }
   return (
-    <div
-      className="grid content-start gap-3"
-      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-    >
+    <div className="grid grid-cols-2 content-start gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {cards.map((card) => (
         <PlaylistCard
           key={card.id}

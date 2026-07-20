@@ -122,6 +122,7 @@
   /* One-off layout dimensions — used via arbitrary utilities, e.g.
      `w-[var(--rail-w)]`, so they stay a single source of truth. */
   --rail-w: 76px;
+  --rail-mobile-h: 64px;
   --bar-h: 96px;
   --card-cover-h: 74px;
   --play-btn: 58px;
@@ -129,9 +130,30 @@
   --master-w: 336px;
   --detail-cover: 64px;
 
-  /* Canvas (iPad landscape) */
+  /* Canvas (iPad landscape) — used by the DEV tablet preview shell */
   --canvas-w: 1194px;
   --canvas-h: 834px;
+}
+
+/* Fluid layout tokens for phones and narrow tablets. */
+@media (max-width: 639px) {
+  :root {
+    --rail-w: 100%;
+    --bar-h: 84px;
+    --card-cover-h: 64px;
+    --play-btn: 48px;
+    --thumb-btn: 44px;
+    --master-w: 100%;
+    --detail-cover: 52px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  :root {
+    --rail-w: 68px;
+    --bar-h: 88px;
+    --master-w: 280px;
+  }
 }
 
 @layer base {

@@ -16,9 +16,9 @@ interface NavRailProps {
 }
 
 const TOOL =
-  'flex h-11 w-11 items-center justify-center rounded-[13px] border-none bg-transparent text-muted-2 cursor-pointer transition-colors duration-150 hover:text-quiet';
+  'flex h-11 w-11 items-center justify-center rounded-[13px] border-none bg-transparent text-muted-2 cursor-pointer transition-colors duration-150 hover:text-quiet max-sm:h-10 max-sm:w-10';
 
-/** Left rail: app mark, primary navigation, and quick tools. */
+/** Left rail (desktop/tablet) / bottom bar (phone): mark, nav, and quick tools. */
 export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: NavRailProps) => {
   const { logout } = useAuthSession();
   const tabletMode = useUiStore((s) => s.tabletMode);
@@ -26,10 +26,10 @@ export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: N
 
   return (
     <nav
-      className="flex w-[var(--rail-w)] flex-shrink-0 flex-col items-center gap-2 border-r border-line-07 bg-rail py-4"
+      className="flex w-[var(--rail-w)] flex-shrink-0 flex-col items-center gap-2 border-r border-line-07 bg-rail py-4 max-sm:h-[var(--rail-mobile-h)] max-sm:w-full max-sm:flex-row max-sm:justify-between max-sm:gap-1 max-sm:border-r-0 max-sm:border-t max-sm:px-3 max-sm:py-1.5"
       aria-label="Primary"
     >
-      <div className="mb-3 flex flex-col items-center gap-1.5">
+      <div className="mb-3 flex flex-col items-center gap-1.5 max-sm:mb-0 max-sm:hidden">
         <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px] bg-accent">
           <Icon name="graphic_eq" size={22} className="text-[#0c0e0f]" />
         </div>
@@ -38,22 +38,24 @@ export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: N
         </span>
       </div>
 
-      <NavItem
-        icon="graphic_eq"
-        label="Home"
-        active={active === 'home'}
-        onClick={() => onNavigate('home')}
-      />
-      <NavItem
-        icon="library_music"
-        label="Library"
-        active={active === 'library'}
-        onClick={() => onNavigate('library')}
-      />
+      <div className="flex flex-col items-center gap-2 max-sm:flex-row max-sm:gap-1">
+        <NavItem
+          icon="graphic_eq"
+          label="Home"
+          active={active === 'home'}
+          onClick={() => onNavigate('home')}
+        />
+        <NavItem
+          icon="library_music"
+          label="Library"
+          active={active === 'library'}
+          onClick={() => onNavigate('library')}
+        />
+      </div>
 
-      <div className="flex-1" />
+      <div className="flex-1 max-sm:hidden" />
 
-      <div className="flex flex-col items-center gap-1.5">
+      <div className="flex flex-col items-center gap-1.5 max-sm:flex-row max-sm:gap-0.5">
         <button
           type="button"
           className={TOOL}
@@ -67,8 +69,8 @@ export const NavRail = ({ active, onNavigate, onOpenPalette, onOpenSettings }: N
           <button
             type="button"
             className={clsx(TOOL, tabletMode && 'bg-accent/15 text-accent hover:text-accent')}
-            title="Tablet mode (dev)"
-            aria-label="Toggle tablet mode"
+            title="iPad canvas preview (dev)"
+            aria-label="Toggle iPad canvas preview"
             aria-pressed={tabletMode}
             onClick={toggleTabletMode}
           >

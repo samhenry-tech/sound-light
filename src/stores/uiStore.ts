@@ -19,7 +19,7 @@ interface UiState {
   showBanished: boolean;
 
   /** App modes */
-  /** Dev-only: bypass the fixed iPad app-shell and render a simple layout. */
+  /** Dev-only: preview the fixed 1194×834 iPad canvas instead of the fluid shell. */
   tabletMode: boolean;
   paletteOpen: boolean;
   settingsOpen: boolean;
