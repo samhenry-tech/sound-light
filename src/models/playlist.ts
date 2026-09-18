@@ -14,6 +14,11 @@ export const playlistSchema = z.object({
   location: z.string().min(1),
   atmosphere: atmosphereSchema,
   pinned: z.boolean(),
+  /**
+   * Present on shared default-catalog rows (`owner === "defaults"`). Omitted
+   * from personal playlists.
+   */
+  genre: z.string().min(1).optional(),
   /** Spotify playlist/album URIs added as locked units. */
   sourceUris: z.array(z.string()),
   /** Individually-added Spotify track URIs. */

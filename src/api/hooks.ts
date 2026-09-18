@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useAuthSession } from '~/auth/useAuthSession';
+import type { DefaultGenreId } from '~/models/defaultPlaylists';
 import type { CreatePlaylistInput, Playlist, UpdatePlaylistInput } from '~/models/playlist';
 import {
   type PublicUserSettings,
@@ -108,6 +109,41 @@ export const useDeletePlaylist = () => {
       if (context?.previous) qc.setQueryData(key, context.previous);
     },
     onSettled: () => void qc.invalidateQueries({ queryKey: key }),
+  });
+};
+
+export const useDefaultPlaylists = () => {
+  const ctx = useDataContext();
+  return useQuery({
+    queryKey: dataKeys.defaultPlaylists,
+    queryFn: () => dataAdapter.listDefaultPlaylists(ctx),
+    enabled: ctx.ready,
+    staleTime: 5 * 60_000,
+  });
+};
+
+export const useCopyGenreDefaults = () => {
+  const ctx = useDataContext();
+  const qc = useQueryClient();
+  const key = dataKeys.playlists(ctx.owner);
+
+  return useMutation({
+    mutationFn: (genre: DefaultGenreId) => dataAdapter.copyGenreDefaults(ctx, genre),
+    onSuccess: (created) => {
+      qc.setQueryData<Playlist[]>(key, (prev) => [...(prev ?? []), ...created]);
+    },
+    onSettled: () => void qc.invalidateQueries({ queryKey: key }),
+  });
+};
+
+export const usePutDefaultPlaylist = () => {
+  const ctx = useDataContext();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (playlist: Playlist) => dataAdapter.putDefaultPlaylist(ctx, playlist),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: dataKeys.defaultPlaylists });
+    },
   });
 };
 

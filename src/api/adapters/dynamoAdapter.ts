@@ -5,10 +5,19 @@
  * tables. IAM enforces row-level isolation via `dynamodb:LeadingKeys`, so a
  * wrong/forged owner simply gets AccessDenied from DynamoDB. Everything read
  * or written is validated against the shared Zod contract.
+ *
+ * Shared default genre packs live in the same playlists table under the fixed
+ * partition key {@link DEFAULTS_OWNER} (readable by all authenticated users;
+ * writable only by the configured admin identity).
  */
 import { DeleteCommand, GetCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 
 import { PLAYLISTS_TABLE, SETTINGS_TABLE } from '~/auth/awsConfig';
+import {
+  type DefaultGenreId,
+  defaultGenreIdSchema,
+  DEFAULTS_OWNER,
+} from '~/models/defaultPlaylists';
 import {
   createPlaylistSchema,
   type Playlist,
@@ -41,21 +50,24 @@ const fetchSettings = async (ctx: DataContext): Promise<UserSettings | undefined
   return result.Item ? userSettingsSchema.parse(result.Item) : undefined;
 };
 
+const queryPlaylistsByOwner = async (ctx: DataContext, owner: string): Promise<Playlist[]> => {
+  const result = await getDynamoClient(ctx.googleIdToken).send(
+    new QueryCommand({
+      TableName: PLAYLISTS_TABLE,
+      KeyConditionExpression: '#owner = :owner',
+      ExpressionAttributeNames: { '#owner': 'owner' },
+      ExpressionAttributeValues: { ':owner': owner },
+    }),
+  );
+  const playlists = playlistListSchema.parse(result.Items ?? []);
+  return playlists.sort(
+    (a, b) => a.sortIndex - b.sortIndex || a.createdAt.localeCompare(b.createdAt),
+  );
+};
+
 export const dynamoAdapter: DataAdapter = {
   async listPlaylists(ctx) {
-    const result = await getDynamoClient(ctx.googleIdToken).send(
-      new QueryCommand({
-        TableName: PLAYLISTS_TABLE,
-        KeyConditionExpression: '#owner = :owner',
-        ExpressionAttributeNames: { '#owner': 'owner' },
-        ExpressionAttributeValues: { ':owner': ctx.owner },
-      }),
-    );
-    const playlists = playlistListSchema.parse(result.Items ?? []);
-    // Stable, predictable order for the client grid.
-    return playlists.sort(
-      (a, b) => a.sortIndex - b.sortIndex || a.createdAt.localeCompare(b.createdAt),
-    );
+    return queryPlaylistsByOwner(ctx, ctx.owner);
   },
 
   async createPlaylist(ctx, input) {
@@ -100,6 +112,59 @@ export const dynamoAdapter: DataAdapter = {
     await getDynamoClient(ctx.googleIdToken).send(
       new DeleteCommand({ TableName: PLAYLISTS_TABLE, Key: { owner: ctx.owner, id } }),
     );
+  },
+
+  async listDefaultPlaylists(ctx) {
+    return queryPlaylistsByOwner(ctx, DEFAULTS_OWNER);
+  },
+
+  async putDefaultPlaylist(ctx, playlist) {
+    const item = playlistSchema.parse({
+      ...playlist,
+      owner: DEFAULTS_OWNER,
+      updatedAt: new Date().toISOString(),
+    });
+    if (!item.genre) throw new Error('Default playlists require a genre');
+    defaultGenreIdSchema.parse(item.genre);
+    await getDynamoClient(ctx.googleIdToken).send(
+      new PutCommand({ TableName: PLAYLISTS_TABLE, Item: item }),
+    );
+    return item;
+  },
+
+  async copyGenreDefaults(ctx, genre: DefaultGenreId) {
+    const pack = (await queryPlaylistsByOwner(ctx, DEFAULTS_OWNER)).filter(
+      (p) => p.genre === genre,
+    );
+    if (pack.length === 0) {
+      throw new Error(`No default playlists found for genre “${genre}”`);
+    }
+
+    const existing = await queryPlaylistsByOwner(ctx, ctx.owner);
+    const baseSort = existing.length;
+    const now = new Date().toISOString();
+    const created: Playlist[] = [];
+
+    for (const [index, source] of pack.entries()) {
+      const playlist = playlistSchema.parse({
+        id: createId(),
+        owner: ctx.owner,
+        location: source.location,
+        atmosphere: source.atmosphere,
+        pinned: source.pinned,
+        sourceUris: [],
+        trackUris: [...source.trackUris],
+        banishedTrackUris: [],
+        sortIndex: baseSort + index,
+        createdAt: now,
+        updatedAt: now,
+      });
+      await getDynamoClient(ctx.googleIdToken).send(
+        new PutCommand({ TableName: PLAYLISTS_TABLE, Item: playlist }),
+      );
+      created.push(playlist);
+    }
+    return created;
   },
 
   async getSettings(ctx) {
