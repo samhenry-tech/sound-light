@@ -1,13 +1,13 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { CommandPalette } from '~components/organisms/CommandPalette';
-import type { Screen } from '~components/organisms/NavRail';
-import { SettingsPanel } from '~components/organisms/SettingsPanel';
-import { SpotifyLinkGate } from '~components/organisms/SpotifyLinkGate';
-import { AppShell } from '~components/templates/AppShell';
-import { TabletShell } from '~components/templates/TabletShell';
-import { useKeyboardShortcuts } from '~features/player/useKeyboardShortcuts';
-import { useUiStore } from '~stores/uiStore';
+import { AppLayout } from '~/components/layouts/AppLayout';
+import { TabletLayout } from '~/components/layouts/TabletLayout';
+import { CommandPalette } from '~/components/organisms/CommandPalette';
+import type { Screen } from '~/components/organisms/NavRail';
+import { SettingsPanel } from '~/components/organisms/SettingsPanel';
+import { SpotifyLinkGate } from '~/components/organisms/SpotifyLinkGate';
+import { useKeyboardShortcuts } from '~/features/player/useKeyboardShortcuts';
+import { useUiStore } from '~/stores/uiStore';
 
 /** Auth gate + app shell that wraps the Home / Library routes. */
 export const RootLayout = () => {
@@ -22,18 +22,18 @@ export const RootLayout = () => {
 
   // Responsive full-viewport shell by default. Dev-only tablet mode previews
   // the fixed 1194×834 iPad canvas.
-  const Shell = import.meta.env.DEV && tabletMode ? TabletShell : AppShell;
+  const Layout = import.meta.env.DEV && tabletMode ? TabletLayout : AppLayout;
 
   return (
     <>
-      <Shell
+      <Layout
         active={active}
         onNavigate={(screen) => navigate(`/${screen}`)}
         onOpenPalette={() => setPaletteOpen(true)}
         onOpenSettings={() => setSettingsOpen(true)}
       >
         <Outlet />
-      </Shell>
+      </Layout>
       <CommandPalette />
       <SettingsPanel />
       <SpotifyLinkGate />

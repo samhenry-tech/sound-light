@@ -1,5 +1,5 @@
-import { Icon } from '~components/atoms/Icon';
-import { IconButton } from '~components/atoms/IconButton';
+import { Icon } from '~/components/atoms/Icon';
+import { IconButton } from '~/components/atoms/IconButton';
 
 interface TrackRowProps {
   title: string;

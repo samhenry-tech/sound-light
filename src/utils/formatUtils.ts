@@ -1,4 +1,4 @@
-import { type Atmosphere, capitalize } from '~theme/atmosphere';
+import { type Atmosphere, capitalize } from '~/theme/atmosphere';
 
 /** Display name for a playlist: "{location} – {Atmosphere}" (en-dash, per handoff). */
 export const playlistName = (location: string, atmosphere: Atmosphere): string => {

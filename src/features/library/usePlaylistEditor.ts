@@ -1,14 +1,15 @@
 /** View-model for the Library detail editor of a single playlist. */
 import { useMemo } from 'react';
 
-import { useDeletePlaylist, useUpdatePlaylist } from '~api/hooks';
-import { useMusicSearch } from '~music/hooks/useMusicSearch';
-import { useResolvedSources, useResolvedTracks } from '~music/hooks/useResolvedTracks';
-import { useMusicProvider } from '~music/MusicProviderContext';
-import type { MusicSource, MusicTrack, ResolvedSource } from '~music/types';
-import type { Playlist } from '~shared/contract';
-import { useUiStore } from '~stores/uiStore';
-import type { Atmosphere } from '~theme/atmosphere';
+import { useDeletePlaylist, useUpdatePlaylist } from '~/api/hooks';
+import type { Playlist } from '~/models/playlist';
+import { useMusicSearch } from '~/music-providers/hooks/useMusicSearch';
+import { useResolvedSources, useResolvedTracks } from '~/music-providers/hooks/useResolvedTracks';
+import type { MusicSource, ResolvedSource } from '~/music-providers/models/MusicSource';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
+import { useMusicProvider } from '~/music-providers/MusicProviderContext';
+import { useUiStore } from '~/stores/uiStore';
+import type { Atmosphere } from '~/theme/atmosphere';
 
 import { effectiveTracks, splitByBanished, type TrackWithOrigin } from './playlistTracks';
 

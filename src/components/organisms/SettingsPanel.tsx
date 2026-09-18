@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 
-import { Icon } from '~components/atoms/Icon';
-import { Modal } from '~components/molecules/Modal';
-import { useMusicAuth } from '~music/useMusicAuth';
-import { usePlayerStore } from '~stores/playerStore';
-import { useSettingsStore } from '~stores/settingsStore';
-import { useUiStore } from '~stores/uiStore';
+import { Icon } from '~/components/atoms/Icon';
+import { Modal } from '~/components/molecules/Modal';
+import { useMusicAuth } from '~/music-providers/useMusicAuth';
+import { usePlayerStore } from '~/stores/playerStore';
+import { useSettingsStore } from '~/stores/settingsStore';
+import { useUiStore } from '~/stores/uiStore';
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
 const SLIDER_ROW = 'flex items-center gap-3';

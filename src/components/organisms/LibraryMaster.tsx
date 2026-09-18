@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 
-import { AccentButton } from '~components/atoms/AccentButton';
-import { LibraryRow } from '~components/molecules/LibraryRow';
-import { SearchInput } from '~components/molecules/SearchInput';
+import { AccentButton } from '~/components/atoms/AccentButton';
+import { LibraryRow } from '~/components/molecules/LibraryRow';
+import { SearchInput } from '~/components/molecules/SearchInput';
 
 export interface LibraryRowData {
   id: string;

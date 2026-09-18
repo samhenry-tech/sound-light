@@ -8,19 +8,21 @@
  */
 import { DeleteCommand, GetCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 
-import { PLAYLISTS_TABLE, SETTINGS_TABLE } from '~auth/awsConfig';
+import { PLAYLISTS_TABLE, SETTINGS_TABLE } from '~/auth/awsConfig';
 import {
-  createPlaylistInputSchema,
-  DEFAULT_SETTINGS,
+  createPlaylistSchema,
   type Playlist,
   playlistListSchema,
   playlistSchema,
-  updatePlaylistInputSchema,
-  updateUserSettingsInputSchema,
+  updatePlaylistSchema,
+} from '~/models/playlist';
+import {
+  DEFAULT_SETTINGS,
+  updateUserSettingsSchema,
   type UserSettings,
   userSettingsSchema,
-} from '~shared/contract';
-import { createId } from '~utils/idUtils';
+} from '~/models/userSettings';
+import { createId } from '~/utils/idUtils';
 
 import { getDynamoClient } from '../dynamoClient';
 import type { DataAdapter, DataContext } from './types';
@@ -57,7 +59,7 @@ export const dynamoAdapter: DataAdapter = {
   },
 
   async createPlaylist(ctx, input) {
-    const values = createPlaylistInputSchema.parse(input);
+    const values = createPlaylistSchema.parse(input);
     const now = new Date().toISOString();
     const playlist = playlistSchema.parse({
       ...values,
@@ -78,7 +80,7 @@ export const dynamoAdapter: DataAdapter = {
 
     // Partial update over the immutable identity fields: id/owner/createdAt
     // are never client-mutable.
-    const patch = updatePlaylistInputSchema.parse(input);
+    const patch = updatePlaylistSchema.parse(input);
     const updated: Playlist = {
       ...existing,
       ...patch,
@@ -108,7 +110,7 @@ export const dynamoAdapter: DataAdapter = {
   },
 
   async updateSettings(ctx, input) {
-    const patch = updateUserSettingsInputSchema.parse(input);
+    const patch = updateUserSettingsSchema.parse(input);
     const base = (await fetchSettings(ctx)) ?? { owner: ctx.owner, ...DEFAULT_SETTINGS };
     const { googleRefreshToken, ...uiPatch } = patch;
     const settings: UserSettings = {

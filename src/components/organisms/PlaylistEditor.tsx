@@ -1,11 +1,11 @@
-import { GradientCover } from '~components/atoms/GradientCover';
-import { Icon } from '~components/atoms/Icon';
-import { Select } from '~components/molecules/Select';
-import { SourceRow } from '~components/molecules/SourceRow';
-import { TrackRow } from '~components/molecules/TrackRow';
-import type { PlaylistEditorModel } from '~features/library/usePlaylistEditor';
-import type { Playlist } from '~shared/contract';
-import { useUiStore } from '~stores/uiStore';
+import { GradientCover } from '~/components/atoms/GradientCover';
+import { Icon } from '~/components/atoms/Icon';
+import { Select } from '~/components/molecules/Select';
+import { SourceRow } from '~/components/molecules/SourceRow';
+import { TrackRow } from '~/components/molecules/TrackRow';
+import type { PlaylistEditorModel } from '~/features/library/usePlaylistEditor';
+import type { Playlist } from '~/models/playlist';
+import { useUiStore } from '~/stores/uiStore';
 import {
   type Atmosphere,
   atmosphereColor,
@@ -13,8 +13,8 @@ import {
   capitalize,
   coverFor,
   LOCATIONS,
-} from '~theme/atmosphere';
-import { playlistName } from '~utils/formatUtils';
+} from '~/theme/atmosphere';
+import { playlistName } from '~/utils/formatUtils';
 
 import { BanishedPanel } from './BanishedPanel';
 import { SearchToAdd } from './SearchToAdd';

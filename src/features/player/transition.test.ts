@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import type { MusicPlayer, MusicTrack } from '~music/types';
+import type { MusicPlayer } from '~/music-providers/models/MusicPlayer';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
 
 import { transitionTo } from './transition';
 

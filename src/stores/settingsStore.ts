@@ -5,7 +5,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { APP_NAME } from '~constants';
+import { APP_NAME } from '~/constants';
 
 interface SettingsState {
   /** Crossfade duration in ms when switching playlists / skipping (0 disables). */

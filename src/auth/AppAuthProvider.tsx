@@ -1,7 +1,7 @@
 import { CognitoIdentityClient, GetIdCommand } from '@aws-sdk/client-cognito-identity';
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { destroyDynamoClientCache } from '~api/dynamoClient';
+import { destroyDynamoClientCache } from '~/api/dynamoClient';
 
 import { type AuthSession, AuthSessionContext, type AuthUser } from './AuthSessionContext';
 import { AWS_REGION, COGNITO_IDENTITY_POOL_ID, GOOGLE_LOGIN_PROVIDER } from './awsConfig';

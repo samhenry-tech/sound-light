@@ -3,8 +3,8 @@
  * Ports the prototype's location/atmosphere cards and pins; tracks start empty
  * and are populated by the GM from real Spotify.
  */
-import type { Playlist } from '~shared/contract';
-import type { Atmosphere } from '~theme/atmosphere';
+import type { Playlist } from '~/models/playlist';
+import type { Atmosphere } from '~/theme/atmosphere';
 
 type Def = [id: string, location: string, atmosphere: Atmosphere];
 

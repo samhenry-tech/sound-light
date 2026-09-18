@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { Playlist } from '~shared/contract';
+import type { Playlist } from '~/models/playlist';
 
 /** Imperative player actions exposed to the UI. State is read from the stores. */
 export interface PlayerActions {

@@ -28,7 +28,7 @@
 
     /* Paths */
     "paths": {
-      "~*": ["./src/*"]
+      "~/*": ["./src/*"]
     },
 
     /* Vitest globals */

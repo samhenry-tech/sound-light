@@ -1,10 +1,10 @@
 import { clsx } from 'clsx';
 
-import { useAuthSession } from '~auth/useAuthSession';
-import { Icon } from '~components/atoms/Icon';
-import { NavItem } from '~components/molecules/NavItem';
-import { APP_NAME } from '~constants';
-import { useUiStore } from '~stores/uiStore';
+import { useAuthSession } from '~/auth/useAuthSession';
+import { Icon } from '~/components/atoms/Icon';
+import { NavItem } from '~/components/molecules/NavItem';
+import { APP_NAME } from '~/constants';
+import { useUiStore } from '~/stores/uiStore';
 
 export type Screen = 'home' | 'library';
 

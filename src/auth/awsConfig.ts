@@ -7,7 +7,7 @@
  * All values are public and live in {@link appConfig} (`src/config.ts`).
  */
 
-import { appConfig } from '~config';
+import { appConfig } from '~/config';
 
 /** Google OAuth 2.0 Web-application client ID (Sign in with Google). */
 export const GOOGLE_CLIENT_ID: string = appConfig.googleClientId;

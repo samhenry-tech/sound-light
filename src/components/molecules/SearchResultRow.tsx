@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 
-import { AccentButton } from '~components/atoms/AccentButton';
-import { Badge } from '~components/atoms/Badge';
-import { Icon } from '~components/atoms/Icon';
+import { AccentButton } from '~/components/atoms/AccentButton';
+import { Badge } from '~/components/atoms/Badge';
+import { Icon } from '~/components/atoms/Icon';
 
 interface SearchResultRowProps {
   kind: 'playlist' | 'track';

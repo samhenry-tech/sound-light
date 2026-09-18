@@ -1,4 +1,5 @@
-import type { MusicPlayer, MusicTrack } from '~music/types';
+import type { MusicPlayer } from '~/music-providers/models/MusicPlayer';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
 
 const STEP_MS = 50;
 

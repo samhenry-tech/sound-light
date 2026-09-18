@@ -6,15 +6,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { useAuthSession } from '~auth/useAuthSession';
-import type {
-  CreatePlaylistInput,
-  Playlist,
-  PublicUserSettings,
-  UpdatePlaylistInput,
-  UpdateUserSettingsInput,
-} from '~shared/contract';
-import { publicUserSettingsSchema } from '~shared/contract';
+import { useAuthSession } from '~/auth/useAuthSession';
+import type { CreatePlaylistInput, Playlist, UpdatePlaylistInput } from '~/models/playlist';
+import {
+  type PublicUserSettings,
+  publicUserSettingsSchema,
+  type UpdateUserSettingsInput,
+} from '~/models/userSettings';
 
 import type { DataContext } from './adapters/types';
 import { dataAdapter } from './dataAdapter';

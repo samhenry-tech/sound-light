@@ -1,12 +1,12 @@
 /** View-model for the Live grid: filter + search + pin-sort the GM's playlists. */
 import { useMemo } from 'react';
 
-import { usePlaylists } from '~api/hooks';
-import type { Playlist } from '~shared/contract';
-import { usePlayerStore } from '~stores/playerStore';
-import { useUiStore } from '~stores/uiStore';
-import { type Atmosphere, atmosphereColor, capitalize, coverFor } from '~theme/atmosphere';
-import { playlistName } from '~utils/formatUtils';
+import { usePlaylists } from '~/api/hooks';
+import type { Playlist } from '~/models/playlist';
+import { usePlayerStore } from '~/stores/playerStore';
+import { useUiStore } from '~/stores/uiStore';
+import { type Atmosphere, atmosphereColor, capitalize, coverFor } from '~/theme/atmosphere';
+import { playlistName } from '~/utils/formatUtils';
 
 export interface LiveCard {
   id: string;

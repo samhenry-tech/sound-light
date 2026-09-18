@@ -1,5 +1,5 @@
-import { Icon } from '~components/atoms/Icon';
-import { useMusicAuth } from '~music/useMusicAuth';
+import { Icon } from '~/components/atoms/Icon';
+import { useMusicAuth } from '~/music-providers/useMusicAuth';
 
 /**
  * Blocking overlay shown on arrival when the music account isn't linked yet.

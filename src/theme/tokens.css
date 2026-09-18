@@ -5,7 +5,7 @@
    rounded-md, animate-eq, …). `--accent` stays a plain runtime variable so
    <ThemeProvider> can retint the whole app by overriding it.
    ============================================================================= */
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
   /* Accent (themeable — indirection to the runtime `--accent` variable). */
@@ -69,7 +69,7 @@
   --radius-pill: 999px;
 
   /* Type */
-  --font-sans: 'Onest', system-ui, -apple-system, sans-serif;
+  --font-sans: "Onest", system-ui, -apple-system, sans-serif;
 
   /* Animations */
   --animate-eq: eq 0.9s ease-in-out infinite;
@@ -117,7 +117,7 @@
   --accent: #f5a04a;
 
   /* Icon font (used by the .material-symbol helper). */
-  --font-icons: 'Material Symbols Rounded';
+  --font-icons: "Material Symbols Rounded";
 
   /* One-off layout dimensions — used via arbitrary utilities, e.g.
      `w-[var(--rail-w)]`, so they stay a single source of truth. */
@@ -186,7 +186,7 @@
   /* Material Symbols Rounded helper — applied by the <Icon> atom. */
   .material-symbol {
     font-family: var(--font-icons);
-    font-feature-settings: 'liga';
+    font-feature-settings: "liga";
     font-weight: normal;
     font-style: normal;
     line-height: 1;

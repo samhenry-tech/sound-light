@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 
-import { PlaylistCover } from '~components/molecules/PlaylistCover';
-import type { LiveCard } from '~features/live/useLivePlaylists';
+import { PlaylistCover } from '~/components/molecules/PlaylistCover';
+import type { LiveCard } from '~/features/live/useLivePlaylists';
 
 interface PlaylistCardProps {
   card: LiveCard;

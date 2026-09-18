@@ -4,7 +4,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
   {
@@ -36,8 +35,8 @@ export default tseslint.config(
           groups: [
             // Node builtins + external packages.
             ['^node:', '^@?\\w'],
-            // In-project absolute imports (`~` alias).
-            ['^~'],
+            // In-project absolute imports (`~/` alias).
+            ['^~/'],
             // Relative imports (incl. CSS modules).
             ['^\\.'],
             // Side-effect imports (bare CSS) last.
@@ -65,5 +64,4 @@ export default tseslint.config(
       globals: { ...globals.browser, ...globals.node },
     },
   },
-  prettier,
 );

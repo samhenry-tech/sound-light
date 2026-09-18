@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import type { MusicTrack } from '~music/types';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
 
 import { usePlayerStore } from './playerStore';
 

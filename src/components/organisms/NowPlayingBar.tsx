@@ -1,14 +1,14 @@
 import { useShallow } from 'zustand/react/shallow';
 
-import { EqBars } from '~components/atoms/EqBars';
-import { GradientCover } from '~components/atoms/GradientCover';
-import { LikeButton, ThumbDownButton } from '~components/molecules/FeedbackButtons';
-import { PlayButton } from '~components/molecules/PlayButton';
-import { ProgressBar } from '~components/molecules/ProgressBar';
-import { VolumeControl } from '~components/molecules/VolumeControl';
-import { APP_NAME } from '~constants';
-import { usePlayerActions } from '~features/player/PlayerContext';
-import { usePlayerStore } from '~stores/playerStore';
+import { EqBars } from '~/components/atoms/EqBars';
+import { GradientCover } from '~/components/atoms/GradientCover';
+import { LikeButton, ThumbDownButton } from '~/components/molecules/FeedbackButtons';
+import { PlayButton } from '~/components/molecules/PlayButton';
+import { ProgressBar } from '~/components/molecules/ProgressBar';
+import { VolumeControl } from '~/components/molecules/VolumeControl';
+import { APP_NAME } from '~/constants';
+import { usePlayerActions } from '~/features/player/PlayerContext';
+import { usePlayerStore } from '~/stores/playerStore';
 
 const FALLBACK_COVER = 'linear-gradient(150deg,#1a1f20,#0f1213)';
 

@@ -24,7 +24,7 @@ banish) and the app remembers banished tracks per playlist.
   DynamoDB for data, all via **Terraform**, all **free tier**. S3 + CloudFront hosting.
 - **Zod** validates every network boundary. **React Query** owns server state.
   **Zustand** owns ephemeral playback/UI state.
-- **Prettier + ESLint (flat) + Vitest** for quality.
+- **Biome + ESLint (flat) + Vitest** for quality.
 - **Real Spotify**: the Web API + Web Playback SDK power search and playback
   (Premium account linked via Authorization Code + PKCE).
 

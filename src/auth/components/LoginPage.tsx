@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { useAuthSession } from '~auth/useAuthSession';
-import { Icon } from '~components/atoms/Icon';
-import { APP_NAME } from '~constants';
+import { useAuthSession } from '~/auth/useAuthSession';
+import { Icon } from '~/components/atoms/Icon';
+import { APP_NAME } from '~/constants';
 
 export const LoginPage = () => {
   const { renderGoogleButton, beginGoogleLogin, error } = useAuthSession();

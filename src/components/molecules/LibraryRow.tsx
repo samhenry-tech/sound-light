@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 
-import { GradientCover } from '~components/atoms/GradientCover';
+import { GradientCover } from '~/components/atoms/GradientCover';
 
 interface LibraryRowProps {
   name: string;

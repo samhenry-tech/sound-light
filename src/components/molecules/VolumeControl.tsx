@@ -1,4 +1,4 @@
-import { Icon } from '~components/atoms/Icon';
+import { Icon } from '~/components/atoms/Icon';
 
 interface VolumeControlProps {
   volume: number;

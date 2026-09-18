@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import { usePlayerStore } from '~stores/playerStore';
-import { useUiStore } from '~stores/uiStore';
+import { usePlayerStore } from '~/stores/playerStore';
+import { useUiStore } from '~/stores/uiStore';
 
 import { usePlayerActions } from './PlayerContext';
 

@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 
-import { Icon } from '~components/atoms/Icon';
+import { Icon } from '~/components/atoms/Icon';
 
 interface SearchInputProps {
   value: string;

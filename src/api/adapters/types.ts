@@ -1,10 +1,5 @@
-import type {
-  CreatePlaylistInput,
-  Playlist,
-  UpdatePlaylistInput,
-  UpdateUserSettingsInput,
-  UserSettings,
-} from '~shared/contract';
+import type { CreatePlaylistInput, Playlist, UpdatePlaylistInput } from '~/models/playlist';
+import type { UpdateUserSettingsInput, UserSettings } from '~/models/userSettings';
 
 /** Per-request context for the data backend. */
 export interface DataContext {

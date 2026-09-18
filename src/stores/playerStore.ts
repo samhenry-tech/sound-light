@@ -5,8 +5,9 @@
  */
 import { create } from 'zustand';
 
-import type { MusicTrack, PlaybackState } from '~music/types';
-import type { Atmosphere } from '~theme/atmosphere';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
+import type { PlaybackState } from '~/music-providers/models/PlaybackState';
+import type { Atmosphere } from '~/theme/atmosphere';
 
 export interface HistoryEntry {
   track: MusicTrack;

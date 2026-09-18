@@ -11,11 +11,11 @@ export default defineConfig({
   // browser will warn once about the untrusted cert — accept it to continue.
   plugins: [react(), tailwindcss(), basicSsl()],
   resolve: {
-    // `~foo/bar` -> `<root>/src/foo/bar`. A single wildcard, so new top-level
+    // `~/foo/bar` -> `<root>/src/foo/bar`. A single wildcard, so new top-level
     // folders under src/ are picked up automatically with no config change.
     alias: [
       {
-        find: /^~(.+)$/,
+        find: /^~\/(.*)$/,
         replacement: `${fileURLToPath(new URL('./src', import.meta.url))}/$1`,
       },
     ],

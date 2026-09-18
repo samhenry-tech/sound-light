@@ -1,11 +1,15 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
-import { RequiresAuth } from '~auth/components/RequiresAuth';
-import { MusicCallbackPage } from '~components/pages/auth/MusicCallbackPage';
-import { HomePage } from '~components/pages/HomePage';
-import { LibraryPage } from '~components/pages/LibraryPage';
+import { AppAuthProvider } from '~/auth/AppAuthProvider';
+import { RequiresAuth } from '~/auth/components/RequiresAuth';
+import { MusicCallbackPage } from '~/components/pages/auth/MusicCallbackPage';
+import { HomePage } from '~/components/pages/HomePage';
+import { LibraryPage } from '~/components/pages/LibraryPage';
+import { PlayerProvider } from '~/features/player/PlayerProvider';
+import { MusicProviderProvider } from '~/music-providers/MusicProviderContext';
 
-import { AppProviders } from './app/AppProviders';
+import { QueryProvider } from './app/providers/QueryProvider';
+import { ThemeProvider } from './app/providers/ThemeProvider';
 import { RootLayout } from './app/RootLayout';
 
 const router = createBrowserRouter([
@@ -28,8 +32,20 @@ const router = createBrowserRouter([
   { path: '*', element: <Navigate to="/home" replace /> },
 ]);
 
+/**
+ * Composition root. Order matters: auth → query → music provider → theme
+ * (reads user settings) → player (needs query + music + data).
+ */
 export const App = () => (
-  <AppProviders>
-    <RouterProvider router={router} />
-  </AppProviders>
+  <AppAuthProvider>
+    <QueryProvider>
+      <MusicProviderProvider>
+        <ThemeProvider>
+          <PlayerProvider>
+            <RouterProvider router={router} />
+          </PlayerProvider>
+        </ThemeProvider>
+      </MusicProviderProvider>
+    </QueryProvider>
+  </AppAuthProvider>
 );

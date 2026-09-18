@@ -3,8 +3,9 @@
  * Ported from the prototype's `effectiveTracks` / `pickFrom`, but keyed by URI
  * instead of title. Kept pure (no React, no I/O) so it's trivially testable.
  */
-import type { MusicTrack, ResolvedSource } from '~music/types';
-import { sample, shuffle } from '~utils/formatUtils';
+import type { ResolvedSource } from '~/music-providers/models/MusicSource';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
+import { sample, shuffle } from '~/utils/formatUtils';
 
 export interface TrackWithOrigin extends MusicTrack {
   /** Human-readable provenance shown in the editor ("Fireside Ambience"). */

@@ -1,8 +1,8 @@
 import { clsx } from 'clsx';
 import type { MouseEvent } from 'react';
 
-import { EqBars } from '~components/atoms/EqBars';
-import { GradientCover } from '~components/atoms/GradientCover';
+import { EqBars } from '~/components/atoms/EqBars';
+import { GradientCover } from '~/components/atoms/GradientCover';
 
 interface PlaylistCoverProps {
   gradient: string;

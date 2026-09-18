@@ -1,11 +1,11 @@
-import { usePlaylists, useUpdatePlaylist } from '~api/hooks';
-import { FilterChips } from '~components/molecules/FilterChips';
-import { SearchInput } from '~components/molecules/SearchInput';
-import { PlaylistGrid } from '~components/organisms/PlaylistGrid';
-import { useLivePlaylists } from '~features/live/useLivePlaylists';
-import { usePlayerActions } from '~features/player/PlayerContext';
-import { useUiStore } from '~stores/uiStore';
-import { playlistName } from '~utils/formatUtils';
+import { usePlaylists, useUpdatePlaylist } from '~/api/hooks';
+import { FilterChips } from '~/components/molecules/FilterChips';
+import { SearchInput } from '~/components/molecules/SearchInput';
+import { PlaylistGrid } from '~/components/organisms/PlaylistGrid';
+import { useLivePlaylists } from '~/features/live/useLivePlaylists';
+import { usePlayerActions } from '~/features/player/PlayerContext';
+import { useUiStore } from '~/stores/uiStore';
+import { playlistName } from '~/utils/formatUtils';
 
 export const HomePage = () => {
   const { cards, isLoading } = useLivePlaylists();

@@ -8,7 +8,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 
-import { AWS_REGION, COGNITO_IDENTITY_POOL_ID, GOOGLE_LOGIN_PROVIDER } from '~auth/awsConfig';
+import { AWS_REGION, COGNITO_IDENTITY_POOL_ID, GOOGLE_LOGIN_PROVIDER } from '~/auth/awsConfig';
 
 let cached: { googleIdToken: string; client: DynamoDBDocumentClient } | null = null;
 

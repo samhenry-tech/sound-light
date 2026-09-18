@@ -1,17 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { type ReactNode, useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { usePlaylists, useUpdatePlaylist } from '~api/hooks';
-import { buildQueue, effectiveTracks } from '~features/library/playlistTracks';
-import { musicKeys } from '~music/hooks/queryKeys';
-import { useMusicProvider } from '~music/MusicProviderContext';
-import type { MusicPlayer, MusicTrack } from '~music/types';
-import type { Playlist } from '~shared/contract';
-import { usePlayerStore } from '~stores/playerStore';
-import { useSettingsStore } from '~stores/settingsStore';
-import { useUiStore } from '~stores/uiStore';
-import { coverFor } from '~theme/atmosphere';
-import { playlistName } from '~utils/formatUtils';
+import { usePlaylists, useUpdatePlaylist } from '~/api/hooks';
+import { buildQueue, effectiveTracks } from '~/features/library/playlistTracks';
+import type { Playlist } from '~/models/playlist';
+import { musicKeys } from '~/music-providers/hooks/queryKeys';
+import type { MusicPlayer } from '~/music-providers/models/MusicPlayer';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
+import { useMusicProvider } from '~/music-providers/MusicProviderContext';
+import { usePlayerStore } from '~/stores/playerStore';
+import { useSettingsStore } from '~/stores/settingsStore';
+import { useUiStore } from '~/stores/uiStore';
+import { coverFor } from '~/theme/atmosphere';
+import { playlistName } from '~/utils/formatUtils';
 
 import { type PlayerActions, PlayerContext } from './PlayerContext';
 import { transitionTo } from './transition';

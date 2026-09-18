@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 
-import { Spinner } from '~components/atoms/Spinner';
+import { Spinner } from '~/components/atoms/Spinner';
 
 /** Full-screen centered spinner / message used during auth redirects. */
 export const Splash = ({ title, error }: { title: string; error?: string }) => {

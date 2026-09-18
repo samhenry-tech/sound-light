@@ -66,7 +66,7 @@ There is **no API Gateway, no Lambda, and no Cognito User Pool**. The stack is:
 ## 2. Data model (DynamoDB, accessed from the browser)
 
 `Playlist` / `UserSettings` shapes are defined once as Zod schemas in
-`src/shared/contract.ts`; the DynamoDB adapter (`src/api/adapters/
+`src/models/`; the DynamoDB adapter (`src/api/adapters/
 dynamoAdapter.ts`) validates everything it reads and writes against them.
 
 | Table             | Keys                         | Contents                                            |

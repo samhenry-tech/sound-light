@@ -6,7 +6,7 @@
  * Google account session is still alive. This is not a server session and cannot
  * outlive Google/browser policy — but it avoids forcing a fresh click every hour.
  */
-import { APP_NAME } from '~constants';
+import { APP_NAME } from '~/constants';
 
 const ID_TOKEN_KEY = `${APP_NAME}.auth.googleIdToken`;
 const SESSION_INTENT_KEY = `${APP_NAME}.auth.sessionIntent`;

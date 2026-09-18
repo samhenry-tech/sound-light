@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 
-import { useCreatePlaylist, usePlaylists } from '~api/hooks';
-import { LibraryMaster, type LibraryRowData } from '~components/organisms/LibraryMaster';
-import { PlaylistEditor } from '~components/organisms/PlaylistEditor';
-import { usePlaylistEditor } from '~features/library/usePlaylistEditor';
-import type { Playlist } from '~shared/contract';
-import { useUiStore } from '~stores/uiStore';
-import { coverFor } from '~theme/atmosphere';
-import { playlistName } from '~utils/formatUtils';
+import { useCreatePlaylist, usePlaylists } from '~/api/hooks';
+import { LibraryMaster, type LibraryRowData } from '~/components/organisms/LibraryMaster';
+import { PlaylistEditor } from '~/components/organisms/PlaylistEditor';
+import { usePlaylistEditor } from '~/features/library/usePlaylistEditor';
+import type { Playlist } from '~/models/playlist';
+import { useUiStore } from '~/stores/uiStore';
+import { coverFor } from '~/theme/atmosphere';
+import { playlistName } from '~/utils/formatUtils';
 
 const summarize = (playlist: Playlist): string => {
   const parts: string[] = [];

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import type { MusicTrack, ResolvedSource } from '~music/types';
+import type { ResolvedSource } from '~/music-providers/models/MusicSource';
+import type { MusicTrack } from '~/music-providers/models/MusicTrack';
 
 import { buildQueue, effectiveTracks, pickFrom, splitByBanished } from './playlistTracks';
 

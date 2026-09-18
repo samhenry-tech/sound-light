@@ -1,5 +1,5 @@
-import { Spinner } from '~components/atoms/Spinner';
-import type { LiveCard } from '~features/live/useLivePlaylists';
+import { Spinner } from '~/components/atoms/Spinner';
+import type { LiveCard } from '~/features/live/useLivePlaylists';
 
 import { PlaylistCard } from './PlaylistCard';
 

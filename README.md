@@ -11,7 +11,7 @@ sign-in.
 
 > Built with the latest stack and industry practices: **React 19 · Vite 6 ·
 > TypeScript (strict) · TanStack Query · Zustand · Zod · React Router 7 · ESLint
-> 9 · Prettier · Vitest**, atomic-design components, a swappable music-provider
+> 9 · Biome · Vitest**, atomic-design components, a swappable music-provider
 > interface, and **AWS via Terraform** (Cognito + API Gateway + Lambda +
 > DynamoDB + CloudFront — no Amplify, free tier only).
 
@@ -46,7 +46,7 @@ registered against.
 | `npm run build`         | Type-check + production build        |
 | `npm run preview`       | Preview the production build         |
 | `npm run lint`          | ESLint (flat config, type-aware)     |
-| `npm run format`        | Prettier write                       |
+| `npm run format`        | Biome format write                   |
 | `npm run typecheck`     | `tsc -b --noEmit`                    |
 | `npm run test`          | Vitest run (jsdom + Testing Library) |
 | `npm run test:coverage` | Coverage report                      |
@@ -75,8 +75,10 @@ src/
   config.ts       Assembles shared + generated JSON (+ SPA-only flags)
   config.generated.json  Terraform outputs for the SPA (do not hand-edit)
   app/            Composition root, router, providers (Query, Theme, Auth, Player)
-  music/          ⟵ Provider-agnostic interface (MusicProvider/MusicPlayer) + hooks
-  spotify/        ⟵ The Spotify implementation of MusicProvider (its own folder)
+  music-providers/ Provider-agnostic MusicProvider interface + Spotify impl
+    models/       MusicTrack, MusicSource, MusicPlayer, MusicProvider, …
+    spotify/      Spotify implementation (api, auth, playback, models)
+    hooks/        React Query search / resolve hooks
   api/            AWS data layer: direct-DynamoDB adapter + React Query hooks
   auth/           Google Sign-In → Cognito Identity Pool + normalized AuthSession
   features/
@@ -86,7 +88,7 @@ src/
     ambient/      Web Audio procedural ambient engine
   components/     Atomic design: atoms · molecules · organisms · templates
   stores/         Zustand: player, ui, settings (persisted)
-  shared/         Zod data contract (the network boundary's source of truth)
+  models/         Zod data contract (the network boundary's source of truth)
   theme/          Design tokens (CSS variables) + atmosphere data
 infra/            Terraform (Cognito Identity Pool, DynamoDB, S3+CloudFront)
 .github/workflows CI, frontend deploy, terraform
@@ -96,20 +98,21 @@ State split, by design:
 
 - **Server data** (playlists, user settings) → **TanStack Query** with optimistic updates.
 - **Ephemeral playback/UI** (now-playing, queue, filters, toast) → **Zustand**.
-- **Network boundaries** → validated with **Zod** (`src/shared/contract.ts`).
+- **Network boundaries** → validated with **Zod** (`src/models/`).
 
 ### Swappable music provider
 
 The app never imports Spotify directly. It talks to a `MusicProvider` interface
-(`src/music`) — `search`, `resolveSources`, `resolveTracks`, `createPlayer`, and
-an `auth` lifecycle. Spotify is one implementation (`src/spotify`,
-`createSpotifyMusicProvider`). Supporting Apple Music / YouTube / local files is
-a matter of writing a new provider and registering it in `src/music/registry.ts`
-— nothing in the UI, stores, or data layer changes.
+(`src/music-providers`) — `search`, `resolveSources`, `resolveTracks`,
+`createPlayer`, and an `auth` lifecycle. Spotify is one implementation
+(`src/music-providers/spotify`, `createSpotifyMusicProvider`). Supporting Apple
+Music / YouTube / local files is a matter of writing a new provider and
+registering it in `src/music-providers/registry.ts` — nothing in the UI, stores,
+or data layer changes.
 
 ### Spotify integration
 
-Lives entirely under `src/spotify/`:
+Lives under `src/music-providers/spotify/`:
 
 - **Auth** — Authorization Code + **PKCE** (no client secret in the browser),
   with token storage and refresh.

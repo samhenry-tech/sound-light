@@ -1,4 +1,4 @@
-import { Icon } from '~components/atoms/Icon';
+import { Icon } from '~/components/atoms/Icon';
 
 /** 👍 — mark the current track a good fit for this playlist. */
 export const LikeButton = ({ onClick }: { onClick: () => void }) => {

@@ -1,6 +1,6 @@
 import type { KeyboardEvent, MouseEvent } from 'react';
 
-import { formatMs } from '~utils/formatUtils';
+import { formatMs } from '~/utils/formatUtils';
 
 interface ProgressBarProps {
   positionMs: number;

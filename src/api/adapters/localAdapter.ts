@@ -2,16 +2,14 @@
  * DataAdapter backed by localStorage — used as a test double. Seeds the
  * prototype's starter library on first use and scopes everything by owner.
  */
-import { APP_NAME } from '~constants';
+import { APP_NAME } from '~/constants';
+import { createPlaylistSchema, type Playlist, updatePlaylistSchema } from '~/models/playlist';
 import {
-  createPlaylistInputSchema,
   DEFAULT_SETTINGS,
-  type Playlist,
-  updatePlaylistInputSchema,
-  updateUserSettingsInputSchema,
+  updateUserSettingsSchema,
   type UserSettings,
-} from '~shared/contract';
-import { createId } from '~utils/idUtils';
+} from '~/models/userSettings';
+import { createId } from '~/utils/idUtils';
 
 import { getSeedPlaylists } from '../seed';
 import type { DataAdapter, DataContext } from './types';
@@ -54,7 +52,7 @@ export const localAdapter: DataAdapter = {
 
   createPlaylist({ owner }: DataContext, input) {
     const store = read(owner);
-    const values = createPlaylistInputSchema.parse(input);
+    const values = createPlaylistSchema.parse(input);
     const now = new Date().toISOString();
     const playlist: Playlist = {
       ...values,
@@ -71,7 +69,7 @@ export const localAdapter: DataAdapter = {
 
   updatePlaylist({ owner }: DataContext, id, input) {
     const store = read(owner);
-    const patch = updatePlaylistInputSchema.parse(input);
+    const patch = updatePlaylistSchema.parse(input);
     const index = store.playlists.findIndex((m) => m.id === id);
     if (index === -1) return Promise.reject(new Error(`Playlist ${id} not found`));
     const updated: Playlist = {
@@ -97,7 +95,7 @@ export const localAdapter: DataAdapter = {
 
   updateSettings({ owner }: DataContext, input) {
     const store = read(owner);
-    const patch = updateUserSettingsInputSchema.parse(input);
+    const patch = updateUserSettingsSchema.parse(input);
     const { googleRefreshToken, ...uiPatch } = patch;
     const next: UserSettings = {
       ...(store.settings ?? defaultSettings(owner)),

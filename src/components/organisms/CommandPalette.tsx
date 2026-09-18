@@ -2,12 +2,12 @@ import { clsx } from 'clsx';
 import { type KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { usePlaylists } from '~api/hooks';
-import { Icon } from '~components/atoms/Icon';
-import { Modal } from '~components/molecules/Modal';
-import { usePlayerActions } from '~features/player/PlayerContext';
-import { useUiStore } from '~stores/uiStore';
-import { playlistName } from '~utils/formatUtils';
+import { usePlaylists } from '~/api/hooks';
+import { Icon } from '~/components/atoms/Icon';
+import { Modal } from '~/components/molecules/Modal';
+import { usePlayerActions } from '~/features/player/PlayerContext';
+import { useUiStore } from '~/stores/uiStore';
+import { playlistName } from '~/utils/formatUtils';
 
 interface Command {
   id: string;
