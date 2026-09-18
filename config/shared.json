@@ -7,5 +7,5 @@
   "googleLoginProvider": "accounts.google.com",
   "musicProvider": "spotify",
   "defaultsAdminEmail": "sam.ed.henry@gmail.com",
-  "defaultsAdminIdentityId": ""
+  "defaultsAdminIdentityId": "ap-southeast-2:d29d40d8-2365-c4b3-f3b0-bf65bac842e4"
 }

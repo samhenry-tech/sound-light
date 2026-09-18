@@ -1,5 +1,6 @@
 import { type ReactNode, useState } from 'react';
 
+import { getBundledDefaultPlaylists } from '~/api/defaultPlaylistCatalog';
 import { useDefaultPlaylists, usePutDefaultPlaylist } from '~/api/hooks';
 import { useAuthSession } from '~/auth/useAuthSession';
 import { Icon } from '~/components/atoms/Icon';
@@ -76,6 +77,26 @@ export const SettingsPanel = () => {
     } catch {
       showToast('Couldn’t copy — select the id manually');
     }
+  };
+
+  const onPublishSeed = () => {
+    if (!appConfig.defaultsAdminIdentityId) {
+      showToast('Add your Cognito id to config/shared.json first (see below)');
+      return;
+    }
+    const seed = getBundledDefaultPlaylists();
+    setPopulateLabel(`0/${seed.length}`);
+    void (async () => {
+      for (const [index, playlist] of seed.entries()) {
+        setPopulateLabel(`${index + 1}/${seed.length} · ${playlist.genre}`);
+        await putDefault.mutateAsync(playlist);
+      }
+      showToast(`Published ${seed.length} default playlists to DynamoDB`);
+    })()
+      .catch((err: unknown) => {
+        showToast(err instanceof Error ? err.message : 'Publish failed');
+      })
+      .finally(() => setPopulateLabel(null));
   };
 
   const onPopulate = () => {
@@ -176,38 +197,47 @@ export const SettingsPanel = () => {
                   </button>
                 </div>
                 <p className="mt-2 mb-0 text-[12px] leading-relaxed text-muted-2">
-                  Paste into <code className="text-quiet">config/shared.json</code> as{' '}
-                  <code className="text-quiet">defaultsAdminIdentityId</code>, merge, and wait for
-                  Terraform to apply before publishing.
-                  {appConfig.defaultsAdminIdentityId
-                    ? appConfig.defaultsAdminIdentityId === session.owner
-                      ? ' Identity id matches config.'
-                      : ' Configured id differs from this session.'
-                    : ' Not set in config yet.'}
+                  {appConfig.defaultsAdminIdentityId === session.owner
+                    ? 'Identity id is configured. After Terraform applies write access, publish the bundled catalog to DynamoDB.'
+                    : appConfig.defaultsAdminIdentityId
+                      ? 'Configured id differs from this session.'
+                      : 'Paste into config/shared.json as defaultsAdminIdentityId, then merge for Terraform write IAM.'}
                 </p>
               </div>
               <div className={ROW}>
                 <span className={LABEL}>
                   Catalog
                   <span className="mt-0.5 block text-[11.5px] text-muted-2">
-                    {defaults.length} playlists stored
+                    {defaults.length} playlists
                     {defaults.some((p) => p.trackUris.length > 0) ? ' · ready' : ' · empty'}
+                    {' · '}
+                    {getBundledDefaultPlaylists().length} bundled
                   </span>
                 </span>
-                <button
-                  type="button"
-                  className={PRIMARY_BTN}
-                  disabled={Boolean(populateLabel) || putDefault.isPending}
-                  onClick={onPopulate}
-                >
-                  {populateLabel ? (
-                    <span className="inline-flex items-center gap-2">
-                      <Spinner size={14} /> {populateLabel}
-                    </span>
-                  ) : (
-                    'Populate from Spotify'
-                  )}
-                </button>
+                <div className="flex flex-wrap justify-end gap-2">
+                  <button
+                    type="button"
+                    className={PRIMARY_BTN}
+                    disabled={Boolean(populateLabel) || putDefault.isPending}
+                    onClick={onPublishSeed}
+                  >
+                    {populateLabel ? (
+                      <span className="inline-flex items-center gap-2">
+                        <Spinner size={14} /> {populateLabel}
+                      </span>
+                    ) : (
+                      'Publish to DynamoDB'
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    className={PRIMARY_BTN}
+                    disabled={Boolean(populateLabel) || putDefault.isPending || !auth.linked}
+                    onClick={onPopulate}
+                  >
+                    Re-search Spotify
+                  </button>
+                </div>
               </div>
             </div>
           </Section>

@@ -16,6 +16,7 @@ import {
 } from '~/models/userSettings';
 import { createId } from '~/utils/idUtils';
 
+import { getBundledDefaultPlaylists } from '../defaultPlaylistCatalog';
 import { getSeedPlaylists } from '../seed';
 import type { DataAdapter, DataContext } from './types';
 
@@ -98,11 +99,10 @@ export const localAdapter: DataAdapter = {
   },
 
   listDefaultPlaylists(_ctx: DataContext) {
-    return Promise.resolve(
-      read(DEFAULTS_OWNER)
-        .playlists.slice()
-        .sort((a, b) => a.sortIndex - b.sortIndex),
-    );
+    const stored = read(DEFAULTS_OWNER)
+      .playlists.slice()
+      .sort((a, b) => a.sortIndex - b.sortIndex);
+    return Promise.resolve(stored.length > 0 ? stored : getBundledDefaultPlaylists());
   },
 
   putDefaultPlaylist(_ctx: DataContext, playlist: Playlist) {

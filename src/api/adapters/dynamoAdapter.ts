@@ -33,6 +33,7 @@ import {
 } from '~/models/userSettings';
 import { createId } from '~/utils/idUtils';
 
+import { getBundledDefaultPlaylists } from '../defaultPlaylistCatalog';
 import { getDynamoClient } from '../dynamoClient';
 import type { DataAdapter, DataContext } from './types';
 
@@ -115,7 +116,13 @@ export const dynamoAdapter: DataAdapter = {
   },
 
   async listDefaultPlaylists(ctx) {
-    return queryPlaylistsByOwner(ctx, DEFAULTS_OWNER);
+    try {
+      const stored = await queryPlaylistsByOwner(ctx, DEFAULTS_OWNER);
+      if (stored.length > 0) return stored;
+    } catch {
+      // Pre-IAM-apply or network: fall through to the bundled catalog.
+    }
+    return getBundledDefaultPlaylists();
   },
 
   async putDefaultPlaylist(ctx, playlist) {
@@ -133,9 +140,7 @@ export const dynamoAdapter: DataAdapter = {
   },
 
   async copyGenreDefaults(ctx, genre: DefaultGenreId) {
-    const pack = (await queryPlaylistsByOwner(ctx, DEFAULTS_OWNER)).filter(
-      (p) => p.genre === genre,
-    );
+    const pack = (await this.listDefaultPlaylists(ctx)).filter((p) => p.genre === genre);
     if (pack.length === 0) {
       throw new Error(`No default playlists found for genre “${genre}”`);
     }
