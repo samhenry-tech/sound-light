@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { AppAuthProvider } from '~/auth/AppAuthProvider';
@@ -40,15 +41,17 @@ vi.mock('~/api/dataAdapter', async () => {
 });
 
 const TestProviders = ({ children }: { children: ReactNode }) => (
-  <AppAuthProvider>
-    <QueryProvider>
-      <MusicProviderProvider>
-        <ThemeProvider>
-          <PlayerProvider>{children}</PlayerProvider>
-        </ThemeProvider>
-      </MusicProviderProvider>
-    </QueryProvider>
-  </AppAuthProvider>
+  <MemoryRouter>
+    <AppAuthProvider>
+      <QueryProvider>
+        <MusicProviderProvider>
+          <ThemeProvider>
+            <PlayerProvider>{children}</PlayerProvider>
+          </ThemeProvider>
+        </MusicProviderProvider>
+      </QueryProvider>
+    </AppAuthProvider>
+  </MemoryRouter>
 );
 
 describe('app integration (mocked auth + local data adapter)', () => {

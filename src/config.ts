@@ -36,4 +36,13 @@ export const appConfig = {
 
   /** Active music backend implementing the MusicProvider interface. */
   musicProvider: shared.musicProvider as MusicProviderId,
+
+  /** Google email allowed to publish shared default genre packs (UI gate). */
+  defaultsAdminEmail: shared.defaultsAdminEmail,
+
+  /**
+   * Cognito identity id allowed to write the `defaults` partition (IAM).
+   * Empty until captured after first admin sign-in.
+   */
+  defaultsAdminIdentityId: shared.defaultsAdminIdentityId,
 } as const;

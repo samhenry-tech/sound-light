@@ -3,6 +3,11 @@
  * prototype's starter library on first use and scopes everything by owner.
  */
 import { APP_NAME } from '~/constants';
+import {
+  type DefaultGenreId,
+  defaultGenreIdSchema,
+  DEFAULTS_OWNER,
+} from '~/models/defaultPlaylists';
 import { createPlaylistSchema, type Playlist, updatePlaylistSchema } from '~/models/playlist';
 import {
   DEFAULT_SETTINGS,
@@ -11,6 +16,7 @@ import {
 } from '~/models/userSettings';
 import { createId } from '~/utils/idUtils';
 
+import { getBundledDefaultPlaylists } from '../defaultPlaylistCatalog';
 import { getSeedPlaylists } from '../seed';
 import type { DataAdapter, DataContext } from './types';
 
@@ -32,7 +38,10 @@ const read = (owner: string): LocalStore => {
   } catch {
     // fall through to seed
   }
-  const seeded: LocalStore = { playlists: getSeedPlaylists(owner), settings: null };
+  const seeded: LocalStore = {
+    playlists: owner === DEFAULTS_OWNER ? [] : getSeedPlaylists(owner),
+    settings: null,
+  };
   write(owner, seeded);
   return seeded;
 };
@@ -87,6 +96,50 @@ export const localAdapter: DataAdapter = {
     store.playlists = store.playlists.filter((m) => m.id !== id);
     write(owner, store);
     return Promise.resolve();
+  },
+
+  listDefaultPlaylists(_ctx: DataContext) {
+    const stored = read(DEFAULTS_OWNER)
+      .playlists.slice()
+      .sort((a, b) => a.sortIndex - b.sortIndex);
+    return Promise.resolve(stored.length > 0 ? stored : getBundledDefaultPlaylists());
+  },
+
+  putDefaultPlaylist(_ctx: DataContext, playlist: Playlist) {
+    const store = read(DEFAULTS_OWNER);
+    if (!playlist.genre) return Promise.reject(new Error('Default playlists require a genre'));
+    defaultGenreIdSchema.parse(playlist.genre);
+    const item: Playlist = {
+      ...playlist,
+      owner: DEFAULTS_OWNER,
+      updatedAt: new Date().toISOString(),
+    };
+    const index = store.playlists.findIndex((p) => p.id === item.id);
+    if (index === -1) store.playlists.push(item);
+    else store.playlists[index] = item;
+    write(DEFAULTS_OWNER, store);
+    return Promise.resolve(item);
+  },
+
+  async copyGenreDefaults(ctx: DataContext, genre: DefaultGenreId) {
+    const pack = (await this.listDefaultPlaylists(ctx)).filter((p) => p.genre === genre);
+    if (pack.length === 0) {
+      throw new Error(`No default playlists found for genre “${genre}”`);
+    }
+    const created: Playlist[] = [];
+    for (const source of pack) {
+      created.push(
+        await this.createPlaylist(ctx, {
+          location: source.location,
+          atmosphere: source.atmosphere,
+          pinned: source.pinned,
+          trackUris: [...source.trackUris],
+          sourceUris: [],
+          banishedTrackUris: [],
+        }),
+      );
+    }
+    return created;
   },
 
   getSettings({ owner }: DataContext) {
