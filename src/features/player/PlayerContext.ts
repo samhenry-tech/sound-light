@@ -4,10 +4,10 @@ import type { Playlist } from '~/models/playlist';
 
 /** Imperative player actions exposed to the UI. State is read from the stores. */
 export interface PlayerActions {
-  /** Crossfade into a playlist: resolve tracks, build a shuffled queue, play. */
+  /** Crossfade into a playlist: send all track URIs to Spotify with shuffle + repeat. */
   selectPlaylist: (playlist: Playlist) => Promise<void>;
   togglePlay: () => void;
-  /** 👎 tap — fade out and skip to the next track. */
+  /** 👎 tap — skip to the next track in the Spotify context. */
   skip: () => void;
   /** Manual advance with no toast. */
   next: () => void;

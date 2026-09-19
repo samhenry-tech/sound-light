@@ -1,4 +1,4 @@
-import type { MusicPlayer } from '~/music-providers/models/MusicPlayer';
+import type { MusicPlayer, PlayTracksOptions } from '~/music-providers/models/MusicPlayer';
 import type { MusicTrack } from '~/music-providers/models/MusicTrack';
 
 const STEP_MS = 50;
@@ -21,7 +21,47 @@ const rampVolume = async (
 };
 
 /**
- * Crossfade into `track`.
+ * Crossfade into a multi-track Spotify context (full URI array with shuffle /
+ * repeat). Same single-stream fade as {@link transitionTo}: the SDK can't
+ * overlap two streams, so we fade out → swap context → fade in.
+ */
+export const transitionToTracks = async (
+  player: MusicPlayer,
+  tracks: readonly MusicTrack[],
+  target: number,
+  crossfadeMs: number,
+  fadeOut = false,
+  options?: PlayTracksOptions,
+  onSwap?: () => void,
+): Promise<void> => {
+  if (tracks.length === 0) return;
+
+  const start = async () => {
+    await player.playTracks(tracks, options);
+    onSwap?.();
+  };
+
+  if (crossfadeMs <= 0) {
+    await start();
+    await player.setVolume(target);
+    return;
+  }
+
+  if (fadeOut) {
+    const half = crossfadeMs / 2;
+    await rampVolume(player, target, 0, half);
+    await start();
+    await rampVolume(player, 0, target, half);
+    return;
+  }
+
+  await player.setVolume(0);
+  await start();
+  await rampVolume(player, 0, target, crossfadeMs);
+};
+
+/**
+ * Crossfade into a single `track` (used for legacy single-URI swaps).
  *
  * The Spotify Web Playback SDK can't overlap two tracks (one stream, one active
  * Connect device per account) and `play({uris})` hard-cuts, so a true
@@ -43,24 +83,16 @@ export const transitionTo = async (
   fadeOut = false,
   onSwap?: () => void,
 ): Promise<void> => {
-  if (crossfadeMs <= 0) {
-    await player.playTrack(track);
-    onSwap?.();
-    await player.setVolume(target);
-    return;
-  }
-
-  if (fadeOut) {
-    const half = crossfadeMs / 2;
-    await rampVolume(player, target, 0, half); // outgoing fades out
-    await player.playTrack(track); // swap at silence (no audible cut)
-    onSwap?.();
-    await rampVolume(player, 0, target, half); // incoming fades in
-    return;
-  }
-
-  await player.setVolume(0);
-  await player.playTrack(track);
-  onSwap?.();
-  await rampVolume(player, 0, target, crossfadeMs);
+  await transitionToTracks(
+    player,
+    [track],
+    target,
+    crossfadeMs,
+    fadeOut,
+    {
+      shuffle: false,
+      repeat: 'off',
+    },
+    onSwap,
+  );
 };

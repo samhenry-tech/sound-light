@@ -21,6 +21,12 @@ const fakePlayer = () => {
       events.push(`play:${t.uri}`);
       return Promise.resolve();
     },
+    playTracks: (tracks) => {
+      events.push(`play:${tracks.map((t) => t.uri).join(',')}`);
+      return Promise.resolve();
+    },
+    skipToNext: () => Promise.resolve(),
+    skipToPrevious: () => Promise.resolve(),
     setVolume: (v) => {
       events.push(`vol:${v.toFixed(2)}`);
       return Promise.resolve();

@@ -18,7 +18,7 @@ identity id.
 | Area | Resources                                                                                   |
 | ---- | ------------------------------------------------------------------------------------------- |
 | Auth | Cognito Identity Pool (Google login provider), authenticated IAM role + row-level policy    |
-| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-playlists` and `*-user-settings` |
+| Data | Two provisioned DynamoDB tables (12 RCU / 12 WCU each): `*-playlists` and `*-user-settings`. Shared default genre packs live in the playlists table under partition key `defaults` (read for all; write for `defaultsAdminIdentityId`). |
 
 All resources are tagged with `Project=sound-light`, `ManagedBy=Terraform`, and named
 `sound-light-dev-*` by default (`${project}-${environment}` from `config/shared.json`).

@@ -54,8 +54,14 @@ resource "aws_iam_role" "authenticated" {
   tags               = local.tags
 }
 
-# Row-level data access: only the two app tables, only the verbs the SPA uses,
-# and ONLY items whose leading (partition) key is the caller's own identity id.
+# Row-level data access: every authenticated identity can only touch items
+# whose partition key equals their Cognito identity id (`OwnRowsOnly`), plus:
+#
+# - `ReadSharedDefaults` — Query/Get the playlists table partition `defaults`
+#   (shared genre packs readable by everyone).
+# - `WriteSharedDefaults` — Put/Update/Delete on that partition, only when
+#   `config/shared.json` → `defaultsAdminIdentityId` is set to Sam's Cognito
+#   identity id (copied from Settings after sign-in).
 data "aws_iam_policy_document" "authenticated_dynamodb" {
   statement {
     sid    = "OwnRowsOnly"
@@ -77,6 +83,53 @@ data "aws_iam_policy_document" "authenticated_dynamodb" {
       test     = "ForAllValues:StringEquals"
       variable = "dynamodb:LeadingKeys"
       values   = ["$${cognito-identity.amazonaws.com:sub}"]
+    }
+  }
+
+  # Shared default genre packs live in the playlists table under partition key
+  # `defaults`. Every signed-in user can read them.
+  statement {
+    sid    = "ReadSharedDefaults"
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:BatchGetItem",
+    ]
+    resources = [aws_dynamodb_table.playlists.arn]
+
+    condition {
+      test     = "ForAllValues:StringEquals"
+      variable = "dynamodb:LeadingKeys"
+      values   = [local.defaults_owner]
+    }
+  }
+
+  # Writes to the defaults partition are restricted to one Cognito identity
+  # (Sam). Omitted until defaultsAdminIdentityId is set in config/shared.json.
+  dynamic "statement" {
+    for_each = local.defaults_admin_identity_id != "" ? [1] : []
+    content {
+      sid    = "WriteSharedDefaults"
+      effect = "Allow"
+      actions = [
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+      ]
+      resources = [aws_dynamodb_table.playlists.arn]
+
+      condition {
+        test     = "ForAllValues:StringEquals"
+        variable = "dynamodb:LeadingKeys"
+        values   = [local.defaults_owner]
+      }
+
+      condition {
+        test     = "StringEquals"
+        variable = "cognito-identity.amazonaws.com:sub"
+        values   = [local.defaults_admin_identity_id]
+      }
     }
   }
 }

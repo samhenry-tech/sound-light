@@ -1,19 +1,29 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 
+import { getBundledDefaultPlaylists } from '~/api/defaultPlaylistCatalog';
+import { useDefaultPlaylists, usePutDefaultPlaylist } from '~/api/hooks';
+import { useAuthSession } from '~/auth/useAuthSession';
 import { Icon } from '~/components/atoms/Icon';
+import { Spinner } from '~/components/atoms/Spinner';
 import { Modal } from '~/components/molecules/Modal';
+import { appConfig } from '~/config';
+import { populateDefaultPlaylists } from '~/features/defaults/populateDefaultPlaylists';
+import { DEFAULTS_ADMIN_EMAIL } from '~/models/defaultPlaylists';
+import { useMusicProvider } from '~/music-providers/MusicProviderContext';
 import { useMusicAuth } from '~/music-providers/useMusicAuth';
 import { usePlayerStore } from '~/stores/playerStore';
 import { useSettingsStore } from '~/stores/settingsStore';
 import { useUiStore } from '~/stores/uiStore';
+
 const ROW = 'flex min-h-[38px] items-center justify-between gap-4';
 const LABEL = 'text-[14px] text-quiet';
 const SLIDER_ROW = 'flex items-center gap-3';
 const VALUE = 'min-w-[36px] text-right text-[13px] tabular-nums text-muted';
 const PRIMARY_BTN =
-  'rounded-sm border border-accent/45 bg-accent/16 px-3.5 py-2 text-[13px] font-semibold text-accent cursor-pointer';
+  'rounded-sm border border-accent/45 bg-accent/16 px-3.5 py-2 text-[13px] font-semibold text-accent cursor-pointer disabled:cursor-default disabled:opacity-50';
 const DANGER_BTN =
   'rounded-sm border border-danger-30 bg-danger-12 px-3.5 py-2 text-[13px] font-semibold text-danger-text cursor-pointer';
+const MONO = 'break-all font-mono text-[11.5px] text-muted';
 
 const Section = ({ title, children }: { title: string; children: ReactNode }) => {
   return (
@@ -40,11 +50,81 @@ const SHORTCUTS: [string, string][] = [
 export const SettingsPanel = () => {
   const open = useUiStore((s) => s.settingsOpen);
   const setOpen = useUiStore((s) => s.setSettingsOpen);
+  const showToast = useUiStore((s) => s.showToast);
 
   const auth = useMusicAuth();
+  const session = useAuthSession();
+  const provider = useMusicProvider();
+  const putDefault = usePutDefaultPlaylist();
+  const { data: defaults = [] } = useDefaultPlaylists();
 
   const settings = useSettingsStore();
   const history = usePlayerStore((s) => s.history);
+
+  const [populateLabel, setPopulateLabel] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const isAdmin =
+    (session.user?.email ?? '').toLowerCase() === DEFAULTS_ADMIN_EMAIL.toLowerCase() ||
+    (session.user?.email ?? '').toLowerCase() === appConfig.defaultsAdminEmail.toLowerCase();
+
+  const onCopyOwner = async () => {
+    try {
+      await navigator.clipboard.writeText(session.owner);
+      setCopied(true);
+      showToast('Cognito identity id copied');
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      showToast('Couldn’t copy — select the id manually');
+    }
+  };
+
+  const onPublishSeed = () => {
+    if (!appConfig.defaultsAdminIdentityId) {
+      showToast('Add your Cognito id to config/shared.json first (see below)');
+      return;
+    }
+    const seed = getBundledDefaultPlaylists();
+    setPopulateLabel(`0/${seed.length}`);
+    void (async () => {
+      for (const [index, playlist] of seed.entries()) {
+        setPopulateLabel(`${index + 1}/${seed.length} · ${playlist.genre}`);
+        await putDefault.mutateAsync(playlist);
+      }
+      showToast(`Published ${seed.length} default playlists to DynamoDB`);
+    })()
+      .catch((err: unknown) => {
+        showToast(err instanceof Error ? err.message : 'Publish failed');
+      })
+      .finally(() => setPopulateLabel(null));
+  };
+
+  const onPopulate = () => {
+    if (!auth.linked) {
+      showToast(`Link ${auth.providerName} first`);
+      return;
+    }
+    if (!appConfig.defaultsAdminIdentityId) {
+      showToast('Add your Cognito id to config/shared.json first (see below)');
+      return;
+    }
+    setPopulateLabel('Starting…');
+    void populateDefaultPlaylists(
+      provider,
+      (playlist) => putDefault.mutateAsync(playlist),
+      (progress) => {
+        setPopulateLabel(`${progress.index + 1}/${progress.total} · ${progress.label}`);
+      },
+    )
+      .then((result) => {
+        const short = result.shortfall.length > 0 ? ` (${result.shortfall.length} under ~4h)` : '';
+        showToast(`Published ${result.playlists.length} default playlists${short}`);
+      })
+      .catch((err: unknown) => {
+        showToast(err instanceof Error ? err.message : 'Populate failed');
+      })
+      .finally(() => setPopulateLabel(null));
+  };
 
   return (
     <Modal open={open} onClose={() => setOpen(false)} ariaLabel="Settings" width={620}>
@@ -104,6 +184,64 @@ export const SettingsPanel = () => {
             </p>
           )}
         </Section>
+
+        {isAdmin && (
+          <Section title="Default genre packs">
+            <div className="flex flex-col gap-3">
+              <div>
+                <div className="mb-1 text-[12px] text-muted-2">Your Cognito identity id</div>
+                <div className="flex items-start gap-2">
+                  <code className={MONO}>{session.owner || '—'}</code>
+                  <button type="button" className={PRIMARY_BTN} onClick={() => void onCopyOwner()}>
+                    {copied ? 'Copied' : 'Copy'}
+                  </button>
+                </div>
+                <p className="mt-2 mb-0 text-[12px] leading-relaxed text-muted-2">
+                  {appConfig.defaultsAdminIdentityId === session.owner
+                    ? 'Identity id is configured. After Terraform applies write access, publish the bundled catalog to DynamoDB.'
+                    : appConfig.defaultsAdminIdentityId
+                      ? 'Configured id differs from this session.'
+                      : 'Paste into config/shared.json as defaultsAdminIdentityId, then merge for Terraform write IAM.'}
+                </p>
+              </div>
+              <div className={ROW}>
+                <span className={LABEL}>
+                  Catalog
+                  <span className="mt-0.5 block text-[11.5px] text-muted-2">
+                    {defaults.length} playlists
+                    {defaults.some((p) => p.trackUris.length > 0) ? ' · ready' : ' · empty'}
+                    {' · '}
+                    {getBundledDefaultPlaylists().length} bundled
+                  </span>
+                </span>
+                <div className="flex flex-wrap justify-end gap-2">
+                  <button
+                    type="button"
+                    className={PRIMARY_BTN}
+                    disabled={Boolean(populateLabel) || putDefault.isPending}
+                    onClick={onPublishSeed}
+                  >
+                    {populateLabel ? (
+                      <span className="inline-flex items-center gap-2">
+                        <Spinner size={14} /> {populateLabel}
+                      </span>
+                    ) : (
+                      'Publish to DynamoDB'
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    className={PRIMARY_BTN}
+                    disabled={Boolean(populateLabel) || putDefault.isPending || !auth.linked}
+                    onClick={onPopulate}
+                  >
+                    Re-search Spotify
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Section>
+        )}
 
         <Section title="Keyboard">
           <div className="grid grid-cols-2 gap-x-[18px] gap-y-2">

@@ -34,6 +34,15 @@ coverage
 .env
 .env.*
 
+# One-off local secrets (never commit)
+spotify_tokens*.json
+google_id_token.txt
+cognito_identity_id.txt
+SPOTIFY_TOKEN*.md
+GOOGLE_ID_TOKEN*.md
+*_EXTRACTION*.md
+*_VERIFICATION*.md
+
 # Terraform
 **/.terraform/*
 *.tfstate

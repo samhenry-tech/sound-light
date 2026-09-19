@@ -4,7 +4,7 @@
  * Requires a linked Spotify **Premium** account.
  */
 import { APP_NAME } from '~/constants';
-import type { MusicPlayer } from '~/music-providers/models/MusicPlayer';
+import type { MusicPlayer, PlayTracksOptions } from '~/music-providers/models/MusicPlayer';
 import type { MusicTrack } from '~/music-providers/models/MusicTrack';
 import type { PlaybackState } from '~/music-providers/models/PlaybackState';
 
@@ -13,6 +13,8 @@ import { SPOTIFY_ENDPOINTS } from '../config';
 
 const SDK_SRC = 'https://sdk.scdn.co/spotify-player.js';
 const NEAR_END_MS = 2000;
+/** Spotify's Play endpoint accepts at most this many URIs in one request. */
+const PLAY_URIS_LIMIT = 100;
 
 let sdkPromise: Promise<void> | null = null;
 
@@ -40,6 +42,8 @@ export const createWebPlaybackPlayer = (): MusicPlayer => {
   let player: SpotifyPlayerInstance | null = null;
   let wasNearEnd = false;
   let current: MusicTrack | null = null;
+  /** True while a multi-track context is active (Spotify advances on its own). */
+  let contextPlayback = false;
 
   const ready = (async () => {
     await loadSdk();
@@ -80,9 +84,9 @@ export const createWebPlaybackPlayer = (): MusicPlayer => {
         }),
       );
 
-      // Heuristic "track ended": we feed one track at a time, so when the SDK
-      // pauses at position 0 right after nearing the end, advance the queue.
-      if (state.paused && state.position === 0 && wasNearEnd) {
+      // Only synthesize "ended" for single-track plays. With a URI-array
+      // context Spotify queues the next track itself.
+      if (!contextPlayback && state.paused && state.position === 0 && wasNearEnd) {
         endedListeners.forEach((l) => l());
       }
       wasNearEnd = state.duration > 0 && state.position > state.duration - NEAR_END_MS;
@@ -107,14 +111,48 @@ export const createWebPlaybackPlayer = (): MusicPlayer => {
       throw new Error(`Spotify playback command failed (${res.status}).`);
   };
 
+  const requireDevice = async (): Promise<string> => {
+    await ready;
+    if (!deviceId) throw new Error('Spotify device not ready yet.');
+    return deviceId;
+  };
+
+  const playUris = async (
+    uris: readonly string[],
+    options: PlayTracksOptions = {},
+  ): Promise<void> => {
+    const id = await requireDevice();
+    const shuffle = options.shuffle ?? true;
+    const repeat = options.repeat ?? 'context';
+    const capped = uris.length > PLAY_URIS_LIMIT ? uris.slice(0, PLAY_URIS_LIMIT) : [...uris];
+    if (capped.length === 0) throw new Error('No tracks to play.');
+
+    contextPlayback = capped.length > 1;
+    wasNearEnd = false;
+
+    await command(`/me/player/shuffle?state=${shuffle}&device_id=${id}`, { method: 'PUT' });
+    await command(`/me/player/repeat?state=${repeat}&device_id=${id}`, { method: 'PUT' });
+    await command(`/me/player/play?device_id=${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ uris: capped }),
+    });
+  };
+
   return {
     async playTrack(track) {
-      await ready;
-      if (!deviceId) throw new Error('Spotify device not ready yet.');
-      await command(`/me/player/play?device_id=${deviceId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ uris: [track.uri] }),
-      });
+      contextPlayback = false;
+      await playUris([track.uri], { shuffle: false, repeat: 'off' });
+    },
+    async playTracks(tracks, options) {
+      await playUris(tracks.map((t) => t.uri).filter(Boolean), options);
+    },
+    async skipToNext() {
+      const id = await requireDevice();
+      await command(`/me/player/next?device_id=${id}`, { method: 'POST' });
+    },
+    async skipToPrevious() {
+      const id = await requireDevice();
+      await command(`/me/player/previous?device_id=${id}`, { method: 'POST' });
     },
     async resume() {
       await ready;

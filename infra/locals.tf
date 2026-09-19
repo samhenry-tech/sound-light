@@ -11,6 +11,13 @@ locals {
   region           = local.shared.region
   google_client_id = local.shared.googleClientId
 
+  # Cognito identity id of the defaults-catalog admin. Empty until captured
+  # after first sign-in (Settings → Account). Write IAM is omitted while blank.
+  defaults_admin_identity_id = try(local.shared.defaultsAdminIdentityId, "")
+
+  # Fixed partition key for shared default playlists in the playlists table.
+  defaults_owner = "defaults"
+
   name_prefix = "${local.project}-${local.environment}"
 
   tags = {
